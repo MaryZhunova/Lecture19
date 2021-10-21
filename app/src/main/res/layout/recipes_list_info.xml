@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/light_brown">
+
+<androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/recycler_view"
+    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+    android:orientation="vertical"
+    android:clipToPadding="false"
+    android:padding="15dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+
+<RelativeLayout
+    android:id="@+id/progress_frame_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true"
+    android:visibility="visible">
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/progress_bar"
+        android:layout_centerHorizontal="true"
+        android:padding="5dp"
+        android:text="@string/loading"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
+</RelativeLayout>
+
+</FrameLayout>
