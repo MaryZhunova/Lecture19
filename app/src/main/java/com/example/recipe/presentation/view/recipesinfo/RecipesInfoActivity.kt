@@ -8,18 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.recipe.NetworkApp
-import com.example.recipe.data.api.Constants
-import com.example.recipe.models.data.RecipeR
 import com.example.recipe.presentation.viewmodel.RecipesInfoViewModel
-import com.example.recipe.data.api.OkHttpRecipesApiImpl
-import com.example.recipe.data.api.RecipesApi
-import com.example.recipe.data.repository.OkhttpRepository
 import com.example.recipe.databinding.RecipesListInfoBinding
-import com.example.recipe.domain.BaseRepository
-import com.example.recipe.domain.RecipesInteractor
 import com.example.recipe.models.converter.Converter
 import com.example.recipe.models.converter.RecipeDToRecipePConverter
-import com.example.recipe.models.converter.RecipeRToRecipeDConverter
 import com.example.recipe.models.domain.RecipeD
 import com.example.recipe.models.presentation.RecipeP
 import com.example.recipe.utils.SchedulersProvider
@@ -27,12 +19,6 @@ import com.example.recipe.presentation.view.recipedetail.RecipeDetailActivity
 import com.example.recipe.utils.ISchedulersProvider
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
-import okhttp3.CookieJar
-import okhttp3.HttpUrl
-import okhttp3.HttpUrl.Companion.toHttpUrl
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import java.util.concurrent.TimeUnit
 
 /**
  * Активити приложения, которая отображает список рецептов
