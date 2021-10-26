@@ -7,6 +7,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.recipe.NetworkApp
 import com.example.recipe.data.api.Constants
 import com.example.recipe.models.data.RecipeR
 import com.example.recipe.presentation.viewmodel.RecipesInfoViewModel
@@ -65,18 +66,8 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
     }
 
     private fun createViewModel() {
-        val url: HttpUrl = Constants.url.toHttpUrl()
-        val httpClient = OkHttpClient.Builder()
-            .readTimeout(3, TimeUnit.SECONDS)
-            .writeTimeout(3, TimeUnit.SECONDS)
-            .cookieJar(CookieJar.NO_COOKIES)
-            .addNetworkInterceptor(HttpLoggingInterceptor())
-            .build()
-        val okHttpRecipesApiImpl: RecipesApi = OkHttpRecipesApiImpl(httpClient, url)
-        val convertertoRecipeD: Converter<RecipeR, RecipeD> = RecipeRToRecipeDConverter()
-        val okhttpRepository: BaseRepository = OkhttpRepository(okHttpRecipesApiImpl, convertertoRecipeD)
+        val recipesInteractor = NetworkApp.appComponent(this).getRecipesInteractor()
         val convertertoRecipeP: Converter<RecipeD, RecipeP> = RecipeDToRecipePConverter()
-        val recipesInteractor = RecipesInteractor(okhttpRepository)
         val schedulersProvider: ISchedulersProvider = SchedulersProvider()
         infoViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {

@@ -2,12 +2,16 @@ package com.example.recipe.models.converter
 
 import com.example.recipe.models.data.RecipeR
 import com.example.recipe.models.domain.RecipeD
-import com.example.recipe.models.presentation.RecipeP
+import javax.inject.Inject
 
 /**
  * Конвретер из [RecipeR] в [RecipeD]
  */
 class RecipeRToRecipeDConverter:Converter<RecipeR, RecipeD> {
+
+    @Inject
+    constructor()
+
     override fun convert(from: RecipeR) =
         RecipeD(
             uri = from.uri,
