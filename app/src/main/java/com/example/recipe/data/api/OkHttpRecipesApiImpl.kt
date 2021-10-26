@@ -1,6 +1,5 @@
 package com.example.recipe.data.api
 
-import android.util.Log
 import com.example.recipe.data.model.Recipe
 import com.example.recipe.data.model.RecipeResponse
 import com.google.gson.Gson
@@ -49,7 +48,7 @@ class OkHttpRecipesApiImpl(): RecipesApi {
         //Преобразовать полученный результат в модель Recipe
         val res = Gson().fromJson(body, RecipeResponse::class.java)
         if (res.hits.isEmpty()) {
-            Log.d("error body", "tt")
+//            Log.e("error", response.code.toString())
             throw Exception()
         }
         return res.hits.map { hit -> hit.recipe }
