@@ -5,9 +5,9 @@ import com.example.recipe.data.api.RecipesApi
 import com.example.recipe.data.repository.OkhttpRepository
 import com.example.recipe.domain.BaseRepository
 import com.example.recipe.models.converter.Converter
-import com.example.recipe.models.converter.RecipeRToRecipeDConverter
-import com.example.recipe.models.data.RecipeR
-import com.example.recipe.models.domain.RecipeD
+import com.example.recipe.models.converter.RecipeToDomainConverter
+import com.example.recipe.models.data.Recipe
+import com.example.recipe.models.domain.RecipeDomainModel
 import dagger.Binds
 import dagger.Module
 
@@ -19,6 +19,6 @@ interface AppModule {
     @Binds
     fun provideRecipesApi(okHttpRecipesApiImpl: OkHttpRecipesApiImpl): RecipesApi
     @Binds
-    fun provideConverter(recipeRToRecipeDConverter: RecipeRToRecipeDConverter): Converter<RecipeR, RecipeD>
+    fun provideConverter(recipeToDomainConverter: RecipeToDomainConverter): Converter<Recipe, RecipeDomainModel>
 
 }

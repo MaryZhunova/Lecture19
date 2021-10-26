@@ -1,6 +1,6 @@
 package com.example.recipe.domain
 
-import com.example.recipe.models.domain.RecipeD
+import com.example.recipe.models.domain.RecipeDomainModel
 import javax.inject.Inject
 
 /**
@@ -15,7 +15,7 @@ class RecipesInteractor @Inject constructor(private val repository: BaseReposito
      * @param query ключевое слово для запроса
      * @return [List<Recipe>] список рецептов или пустой список, если ошибка
      */
-    fun get(query: String): List<RecipeD>? {
+    fun get(query: String): List<RecipeDomainModel>? {
         return repository.get(query)
     }
 

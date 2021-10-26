@@ -17,7 +17,7 @@ data class RecipeResponse(val hits: List<Hit>) : Parcelable
  * @param recipe рецепт
  */
 @Parcelize
-data class Hit(val recipe: RecipeR) : Parcelable
+data class Hit(val recipe: Recipe) : Parcelable
 
 /**
  * Модель для отображения данных о рецептах  для работы с сервером
@@ -30,9 +30,9 @@ data class Hit(val recipe: RecipeR) : Parcelable
  * @param ingredientLines список ингредиентов
  */
 @Parcelize
-data class RecipeR(val uri: String,
-                   val label: String,
-                   val image: String,
-                   val source: String,
-                   val url: String,
-                   val ingredientLines: List<String>) : Parcelable
+data class Recipe(val uri: String,
+                  val label: String,
+                  val image: String,
+                  val source: String,
+                  val url: String,
+                  val ingredientLines: List<String>) : Parcelable

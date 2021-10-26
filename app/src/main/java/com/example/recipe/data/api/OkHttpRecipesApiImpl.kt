@@ -1,7 +1,7 @@
 package com.example.recipe.data.api
 
 import android.util.Log
-import com.example.recipe.models.data.RecipeR
+import com.example.recipe.models.data.Recipe
 import com.example.recipe.models.data.RecipeResponse
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
@@ -19,7 +19,7 @@ import javax.inject.Named
 
 class OkHttpRecipesApiImpl @Inject constructor(@Named("OkHttpClient") private val httpClient: OkHttpClient, @Named("HttpUrl") private val url: HttpUrl): RecipesApi {
 
-    override fun get(query: String): List<RecipeR> {
+    override fun get(query: String): List<Recipe> {
 
         //Создать url с параметрами (тип, ключевое слово, айди и ключ)
         val httpBuilder: HttpUrl.Builder = url.newBuilder()
