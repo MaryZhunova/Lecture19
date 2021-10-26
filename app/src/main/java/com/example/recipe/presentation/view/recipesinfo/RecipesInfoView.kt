@@ -1,6 +1,6 @@
 package com.example.recipe.presentation.view.recipesinfo
 
-import com.example.recipe.models.presentation.RecipeP
+import com.example.recipe.models.presentation.RecipePresentationModel
 
 /**
  * Интерфейс, описывающий возможности View
@@ -25,5 +25,5 @@ interface RecipesInfoView {
      *
      * @param recipes список приложений.
      */
-    fun showData(recipes: List<RecipeP>)
+    fun showData(recipes: List<RecipePresentationModel>)
 }

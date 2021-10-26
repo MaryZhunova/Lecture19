@@ -17,10 +17,10 @@ import com.example.recipe.databinding.RecipesListInfoBinding
 import com.example.recipe.domain.BaseRepository
 import com.example.recipe.domain.RecipesInteractor
 import com.example.recipe.models.converter.Converter
-import com.example.recipe.models.converter.RecipeDToRecipePConverter
-import com.example.recipe.models.converter.RecipeRToRecipeDConverter
-import com.example.recipe.models.domain.RecipeD
-import com.example.recipe.models.presentation.RecipeP
+import com.example.recipe.models.converter.DomainToPresentationConverter
+import com.example.recipe.models.converter.RecipeToDomainConverter
+import com.example.recipe.models.domain.RecipeDomainModel
+import com.example.recipe.models.presentation.RecipePresentationModel
 import com.example.recipe.utils.SchedulersProvider
 import com.example.recipe.presentation.view.recipedetail.RecipeDetailActivity
 import com.example.recipe.utils.ISchedulersProvider
@@ -41,7 +41,7 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
     private lateinit var binding: RecipesListInfoBinding
     private lateinit var infoViewModel: RecipesInfoViewModel
     private var query: String? = null
-    private lateinit var recipe: List<RecipeP>
+    private lateinit var recipe: List<RecipePresentationModel>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,15 +73,15 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
             .addNetworkInterceptor(HttpLoggingInterceptor())
             .build()
         val okHttpRecipesApiImpl: RecipesApi = OkHttpRecipesApiImpl(httpClient, url)
-        val convertertoRecipeD: Converter<RecipeR, RecipeD> = RecipeRToRecipeDConverter()
-        val okhttpRepository: BaseRepository = OkhttpRepository(okHttpRecipesApiImpl, convertertoRecipeD)
-        val convertertoRecipeP: Converter<RecipeD, RecipeP> = RecipeDToRecipePConverter()
+        val converterToRecipeDomainModel: Converter<RecipeR, RecipeDomainModel> = RecipeToDomainConverter()
+        val okhttpRepository: BaseRepository = OkhttpRepository(okHttpRecipesApiImpl, converterToRecipeDomainModel)
+        val converterToRecipePresentationModel: Converter<RecipeDomainModel, RecipePresentationModel> = DomainToPresentationConverter()
         val recipesInteractor = RecipesInteractor(okhttpRepository)
         val schedulersProvider: ISchedulersProvider = SchedulersProvider()
         infoViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(RecipesInfoViewModel::class.java)) {
-                    return RecipesInfoViewModel(recipesInteractor, schedulersProvider, convertertoRecipeP) as T
+                    return RecipesInfoViewModel(recipesInteractor, schedulersProvider, converterToRecipePresentationModel) as T
                 }
                 throw IllegalArgumentException ("UnknownViewModel")
             }
@@ -92,7 +92,7 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
         infoViewModel.getProgressLiveData()
             .observe(this) { isVisible: Boolean -> showProgress(isVisible) }
         infoViewModel.getRecipesLiveData()
-            .observe(this) { recipes: List<RecipeP> ->
+            .observe(this) { recipes: List<RecipePresentationModel> ->
                 showData(recipes)
                 recipe = recipes
             }
@@ -103,13 +103,13 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
         binding.progressFrameLayout.visibility = if (isVisible) View.VISIBLE else View.GONE
     }
 
-    override fun showData(recipes: List<RecipeP>) {
+    override fun showData(recipes: List<RecipePresentationModel>) {
         val adapter = RecipesInfoAdapter(recipes, this)
         binding.recyclerView.adapter = adapter
     }
 
     override fun showError(throwable: Throwable) {
-        Snackbar.make(binding.root, "Couldn't find any recipe", BaseTransientBottomBar.LENGTH_LONG).show();
+        Snackbar.make(binding.root, "Couldn't find any recipe", BaseTransientBottomBar.LENGTH_LONG).show()
         Log.e("error", throwable.toString())
     }
 

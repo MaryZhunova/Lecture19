@@ -14,9 +14,9 @@ import kotlinx.parcelize.Parcelize
  * @param ingredientLines список ингредиентов
  */
 @Parcelize
-data class RecipeD(val uri: String,
-                   val label: String,
-                   val image: String,
-                   val source: String,
-                   val url: String,
-                   val ingredientLines: List<String>) : Parcelable
+data class RecipeDomainModel(val uri: String,
+                             val label: String,
+                             val image: String,
+                             val source: String,
+                             val url: String,
+                             val ingredientLines: List<String>) : Parcelable

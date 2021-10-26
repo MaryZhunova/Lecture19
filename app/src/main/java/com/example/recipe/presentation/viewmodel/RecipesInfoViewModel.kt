@@ -5,8 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.recipe.domain.RecipesInteractor
 import com.example.recipe.models.converter.Converter
-import com.example.recipe.models.domain.RecipeD
-import com.example.recipe.models.presentation.RecipeP
+import com.example.recipe.models.domain.RecipeDomainModel
+import com.example.recipe.models.presentation.RecipePresentationModel
+import com.example.recipe.presentation.view.recipesinfo.RecipesInfoActivity
 import com.example.recipe.utils.ISchedulersProvider
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
@@ -16,11 +17,11 @@ import io.reactivex.disposables.Disposable
  */
 class RecipesInfoViewModel(private val recipesInteractor: RecipesInteractor,
                            private val schedulersProvider: ISchedulersProvider,
-                           private val converter: Converter<RecipeD, RecipeP>) : ViewModel() {
+                           private val converter: Converter<RecipeDomainModel, RecipePresentationModel>) : ViewModel() {
 
     private val progressLiveData: MutableLiveData<Boolean> = MutableLiveData()
     private val errorLiveData: MutableLiveData<Throwable> = MutableLiveData()
-    private val recipesLiveData: MutableLiveData<List<RecipeP>> = MutableLiveData()
+    private val recipesLiveData: MutableLiveData<List<RecipePresentationModel>> = MutableLiveData()
     private var disposable: Disposable? = null
 
     /**
@@ -48,5 +49,5 @@ class RecipesInfoViewModel(private val recipesInteractor: RecipesInteractor,
 
     fun getProgressLiveData(): LiveData<Boolean> = progressLiveData
     fun getErrorLiveData(): LiveData<Throwable> = errorLiveData
-    fun getRecipesLiveData(): LiveData<List<RecipeP>> = recipesLiveData
+    fun getRecipesLiveData(): LiveData<List<RecipePresentationModel>> = recipesLiveData
 }

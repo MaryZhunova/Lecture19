@@ -8,7 +8,7 @@ import com.example.recipe.R
 import com.example.recipe.databinding.RecipeDetailBinding
 import android.text.Html
 import android.text.method.LinkMovementMethod
-import com.example.recipe.models.presentation.RecipeP
+import com.example.recipe.models.presentation.RecipePresentationModel
 import com.example.recipe.utils.GlideApp
 
 /**
@@ -17,7 +17,7 @@ import com.example.recipe.utils.GlideApp
 class RecipeDetailActivity: AppCompatActivity() {
 
     private lateinit var binding: RecipeDetailBinding
-    private var recipe: RecipeP? = null
+    private var recipe: RecipePresentationModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +31,7 @@ class RecipeDetailActivity: AppCompatActivity() {
         GlideApp.with(applicationContext)
             .asBitmap()
             .load(tempUri)
-            .into(binding.image);
+            .into(binding.image)
 
         //Отобразить название рецепта
         binding.label.text = recipe?.label
@@ -45,7 +45,7 @@ class RecipeDetailActivity: AppCompatActivity() {
         binding.url.isClickable = true
         binding.url.movementMethod = LinkMovementMethod.getInstance()
         val text = "<a href='${recipe?.url}'> ${recipe?.source} </a>"
-        binding.url.text = Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT);
+        binding.url.text = Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT)
 
     }
 }

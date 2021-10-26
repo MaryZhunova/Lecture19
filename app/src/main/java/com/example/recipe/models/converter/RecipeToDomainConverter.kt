@@ -1,15 +1,14 @@
 package com.example.recipe.models.converter
 
 import com.example.recipe.models.data.RecipeR
-import com.example.recipe.models.domain.RecipeD
-import com.example.recipe.models.presentation.RecipeP
+import com.example.recipe.models.domain.RecipeDomainModel
 
 /**
- * Конвретер из [RecipeR] в [RecipeD]
+ * Конвретер из [RecipeR] в [RecipeDomainModel]
  */
-class RecipeRToRecipeDConverter:Converter<RecipeR, RecipeD> {
+class RecipeToDomainConverter:Converter<RecipeR, RecipeDomainModel> {
     override fun convert(from: RecipeR) =
-        RecipeD(
+        RecipeDomainModel(
             uri = from.uri,
             label = from.label,
             image = from.image,

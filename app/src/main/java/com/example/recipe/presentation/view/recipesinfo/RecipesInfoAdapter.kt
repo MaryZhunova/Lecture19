@@ -9,13 +9,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipe.R
-import com.example.recipe.models.presentation.RecipeP
+import com.example.recipe.models.presentation.RecipePresentationModel
 import com.example.recipe.utils.GlideApp
 
 /**
  * Адаптер для отображения элементов списка
  */
-class RecipesInfoAdapter(private val recipes: List<RecipeP>, private val onRecipeClickListener: OnRecipeClickListener): RecyclerView.Adapter<MyViewHolder>() {
+class RecipesInfoAdapter(private val recipes: List<RecipePresentationModel>, private val onRecipeClickListener: OnRecipeClickListener): RecyclerView.Adapter<MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.recipes_list_info_rv, parent, false), onRecipeClickListener)
