@@ -1,7 +1,10 @@
 package com.example.recipe.data.repository
 
 import com.example.recipe.data.api.RecipesApi
-import com.example.recipe.data.model.Recipe
+import com.example.recipe.domain.BaseRepository
+import com.example.recipe.models.converter.Converter
+import com.example.recipe.models.data.RecipeR
+import com.example.recipe.models.domain.RecipeD
 
 /**
  * Реализация [BaseRepository]
@@ -9,9 +12,9 @@ import com.example.recipe.data.model.Recipe
  * @param recipesApi апи для работы с сервераными данными
  */
 
-class OkhttpRepository(private val recipesApi: RecipesApi): BaseRepository {
+class OkhttpRepository(private val recipesApi: RecipesApi, private val converter: Converter<RecipeR, RecipeD>): BaseRepository {
 
-    override fun get(query: String): List<Recipe>? {
-        return recipesApi.get(query)
+    override fun get(query: String): List<RecipeD>? {
+        return recipesApi.get(query)?.map(converter::convert)
     }
 }

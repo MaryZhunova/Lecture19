@@ -1,10 +1,10 @@
-package com.example.recipe.view.main
+package com.example.recipe.presentation.view.main
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.recipe.databinding.ActivityMainBinding
-import com.example.recipe.view.recipesinfo.RecipesInfoActivity
+import com.example.recipe.presentation.view.recipesinfo.RecipesInfoActivity
 
 /**
  * Главная активити приложения, которая позволяет ввести ключевое слово

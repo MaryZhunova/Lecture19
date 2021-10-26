@@ -1,15 +1,14 @@
-package com.example.recipe.view.recipedetail
+package com.example.recipe.presentation.view.recipedetail
 
 import android.net.Uri
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.example.recipe.R
-import com.example.recipe.data.model.Recipe
 import com.example.recipe.databinding.RecipeDetailBinding
 import android.text.Html
-
 import android.text.method.LinkMovementMethod
+import com.example.recipe.models.presentation.RecipeP
 import com.example.recipe.utils.GlideApp
 
 /**
@@ -18,7 +17,7 @@ import com.example.recipe.utils.GlideApp
 class RecipeDetailActivity: AppCompatActivity() {
 
     private lateinit var binding: RecipeDetailBinding
-    private var recipe: Recipe? = null
+    private var recipe: RecipeP? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

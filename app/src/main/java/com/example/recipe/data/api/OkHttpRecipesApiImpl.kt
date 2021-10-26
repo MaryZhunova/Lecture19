@@ -1,34 +1,21 @@
 package com.example.recipe.data.api
 
 import android.util.Log
-import com.example.recipe.data.model.Recipe
-import com.example.recipe.data.model.RecipeResponse
+import com.example.recipe.models.data.RecipeR
+import com.example.recipe.models.data.RecipeResponse
 import com.google.gson.Gson
-import okhttp3.CookieJar
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.HttpUrl
-import okhttp3.HttpUrl.Companion.toHttpUrl
-import okhttp3.logging.HttpLoggingInterceptor
 import java.lang.Exception
-import java.util.concurrent.TimeUnit
 
 
 /**
  * Реализация [RecipesApi] с помощью [OkHttpClient]
  */
-class OkHttpRecipesApiImpl(): RecipesApi {
+class OkHttpRecipesApiImpl(private val httpClient: OkHttpClient, private val url: HttpUrl): RecipesApi {
 
-    override fun get(query: String): List<Recipe> {
-        //Создать  OkHttp клиент
-        val httpClient = OkHttpClient.Builder()
-            .readTimeout(3, TimeUnit.SECONDS)
-            .writeTimeout(3, TimeUnit.SECONDS)
-            .cookieJar(CookieJar.NO_COOKIES)
-            .addNetworkInterceptor(HttpLoggingInterceptor())
-            .build()
-
-        val url: HttpUrl = Constants.url.toHttpUrl()
+    override fun get(query: String): List<RecipeR> {
 
         //Создать url с параметрами (тип, ключевое слово, айди и ключ)
         val httpBuilder: HttpUrl.Builder = url.newBuilder()

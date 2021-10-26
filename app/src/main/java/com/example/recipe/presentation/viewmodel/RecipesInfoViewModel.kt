@@ -1,10 +1,12 @@
-package com.example.recipe.viewmodel
+package com.example.recipe.presentation.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.recipe.data.model.Recipe
-import com.example.recipe.data.repository.BaseRepository
+import com.example.recipe.domain.RecipesInteractor
+import com.example.recipe.models.converter.Converter
+import com.example.recipe.models.domain.RecipeD
+import com.example.recipe.models.presentation.RecipeP
 import com.example.recipe.utils.ISchedulersProvider
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
@@ -12,11 +14,13 @@ import io.reactivex.disposables.Disposable
 /**
  * ViewModel [RecipesInfoActivity]
  */
-class RecipesInfoViewModel(private val okhttpRepository: BaseRepository, private val schedulersProvider: ISchedulersProvider) : ViewModel() {
+class RecipesInfoViewModel(private val recipesInteractor: RecipesInteractor,
+                           private val schedulersProvider: ISchedulersProvider,
+                           private val converter: Converter<RecipeD, RecipeP>) : ViewModel() {
 
     private val progressLiveData: MutableLiveData<Boolean> = MutableLiveData()
     private val errorLiveData: MutableLiveData<Throwable> = MutableLiveData()
-    private val recipesLiveData: MutableLiveData<List<Recipe>> = MutableLiveData()
+    private val recipesLiveData: MutableLiveData<List<RecipeP>> = MutableLiveData()
     private var disposable: Disposable? = null
 
     /**
@@ -25,7 +29,8 @@ class RecipesInfoViewModel(private val okhttpRepository: BaseRepository, private
      * @param query ключевое слово для запроса
      */
     fun get(query: String) {
-        disposable = Single.fromCallable { okhttpRepository.get(query) }
+        disposable = Single.fromCallable { recipesInteractor.get(query) }
+            .map { recipes -> recipes.map(converter::convert) }
             .doOnSubscribe { progressLiveData.postValue(true) }
             .doAfterTerminate { progressLiveData.postValue(false) }
             .subscribeOn(schedulersProvider.io())
@@ -43,5 +48,5 @@ class RecipesInfoViewModel(private val okhttpRepository: BaseRepository, private
 
     fun getProgressLiveData(): LiveData<Boolean> = progressLiveData
     fun getErrorLiveData(): LiveData<Throwable> = errorLiveData
-    fun getRecipesLiveData(): LiveData<List<Recipe>> = recipesLiveData
+    fun getRecipesLiveData(): LiveData<List<RecipeP>> = recipesLiveData
 }
