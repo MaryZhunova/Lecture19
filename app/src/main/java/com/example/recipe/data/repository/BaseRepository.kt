@@ -13,5 +13,5 @@ interface BaseRepository {
      * @param query ключевое слово для запроса
      * @return [List<Recipe>] список рецептов или пустой список, если ошибка
      */
-    fun get(query: String): List<Recipe>?
+    fun get(query: String): List<Recipe>
 }

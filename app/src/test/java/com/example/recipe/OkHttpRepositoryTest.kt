@@ -1,39 +1,51 @@
 package com.example.recipe
 
-import com.example.recipe.data.api.RecipesApi
+import com.example.recipe.data.api.OkHttpRecipesApiImpl
 import com.example.recipe.data.model.Recipe
 import com.example.recipe.data.repository.OkhttpRepository
+import com.google.common.truth.Truth
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Test
-
-import org.junit.Assert.*
 import org.junit.Before
+import java.lang.Exception
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
 class OkHttpRepositoryTest {
-    private lateinit var api: RecipesApi
-    private lateinit var repository: OkhttpRepository
-    private val expectedResult: List<Recipe> = mockk()
-    private val queryArgument = "cheese"
-
-
+    var api: OkHttpRecipesApiImpl = mockk()
+    lateinit var repository: OkhttpRepository
 
     @Before
     fun setUp() {
-        api = mockk()
         repository = OkhttpRepository(api)
     }
 
     @Test
-    fun get_isCorrect() {
+    fun getTest() {
+        val expectedResult: List<Recipe> = mockk()
         every { api.get(queryArgument) } returns expectedResult
 
-        val testSubscriber = repository.get(queryArgument)
+        val testResult = repository.get(queryArgument)
 
+        Truth.assertThat(testResult).isEqualTo(expectedResult)
+    }
+
+    @Test
+    fun getTestException() {
+
+        every { api.get(queryArgumentForException) } throws Exception()
+
+        var testResult = false
+        try {
+            repository.get(queryArgumentForException)
+        } catch (e: Exception) {
+            testResult = true
+        }
+
+        Truth.assertThat(testResult).isTrue()
+    }
+
+    private companion object {
+        const val queryArgument = "Nyama"
+        const val queryArgumentForException = "nyam"
     }
 }

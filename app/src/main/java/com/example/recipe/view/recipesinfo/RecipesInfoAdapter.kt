@@ -1,6 +1,5 @@
 package com.example.recipe.view.recipesinfo
 
-import android.content.Context
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
@@ -23,7 +22,7 @@ class RecipesInfoAdapter(private val recipes: List<Recipe>, private val onRecipe
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val tempUri = Uri.parse(recipes[position].image)
-        GlideApp.with(holder.getContext())
+        GlideApp.with(holder.itemView.context)
             .asBitmap()
             .load(tempUri)
             .into(holder.icon)
@@ -42,16 +41,6 @@ class MyViewHolder(itemView: View, onRecipeClickListener: OnRecipeClickListener)
 
     init {
         itemView.setOnClickListener(this)
-    }
-
-    /**
-     * Получить контекст view
-     *
-     * @return контекст view
-     */
-
-    fun getContext(): Context {
-        return itemView.context
     }
 
     override fun onClick(v: View?) {

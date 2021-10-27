@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.example.recipe.data.model.Recipe
 import com.example.recipe.data.repository.BaseRepository
 import com.example.recipe.utils.ISchedulersProvider
+import com.example.recipe.view.recipesinfo.RecipesInfoActivity
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 

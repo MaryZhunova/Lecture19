@@ -16,6 +16,10 @@ import com.example.recipe.utils.SchedulersProvider
 import com.example.recipe.view.recipedetail.RecipeDetailActivity
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
+import okhttp3.CookieJar
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import java.util.concurrent.TimeUnit
 
 /**
  * Активити приложения, которая отображает список рецептов
@@ -49,7 +53,14 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
     }
 
     private fun createViewModel() {
-        val okHttpRecipesApiImpl = OkHttpRecipesApiImpl()
+        //Создать  OkHttp клиент
+        val httpClient = OkHttpClient.Builder()
+            .readTimeout(3, TimeUnit.SECONDS)
+            .writeTimeout(3, TimeUnit.SECONDS)
+            .cookieJar(CookieJar.NO_COOKIES)
+            .addNetworkInterceptor(HttpLoggingInterceptor())
+            .build()
+        val okHttpRecipesApiImpl = OkHttpRecipesApiImpl(httpClient)
         val okhttpRepository = OkhttpRepository(okHttpRecipesApiImpl)
         val schedulersProvider = SchedulersProvider()
         infoViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
@@ -83,7 +94,7 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
     }
 
     override fun showError(throwable: Throwable) {
-        Snackbar.make(binding.root, "Couldn't find any recipe", BaseTransientBottomBar.LENGTH_LONG).show();
+        Snackbar.make(binding.root, "Couldn't find any recipe", BaseTransientBottomBar.LENGTH_LONG).show()
         Log.e("error", throwable.toString())
     }
 

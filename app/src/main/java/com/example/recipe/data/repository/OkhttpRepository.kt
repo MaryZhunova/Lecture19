@@ -11,7 +11,7 @@ import com.example.recipe.data.model.Recipe
 
 class OkhttpRepository(private val recipesApi: RecipesApi): BaseRepository {
 
-    override fun get(query: String): List<Recipe>? {
+    override fun get(query: String): List<Recipe> {
         return recipesApi.get(query)
     }
 }
