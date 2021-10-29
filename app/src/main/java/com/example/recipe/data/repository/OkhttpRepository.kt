@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 class OkhttpRepository @Inject constructor(private val recipesApi: RecipesApi, private val converter: Converter<Recipe, RecipeDomainModel>): BaseRepository {
 
-    override fun get(query: String): List<RecipeDomainModel>? {
-        return recipesApi.get(query)?.map(converter::convert)
+    override fun get(query: String): List<RecipeDomainModel> {
+        return recipesApi.get(query).map(converter::convert)
     }
 }

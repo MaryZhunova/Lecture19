@@ -19,7 +19,7 @@ import com.example.recipe.utils.GlideApp
 class RecipesInfoAdapter(private val recipes: List<RecipePresentationModel>, private val onRecipeClickListener: OnRecipeClickListener): RecyclerView.Adapter<MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        return MyViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.recipes_list_info_rv, parent, false), onRecipeClickListener)
+        return MyViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.recipes_list_info_item, parent, false), onRecipeClickListener)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
