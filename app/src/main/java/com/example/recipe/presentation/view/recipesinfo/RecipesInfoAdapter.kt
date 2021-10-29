@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipe.R
 import com.example.recipe.models.presentation.RecipePresentationModel
@@ -22,11 +23,13 @@ class RecipesInfoAdapter(private val recipes: List<RecipePresentationModel>, pri
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val tempUri = Uri.parse(recipes[position].image)
-        GlideApp.with(holder.getContext())
-            .asBitmap()
-            .load(tempUri)
-            .into(holder.icon)
+        if (PreferenceManager.getDefaultSharedPreferences(holder.getContext()).getBoolean("switch_images", true)) {
+            val tempUri = Uri.parse(recipes[position].image)
+            GlideApp.with(holder.getContext())
+                .asBitmap()
+                .load(tempUri)
+                .into(holder.icon)
+        }
         holder.recipeName.text = recipes[position].label
     }
 

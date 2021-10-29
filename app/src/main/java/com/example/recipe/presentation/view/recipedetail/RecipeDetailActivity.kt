@@ -8,6 +8,7 @@ import com.example.recipe.R
 import com.example.recipe.databinding.RecipeDetailBinding
 import android.text.Html
 import android.text.method.LinkMovementMethod
+import androidx.preference.PreferenceManager
 import com.example.recipe.models.presentation.RecipePresentationModel
 import com.example.recipe.utils.GlideApp
 
@@ -27,11 +28,13 @@ class RecipeDetailActivity: AppCompatActivity() {
         recipe = intent.getParcelableExtra("recipe")
 
         //Отобразить картинку блюда
-        val tempUri = Uri.parse(recipe?.image)
-        GlideApp.with(applicationContext)
-            .asBitmap()
-            .load(tempUri)
-            .into(binding.image)
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("switch_images", true)) {
+            val tempUri = Uri.parse(recipe?.image)
+            GlideApp.with(applicationContext)
+                .asBitmap()
+                .load(tempUri)
+                .into(binding.image)
+        }
 
         //Отобразить название рецепта
         binding.label.text = recipe?.label

@@ -1,9 +1,10 @@
 <resources>
-    <string name="app_name">recipe</string>
+    <string name="app_name">Recipes</string>
     <string name="enter_a_key_word">Enter a key word:</string>
     <string name="yum">Yum!</string>
     <string name="bullet_point">►</string>
     <string name="ingredients">Ingredients:</string>
     <string name="for_detailed_recipe_go_to">For detailed recipe go to </string>
-    <string name="loading">loading...</string>
+    <string name="loading">loading…</string>
+    <string name="settings">Settings</string>
 </resources>
