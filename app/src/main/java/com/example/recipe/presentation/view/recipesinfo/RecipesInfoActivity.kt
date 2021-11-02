@@ -52,13 +52,10 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
     }
 
     private fun createViewModel() {
-        val recipesInteractor = NetworkApp.appComponent(this).getRecipesInteractor()
-        val converterToRecipePresentationModel: Converter<RecipeDomainModel, RecipePresentationModel> = DomainToPresentationConverter()
-        val schedulersProvider: ISchedulersProvider = SchedulersProvider()
         infoViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(RecipesInfoViewModel::class.java)) {
-                    return RecipesInfoViewModel(recipesInteractor, schedulersProvider, converterToRecipePresentationModel) as T
+                    return NetworkApp.appComponent(applicationContext).getRecipesInfoViewModel() as T
                 }
                 throw IllegalArgumentException ("UnknownViewModel")
             }

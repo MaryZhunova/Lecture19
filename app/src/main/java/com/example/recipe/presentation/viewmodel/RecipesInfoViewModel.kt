@@ -11,11 +11,12 @@ import com.example.recipe.presentation.view.recipesinfo.RecipesInfoActivity
 import com.example.recipe.utils.ISchedulersProvider
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
+import javax.inject.Inject
 
 /**
  * ViewModel [RecipesInfoActivity]
  */
-class RecipesInfoViewModel(private val recipesInteractor: RecipesInteractor,
+class RecipesInfoViewModel @Inject constructor(private val recipesInteractor: RecipesInteractor,
                            private val schedulersProvider: ISchedulersProvider,
                            private val converter: Converter<RecipeDomainModel, RecipePresentationModel>) : ViewModel() {
 
