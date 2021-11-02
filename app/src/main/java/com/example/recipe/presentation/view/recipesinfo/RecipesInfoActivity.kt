@@ -3,11 +3,15 @@ package com.example.recipe.presentation.view.recipesinfo
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.recipe.NetworkApp
+import com.example.recipe.R
 import com.example.recipe.presentation.viewmodel.RecipesInfoViewModel
 import com.example.recipe.databinding.RecipesListInfoBinding
 import com.example.recipe.models.converter.Converter
@@ -16,6 +20,7 @@ import com.example.recipe.models.domain.RecipeDomainModel
 import com.example.recipe.models.presentation.RecipePresentationModel
 import com.example.recipe.utils.SchedulersProvider
 import com.example.recipe.presentation.view.recipedetail.RecipeDetailActivity
+import com.example.recipe.presentation.view.settings.SettingsActivity
 import com.example.recipe.utils.ISchedulersProvider
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
@@ -39,6 +44,7 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
         showData(emptyList())
 
         query = intent.getStringExtra("query")
+        binding.result.text = "Search results for $query"
 
         //Создать вью модель
         createViewModel()
@@ -49,6 +55,21 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
             //Отправить сетевой запрос с ключевым словом query через вью модель
             query?.let { infoViewModel.get(it) }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.menu_filter, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.filter) {
+            //todo
+//            val newIntent = Intent(applicationContext, SettingsActivity::class.java)
+//            startActivity(newIntent)
+        }
+        return true
     }
 
     private fun createViewModel() {

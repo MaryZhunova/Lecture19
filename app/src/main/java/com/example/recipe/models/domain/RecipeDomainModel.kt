@@ -12,6 +12,12 @@ import kotlinx.parcelize.Parcelize
  * @param source источник рецепта
  * @param url ссылка на рецепт на стороннем ресурсе
  * @param ingredientLines список ингредиентов
+ * @param dietLabels вариант диетического питания
+ * @param healthLabels отсутствующие аллергены
+ * @param cuisineType вид кухни мира
+ * @param mealType для какого приема пищи подходит блюдо
+ * @param dishType вид блюда
+ * @param totalTime время, необходимое для приготовления
  */
 @Parcelize
 data class RecipeDomainModel(val uri: String,
@@ -19,4 +25,10 @@ data class RecipeDomainModel(val uri: String,
                              val image: String,
                              val source: String,
                              val url: String,
-                             val ingredientLines: List<String>) : Parcelable
+                             val ingredientLines: List<String>,
+                             val dietLabels: List<String>,
+                             val healthLabels: List<String>,
+                             val cuisineType: List<String>,
+                             val mealType: List<String>,
+                             val dishType: List<String>,
+                             val totalTime: String) : Parcelable

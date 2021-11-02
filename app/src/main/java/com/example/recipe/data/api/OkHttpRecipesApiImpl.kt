@@ -15,8 +15,6 @@ import javax.inject.Named
 /**
  * Реализация [RecipesApi] с помощью [OkHttpClient]
  */
-
-
 class OkHttpRecipesApiImpl @Inject constructor(@Named("OkHttpClient") private val httpClient: OkHttpClient, @Named("HttpUrl") private val url: HttpUrl): RecipesApi {
 
     override fun get(query: String): List<Recipe> {
