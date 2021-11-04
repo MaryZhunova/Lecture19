@@ -26,8 +26,10 @@ class OkHttpRepositoryTest {
 
     @Test
     fun getTest() {
-        val apiResult: List<Recipe> = listOf(Recipe("uri", "label", "image", "source", "url", listOf("ingredientLines")))
-        val expectedResult: List<RecipeDomainModel> = listOf(RecipeDomainModel("uri", "label", "image", "source", "url", listOf("ingredientLines")))
+        val apiResult: List<Recipe> = listOf(Recipe("uri", "label", "image", "source",
+            "url", listOf("ingredientLines"), listOf("dietLabels"), listOf("healthLabels"), listOf("cuisineType"), listOf("mealType"), listOf("dishType")))
+        val expectedResult: List<RecipeDomainModel> = listOf(RecipeDomainModel("uri", "label", "image", "source",
+            "url", listOf("ingredientLines"), listOf("dietLabels"), listOf("healthLabels"), listOf("cuisineType"), listOf("mealType"), listOf("dishType")))
         every { api.get(queryArgument) } returns apiResult
 
         val testResult = repository.get(queryArgument)

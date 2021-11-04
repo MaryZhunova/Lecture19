@@ -1,4 +1,4 @@
-package com.example.recipe.presentation.view.main
+package com.example.recipe.presentation.main
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,8 +10,9 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
 import com.example.recipe.R
 import com.example.recipe.databinding.ActivityMainBinding
-import com.example.recipe.presentation.view.recipesinfo.RecipesInfoActivity
-import com.example.recipe.presentation.view.settings.SettingsActivity
+import com.example.recipe.presentation.favourites.FavouritesActivity
+import com.example.recipe.presentation.recipesinfo.RecipesInfoActivity
+import com.example.recipe.presentation.settings.SettingsActivity
 
 /**
  * Главная активити приложения, которая позволяет ввести ключевое слово
@@ -50,6 +51,9 @@ class MainRecipesActivity: AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.settings) {
             val newIntent = Intent(applicationContext, SettingsActivity::class.java)
+            startActivity(newIntent)
+        } else if (item.itemId == R.id.favourites) {
+            val newIntent = Intent(applicationContext, FavouritesActivity::class.java)
             startActivity(newIntent)
         }
         return true

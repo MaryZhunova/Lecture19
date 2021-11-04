@@ -1,4 +1,4 @@
-package com.example.recipe.presentation.view.recipedetail
+package com.example.recipe.presentation.recipedetail
 
 import android.net.Uri
 import android.os.Bundle
@@ -8,6 +8,9 @@ import com.example.recipe.R
 import com.example.recipe.databinding.RecipeDetailBinding
 import android.text.Html
 import android.text.method.LinkMovementMethod
+import android.view.View
+import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.preference.PreferenceManager
 import com.example.recipe.models.presentation.RecipePresentationModel
 import com.example.recipe.utils.GlideApp
@@ -38,6 +41,19 @@ class RecipeDetailActivity: AppCompatActivity() {
 
         //Отобразить название рецепта
         binding.label.text = recipe?.label
+
+        //Обработать добавление/удаление рецепта в избранное
+        binding.fav.setOnClickListener {
+            if (!binding.favFilled.isVisible) {
+                binding.favFilled.visibility = View.VISIBLE
+                Toast.makeText(applicationContext, "Added to favourites", Toast.LENGTH_SHORT).show()
+                //todo
+            } else {
+                binding.favFilled.visibility = View.INVISIBLE
+                Toast.makeText(applicationContext, "Removed from favourites", Toast.LENGTH_SHORT).show()
+                //todo
+            }
+        }
 
         //Отобразить список ингредиентов
         val adapter = recipe?.let { ArrayAdapter(this, R.layout.ingredient, R.id.ingredient_name, it.ingredientLines) }

@@ -1,4 +1,4 @@
-package com.example.recipe.presentation.view.settings
+package com.example.recipe.presentation.settings
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

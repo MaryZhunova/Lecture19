@@ -1,4 +1,4 @@
-package com.example.recipe.presentation.view.recipesinfo
+package com.example.recipe.presentation.recipesinfo
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,21 +7,16 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.recipe.NetworkApp
 import com.example.recipe.R
-import com.example.recipe.presentation.viewmodel.RecipesInfoViewModel
+import com.example.recipe.presentation.recipesinfo.viewmodel.RecipesInfoViewModel
 import com.example.recipe.databinding.RecipesListInfoBinding
-import com.example.recipe.models.converter.Converter
-import com.example.recipe.models.converter.DomainToPresentationConverter
-import com.example.recipe.models.domain.RecipeDomainModel
 import com.example.recipe.models.presentation.RecipePresentationModel
-import com.example.recipe.utils.SchedulersProvider
-import com.example.recipe.presentation.view.recipedetail.RecipeDetailActivity
-import com.example.recipe.presentation.view.settings.SettingsActivity
-import com.example.recipe.utils.ISchedulersProvider
+import com.example.recipe.presentation.recipedetail.RecipeDetailActivity
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 
@@ -34,6 +29,7 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
     private lateinit var infoViewModel: RecipesInfoViewModel
     private var query: String? = null
     private lateinit var recipe: List<RecipePresentationModel>
+    private lateinit var adapter: RecipesInfoAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +40,7 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
         showData(emptyList())
 
         query = intent.getStringExtra("query")
-        binding.result.text = "Search results for $query"
+        binding.result.text = getString(R.string.search_result, query)
 
         //Создать вью модель
         createViewModel()
@@ -60,14 +56,25 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.menu_filter, menu)
-        return true
+
+//        val searchMenu = menu?.findItem(R.id.search)
+//        val searchView = searchMenu?.actionView as SearchView
+//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+//            override fun onQueryTextSubmit(query: String?): Boolean {
+//                return false
+//            }
+//
+//            override fun onQueryTextChange(newText: String?): Boolean {
+//                adapter.filter.filter(newText)
+//                return true
+//            }
+//        })
+            return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.filter) {
             //todo
-//            val newIntent = Intent(applicationContext, SettingsActivity::class.java)
-//            startActivity(newIntent)
         }
         return true
     }
@@ -99,7 +106,7 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
     }
 
     override fun showData(recipes: List<RecipePresentationModel>) {
-        val adapter = RecipesInfoAdapter(recipes, this)
+        adapter = RecipesInfoAdapter(recipes, this)
         binding.recyclerView.adapter = adapter
     }
 
@@ -112,5 +119,15 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
         val newIntent = Intent(applicationContext, RecipeDetailActivity::class.java)
         newIntent.putExtra("recipe", recipe[position])
         startActivity(newIntent)
+    }
+
+    override fun onFavouriteClick(position: Int, pressed: Boolean) {
+        if (pressed) {
+            Toast.makeText(applicationContext, "Added to favourites", Toast.LENGTH_SHORT).show()
+            //todo
+        } else {
+            Toast.makeText(applicationContext, "Removed from favourites", Toast.LENGTH_SHORT).show()
+            //todo
+        }
     }
 }

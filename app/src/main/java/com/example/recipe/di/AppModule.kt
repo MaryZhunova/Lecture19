@@ -15,7 +15,7 @@ import com.example.recipe.utils.SchedulersProvider
 import dagger.Binds
 import dagger.Module
 
-@Module(includes = [ConfigModule::class])
+@Module
 interface AppModule {
 
     @Binds

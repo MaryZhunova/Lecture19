@@ -3,19 +3,21 @@ package com.example.recipe.data.api
 import android.util.Log
 import com.example.recipe.models.data.Recipe
 import com.example.recipe.models.data.RecipeResponse
+import com.example.recipe.utils.Constants
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.HttpUrl
 import java.lang.Exception
 import javax.inject.Inject
-import javax.inject.Named
-
 
 /**
  * Реализация [RecipesApi] с помощью [OkHttpClient]
  */
-class OkHttpRecipesApiImpl @Inject constructor(@Named("OkHttpClient") private val httpClient: OkHttpClient, @Named("HttpUrl") private val url: HttpUrl): RecipesApi {
+class OkHttpRecipesApiImpl @Inject constructor(): RecipesApi {
+
+    @Inject lateinit var httpClient: OkHttpClient
+    @Inject lateinit var url: HttpUrl
 
     override fun get(query: String): List<Recipe> {
 
@@ -23,8 +25,8 @@ class OkHttpRecipesApiImpl @Inject constructor(@Named("OkHttpClient") private va
         val httpBuilder: HttpUrl.Builder = url.newBuilder()
         httpBuilder.addQueryParameter("type", "public")
         httpBuilder.addQueryParameter("q", query)
-        httpBuilder.addQueryParameter("app_id", Constants.id)
-        httpBuilder.addQueryParameter("app_key", Constants.key)
+        httpBuilder.addQueryParameter("app_id", Constants.ID)
+        httpBuilder.addQueryParameter("app_key", Constants.KEY)
 
         //Создать get запрос
         val request = Request.Builder()

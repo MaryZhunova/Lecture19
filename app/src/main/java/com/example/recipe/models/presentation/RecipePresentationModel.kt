@@ -17,7 +17,6 @@ import kotlinx.parcelize.Parcelize
  * @param cuisineType вид кухни мира
  * @param mealType для какого приема пищи подходит блюдо
  * @param dishType вид блюда
- * @param totalTime время, необходимое для приготовления
  */
 @Parcelize
 data class RecipePresentationModel(val uri: String,
@@ -30,5 +29,4 @@ data class RecipePresentationModel(val uri: String,
                                    val healthLabels: List<String>,
                                    val cuisineType: List<String>,
                                    val mealType: List<String>,
-                                   val dishType: List<String>,
-                                   val totalTime: String) : Parcelable
+                                   val dishType: List<String>) : Parcelable

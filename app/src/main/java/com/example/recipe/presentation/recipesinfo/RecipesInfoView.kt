@@ -1,4 +1,4 @@
-package com.example.recipe.presentation.view.recipesinfo
+package com.example.recipe.presentation.recipesinfo
 
 import com.example.recipe.models.presentation.RecipePresentationModel
 

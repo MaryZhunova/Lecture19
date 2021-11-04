@@ -1,4 +1,4 @@
-package com.example.recipe.presentation.viewmodel
+package com.example.recipe.presentation.recipesinfo.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,10 +7,10 @@ import com.example.recipe.domain.RecipesInteractor
 import com.example.recipe.models.converter.Converter
 import com.example.recipe.models.domain.RecipeDomainModel
 import com.example.recipe.models.presentation.RecipePresentationModel
-import com.example.recipe.presentation.view.recipesinfo.RecipesInfoActivity
+import com.example.recipe.presentation.recipesinfo.RecipesInfoActivity
 import com.example.recipe.utils.ISchedulersProvider
 import io.reactivex.Single
-import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 /**
@@ -23,7 +23,7 @@ class RecipesInfoViewModel @Inject constructor(private val recipesInteractor: Re
     private val progressLiveData: MutableLiveData<Boolean> = MutableLiveData()
     private val errorLiveData: MutableLiveData<Throwable> = MutableLiveData()
     private val recipesLiveData: MutableLiveData<List<RecipePresentationModel>> = MutableLiveData()
-    private var disposable: Disposable? = null
+    private val composite: CompositeDisposable = CompositeDisposable()
 
     /**
      * Получение списка рецептов
@@ -31,21 +31,19 @@ class RecipesInfoViewModel @Inject constructor(private val recipesInteractor: Re
      * @param query ключевое слово для запроса
      */
     fun get(query: String) {
-        disposable = Single.fromCallable { recipesInteractor.get(query) }
+        val disposable = Single.fromCallable { recipesInteractor.get(query) }
             .map { recipes -> recipes.map(converter::convert) }
             .doOnSubscribe { progressLiveData.postValue(true) }
             .doAfterTerminate { progressLiveData.postValue(false) }
             .subscribeOn(schedulersProvider.io())
             .observeOn(schedulersProvider.ui())
             .subscribe(recipesLiveData::setValue, errorLiveData::setValue)
+        composite.add(disposable)
     }
 
     override fun onCleared() {
         super.onCleared()
-        if (disposable != null && !disposable!!.isDisposed) {
-            disposable!!.dispose()
-            disposable = null
-        }
+        composite.dispose()
     }
 
     fun getProgressLiveData(): LiveData<Boolean> = progressLiveData

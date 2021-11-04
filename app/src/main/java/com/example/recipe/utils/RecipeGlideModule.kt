@@ -3,6 +3,5 @@ package com.example.recipe.utils
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.module.AppGlideModule
 
-
 @GlideModule
 class RecipeGlideModule : AppGlideModule()

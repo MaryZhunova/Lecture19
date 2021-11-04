@@ -11,7 +11,7 @@
         android:theme="@style/Theme.Recipe"
         android:name=".NetworkApp">
         <activity
-            android:name="com.example.recipe.presentation.view.main.MainRecipesActivity"
+            android:name="com.example.recipe.presentation.main.MainRecipesActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,34 +20,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.recipe.presentation.view.settings.SettingsActivity"
+            android:name="com.example.recipe.presentation.settings.SettingsActivity"
             android:exported="true">
         </activity>
-        <activity android:name="com.example.recipe.presentation.view.recipesinfo.RecipesInfoActivity"
+        <activity
+            android:name="com.example.recipe.presentation.favourites.FavouritesActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="www.example.com"
-                    android:pathPrefix="/recipes-info-activity"
-                    android:scheme="http" />
-            </intent-filter>
         </activity>
-        <activity android:name="com.example.recipe.presentation.view.recipedetail.RecipeDetailActivity"
+        <activity android:name="com.example.recipe.presentation.recipesinfo.RecipesInfoActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="www.example.com"
-                    android:pathPrefix="/recipe-detail-activity"
-                    android:scheme="http" />
-            </intent-filter>
+        </activity>
+        <activity android:name="com.example.recipe.presentation.recipedetail.RecipeDetailActivity"
+            android:exported="true">
         </activity>
     </application>
 
