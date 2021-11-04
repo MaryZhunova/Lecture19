@@ -10,14 +10,12 @@ import okhttp3.Request
 import okhttp3.HttpUrl
 import java.lang.Exception
 import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * Реализация [RecipesApi] с помощью [OkHttpClient]
  */
-class OkHttpRecipesApiImpl @Inject constructor(): RecipesApi {
-
-    @Inject lateinit var httpClient: OkHttpClient
-    @Inject lateinit var url: HttpUrl
+class OkHttpRecipesApiImpl @Inject constructor(@Named("httpClient") val httpClient: OkHttpClient, @Named("httpUrl") val url: HttpUrl): RecipesApi {
 
     override fun get(query: String): List<Recipe> {
 

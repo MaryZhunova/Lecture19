@@ -11,6 +11,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipe.NetworkApp
 import com.example.recipe.R
 import com.example.recipe.presentation.recipesinfo.viewmodel.RecipesInfoViewModel
@@ -108,6 +110,7 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
     override fun showData(recipes: List<RecipePresentationModel>) {
         adapter = RecipesInfoAdapter(recipes, this)
         binding.recyclerView.adapter = adapter
+        binding.recyclerView.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
     }
 
     override fun showError(throwable: Throwable) {

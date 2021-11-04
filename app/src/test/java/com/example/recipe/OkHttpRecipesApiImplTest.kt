@@ -6,8 +6,10 @@ import com.example.recipe.models.data.Recipe
 import com.google.common.truth.Truth
 import io.mockk.every
 import io.mockk.mockk
+import okhttp3.HttpUrl
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
 import okhttp3.Protocol
 import okhttp3.Request
 import okhttp3.Response
@@ -18,13 +20,14 @@ import java.lang.Exception
 
 class OkHttpRecipesApiImplTest {
 
+    private lateinit var url: HttpUrl
     private lateinit var api: OkHttpRecipesApiImpl
+    private val okHttpClient: OkHttpClient = mockk()
 
     @Before
     fun setUp() {
-        api = OkHttpRecipesApiImpl()
-        api.httpClient  = mockk()
-        api.url = Constants.URL.toHttpUrl()
+        url = Constants.URL.toHttpUrl()
+        api = OkHttpRecipesApiImpl(okHttpClient, url)
     }
 
     @Test
@@ -76,7 +79,7 @@ class OkHttpRecipesApiImplTest {
             .build()
         val expectedResult = listOf(Recipe("uri", "label", "image", "source",
             "url", listOf("ingredientLines"), listOf("dietLabels"), listOf("healthLabels"), listOf("cuisineType"), listOf("mealType"), listOf("dishType")))
-        every { api.httpClient.newCall(any()).execute() } returns response
+        every { okHttpClient.newCall(any()).execute() } returns response
 
         val testResult = api.get(queryArgument)
 
