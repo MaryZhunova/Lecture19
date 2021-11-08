@@ -58,19 +58,6 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.menu_filter, menu)
-
-//        val searchMenu = menu?.findItem(R.id.search)
-//        val searchView = searchMenu?.actionView as SearchView
-//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-//            override fun onQueryTextSubmit(query: String?): Boolean {
-//                return false
-//            }
-//
-//            override fun onQueryTextChange(newText: String?): Boolean {
-//                adapter.filter.filter(newText)
-//                return true
-//            }
-//        })
             return true
     }
 
@@ -114,8 +101,10 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
     }
 
     override fun showError(throwable: Throwable) {
-        Snackbar.make(binding.root, "Couldn't find any recipe", BaseTransientBottomBar.LENGTH_LONG).show()
-        Log.e("error", throwable.toString())
+        throwable.message?.let {
+            binding.errorLayout.visibility = View.VISIBLE
+            binding.errorText.text = it
+        }
     }
 
     override fun onRecipeClick(position: Int) {

@@ -20,6 +20,7 @@ class DomainToPresentationConverter @Inject constructor(): Converter<RecipeDomai
             healthLabels = from.healthLabels,
             cuisineType = from.cuisineType,
             mealType = from.mealType,
-            dishType = from.dishType
+            dishType = from.dishType,
+            isFavourite = from.isFavourite
         )
 }

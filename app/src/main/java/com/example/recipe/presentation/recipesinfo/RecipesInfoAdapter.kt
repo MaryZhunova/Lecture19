@@ -17,11 +17,7 @@ import com.example.recipe.utils.GlideApp
 /**
  * Адаптер для отображения элементов списка
  */
-class RecipesInfoAdapter(private val recipes: List<RecipePresentationModel>, private val onRecipeClickListener: OnRecipeClickListener): RecyclerView.Adapter<MyViewHolder>()
-//    , Filterable
-    {
-
-//    var recipesCopy: List<*>? = null
+class RecipesInfoAdapter(private val recipes: List<RecipePresentationModel>, private val onRecipeClickListener: OnRecipeClickListener): RecyclerView.Adapter<MyViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.recipes_list_info_item, parent, false), onRecipeClickListener)
@@ -36,48 +32,23 @@ class RecipesInfoAdapter(private val recipes: List<RecipePresentationModel>, pri
                 .into(holder.icon)
         }
         holder.recipeName.text = recipes[position].label
+        if (recipes[position].isFavourite) {
+            holder.favouriteFilled.visibility = View.VISIBLE
+        } else {
+            holder.favouriteFilled.visibility = View.INVISIBLE
+        }
     }
 
     override fun getItemCount(): Int {
         return recipes.size
     }
-
-//    override fun getFilter(): Filter {
-//        return object : Filter() {
-//            override fun publishResults(constraint: CharSequence, results: FilterResults) {
-//                recipesCopy = results.values as List<*>
-//                notifyDataSetChanged()
-//            }
-//
-//            override fun performFiltering(constraint: CharSequence): FilterResults {
-//                val filteredResults: List<*> = if (constraint.isEmpty()) {
-//                    recipes
-//                } else {
-//                    getFilteredResults(constraint.toString().lowercase(Locale.getDefault()))
-//                }
-//                val results = FilterResults()
-//                results.values = filteredResults
-//                return results
-//            }
-//        }
-//    }
-//
-//    fun getFilteredResults(constraint: String): List<RecipePresentationModel> {
-//        val results = mutableListOf<RecipePresentationModel>()
-//        for (item in recipes) {
-//            if (item.label.lowercase(Locale.getDefault()).contains(constraint)) {
-//                results.add(item)
-//            }
-//        }
-//        return results
-//    }
 }
 
 class MyViewHolder(itemView: View, onRecipeClickListener: OnRecipeClickListener) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
     val icon: ImageView = itemView.findViewById(R.id.preview_icon)
     val recipeName: TextView = itemView.findViewById(R.id.recipe_name)
+    val favouriteFilled: ImageView = itemView.findViewById(R.id.fav_filled)
     private val favourite: ImageView = itemView.findViewById(R.id.fav)
-    private val favouriteFilled: ImageView = itemView.findViewById(R.id.fav_filled)
     private val onRecipeClick = onRecipeClickListener
 
     init {

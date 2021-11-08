@@ -6,7 +6,7 @@ package com.example.recipe.utils
 class Constants {
     companion object{
         const val URL = "https://api.edamam.com/api/recipes/v2"
-        const val KEY = "e906d60b053299bd251af78fa297f507"
+        const val KEY = "1c70177c0b5d56057410b74bd9ae1283"
         const val ID = "f2aed758"
     }
 }

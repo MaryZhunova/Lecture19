@@ -23,8 +23,8 @@ class NetworkModule(val url: String) {
     @Named("httpClient")
     fun providesHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
-            .readTimeout(3, TimeUnit.SECONDS)
-            .writeTimeout(3, TimeUnit.SECONDS)
+            .readTimeout(3, TimeUnit.MINUTES)
+            .writeTimeout(3, TimeUnit.MINUTES)
             .cookieJar(CookieJar.NO_COOKIES)
             .addNetworkInterceptor(HttpLoggingInterceptor())
             .build()

@@ -33,6 +33,7 @@ data class Hit(val recipe: Recipe) : Parcelable
  * @param cuisineType вид кухни мира
  * @param mealType для какого приема пищи подходит блюдо
  * @param dishType вид блюда
+ * @param isFavourite добавлено ли блюдо в избранное
  */
 @Parcelize
 data class Recipe(val uri: String,
@@ -45,4 +46,5 @@ data class Recipe(val uri: String,
                   val healthLabels: List<String>,
                   val cuisineType: List<String>,
                   val mealType: List<String>,
-                  val dishType: List<String>) : Parcelable
+                  val dishType: List<String>,
+                  var isFavourite: Boolean = false) : Parcelable

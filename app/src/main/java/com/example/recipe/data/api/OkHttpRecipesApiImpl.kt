@@ -34,12 +34,15 @@ class OkHttpRecipesApiImpl @Inject constructor(@Named("httpClient") val httpClie
 
         //Отправить get запрос
         val response = httpClient.newCall(request).execute()
+        if (!response.isSuccessful) {
+            throw Exception("Server error ${response.code}")
+        }
         val body = response.body?.string()
         //Преобразовать полученный результат в модель Recipe
         val res = Gson().fromJson(body, RecipeResponse::class.java)
         if (res.hits.isEmpty()) {
             Log.d("error body", "tt")
-            throw Exception()
+            throw Exception("Couldn't find any recipe")
         }
         return res.hits.map { hit -> hit.recipe }
     }

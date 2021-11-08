@@ -42,6 +42,13 @@ class RecipeDetailActivity: AppCompatActivity() {
         //Отобразить название рецепта
         binding.label.text = recipe?.label
 
+        //Отобразить избранный рецепт или нет
+        if (recipe?.isFavourite == true) {
+            binding.favFilled.visibility = View.VISIBLE
+        } else {
+            binding.favFilled.visibility = View.INVISIBLE
+        }
+
         //Обработать добавление/удаление рецепта в избранное
         binding.fav.setOnClickListener {
             if (!binding.favFilled.isVisible) {

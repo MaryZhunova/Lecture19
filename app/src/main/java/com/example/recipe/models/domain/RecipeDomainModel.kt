@@ -29,4 +29,5 @@ data class RecipeDomainModel(val uri: String,
                              val healthLabels: List<String>,
                              val cuisineType: List<String>,
                              val mealType: List<String>,
-                             val dishType: List<String>) : Parcelable
+                             val dishType: List<String>,
+                             var isFavourite: Boolean = false) : Parcelable
