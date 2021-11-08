@@ -1,9 +1,9 @@
 package com.example.recipe
 
 import com.example.recipe.data.api.OkHttpRecipesApiImpl
+import com.example.recipe.data.dao.RecipesDbImpl
 import com.example.recipe.data.repository.RecipesRepositoryImpl
 import com.example.recipe.models.converter.Converter
-import com.example.recipe.models.converter.RecipeToDomainConverter
 import com.example.recipe.models.data.Recipe
 import com.example.recipe.models.domain.RecipeDomainModel
 import com.google.common.truth.Truth
@@ -15,13 +15,13 @@ import java.lang.Exception
 
 class OkHttpRepositoryTest {
     private val api: OkHttpRecipesApiImpl = mockk()
+    private val db: RecipesDbImpl = mockk()
     private lateinit var converter: Converter<Recipe, RecipeDomainModel>
     private lateinit var repositoryImpl: RecipesRepositoryImpl
 
     @Before
     fun setUp() {
-        converter = RecipeToDomainConverter()
-        repositoryImpl = RecipesRepositoryImpl(api, converter)
+        repositoryImpl = RecipesRepositoryImpl(db, api)
     }
 
     @Test

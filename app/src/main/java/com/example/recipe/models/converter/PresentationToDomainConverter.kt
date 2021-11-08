@@ -5,11 +5,11 @@ import com.example.recipe.models.presentation.RecipePresentationModel
 import javax.inject.Inject
 
 /**
- * Конвретер из [RecipeDomainModel] в [RecipePresentationModel]
+ * Конвретер из [RecipePresentationModel] в [RecipeDomainModel]
  */
-class DomainToPresentationConverter @Inject constructor(): Converter<RecipeDomainModel, RecipePresentationModel> {
-    override fun convert(from: RecipeDomainModel) =
-        RecipePresentationModel(
+class PresentationToDomainConverter @Inject constructor(): Converter<RecipePresentationModel, RecipeDomainModel> {
+    override fun convert(from: RecipePresentationModel) =
+        RecipeDomainModel(
             uri = from.uri,
             label = from.label,
             image = from.image,

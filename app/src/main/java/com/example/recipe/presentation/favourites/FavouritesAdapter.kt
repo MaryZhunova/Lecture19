@@ -1,4 +1,4 @@
-package com.example.recipe.presentation.recipesinfo
+package com.example.recipe.presentation.favourites
 
 import android.content.Context
 import android.net.Uri
@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.view.isVisible
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipe.R
@@ -17,10 +16,10 @@ import com.example.recipe.utils.GlideApp
 /**
  * Адаптер для отображения элементов списка
  */
-class RecipesInfoAdapter(val recipes: MutableList<RecipePresentationModel>, private val onRecipeClickListener: OnRecipeClickListener): RecyclerView.Adapter<RecipesInfoAdapter.MyViewHolder>(){
+class FavouritesAdapter(val recipes: MutableList<RecipePresentationModel>, private val onFavouriteRecipeClickListener: OnFavouriteRecipeClickListener): RecyclerView.Adapter<FavouritesAdapter.MyViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        return MyViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.recipes_list_info_item, parent, false), onRecipeClickListener)
+        return MyViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.recipes_list_info_item, parent, false), onFavouriteRecipeClickListener)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
@@ -32,27 +31,21 @@ class RecipesInfoAdapter(val recipes: MutableList<RecipePresentationModel>, priv
                 .into(holder.icon)
         }
         holder.recipeName.text = recipes[position].label
-        if (recipes[position].isFavourite) {
-            holder.favouriteFilled.visibility = View.VISIBLE
-        } else {
-            holder.favouriteFilled.visibility = View.INVISIBLE
-        }
+        holder.favouriteFilled.visibility = View.VISIBLE
     }
 
     override fun getItemCount(): Int {
         return recipes.size
     }
 
-    inner class MyViewHolder(itemView: View, onRecipeClickListener: OnRecipeClickListener) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class MyViewHolder(itemView: View, onFavouriteRecipeClickListener: OnFavouriteRecipeClickListener) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         val icon: ImageView = itemView.findViewById(R.id.preview_icon)
         val recipeName: TextView = itemView.findViewById(R.id.recipe_name)
         val favouriteFilled: ImageView = itemView.findViewById(R.id.fav_filled)
-        private val favourite: ImageView = itemView.findViewById(R.id.fav)
-        private val onRecipeClick = onRecipeClickListener
+        private val onRecipeClick = onFavouriteRecipeClickListener
 
         init {
             itemView.setOnClickListener(this)
-            favourite.setOnClickListener(this)
             favouriteFilled.setOnClickListener(this)
         }
 
@@ -67,16 +60,11 @@ class RecipesInfoAdapter(val recipes: MutableList<RecipePresentationModel>, priv
 
         override fun onClick(v: View?) {
             if (v != null) {
-                if (v.id == favourite.id || v.id == favouriteFilled.id) {
-                    if (!favouriteFilled.isVisible) {
-                        favouriteFilled.visibility = View.VISIBLE
-                        recipes[adapterPosition].isFavourite = true
-                        onRecipeClick.onFavouriteClick(recipes[adapterPosition], true)
-                    } else {
-                        favouriteFilled.visibility = View.INVISIBLE
-                        recipes[adapterPosition].isFavourite = false
-                        onRecipeClick.onFavouriteClick(recipes[adapterPosition], false)
-                    }
+                if (v.id == favouriteFilled.id) {
+                    val position = adapterPosition
+                    onRecipeClick.onFavouriteClick(recipes[position])
+                    recipes.removeAt(position)
+                    notifyItemRemoved(position)
                 } else {
                     onRecipeClick.onRecipeClick(recipes[adapterPosition])
                 }
@@ -89,7 +77,7 @@ class RecipesInfoAdapter(val recipes: MutableList<RecipePresentationModel>, priv
  * Интерфейс слушателя клика на элемент списка
  */
 
-interface OnRecipeClickListener {
+interface OnFavouriteRecipeClickListener {
     /**
      * Обработка нажатия на элемент списка
      *
@@ -100,7 +88,6 @@ interface OnRecipeClickListener {
      * Обработка нажатия на imageview "favorite" элемента списка
      *
      * @param recipePresentationModel элемент из списка
-     * @param pressed true - добавлен в избранное, false - удален из избранного
      */
-    fun onFavouriteClick(recipePresentationModel: RecipePresentationModel, pressed: Boolean)
+    fun onFavouriteClick(recipePresentationModel: RecipePresentationModel)
 }

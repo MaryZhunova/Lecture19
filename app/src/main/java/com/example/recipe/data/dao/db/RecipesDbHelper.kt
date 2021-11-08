@@ -1,12 +1,14 @@
-package com.example.recipe.data.db
+package com.example.recipe.data.dao.db
 
 import android.content.Context
 import android.database.sqlite.SQLiteOpenHelper
 import android.database.sqlite.SQLiteDatabase
 import android.provider.BaseColumns
+import com.example.recipe.data.dao.RecipesDbContract
 import javax.inject.Inject
+import javax.inject.Named
 
-class RecipesDbHelper @Inject constructor(context: Context?) :
+class RecipesDbHelper @Inject constructor(@Named("context") context: Context) :
     SQLiteOpenHelper(context, RecipesDbContract.DB_FILE_NAME, null, RecipesDbContract.DB_VERSION) {
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -24,22 +26,30 @@ class RecipesDbHelper @Inject constructor(context: Context?) :
 
     companion object {
         private const val CREATE_TABLE_RECIPES =
-            "CREATE TABLE IF NOT EXISTS " + RecipesDbContract.RecipesEntry.TABLE_NAME +
+            "CREATE TABLE IF NOT EXISTS " + RecipesDbContract.RecipesEntry.TABLE_NAME_RECIPES +
                     "(" +
                     BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    RecipesDbContract.RecipesEntry.URI + " TEXT NOT NULL UNIQUE ON CONFLICT FAIL," +
+                    RecipesDbContract.RecipesEntry.URI + " TEXT NOT NULL UNIQUE," +
                     RecipesDbContract.RecipesEntry.LABEL + " TEXT," +
                     RecipesDbContract.RecipesEntry.IMAGE + " TEXT," +
                     RecipesDbContract.RecipesEntry.SOURCE + " TEXT," +
-                    RecipesDbContract.RecipesEntry.URL + " TEXT," +
-                    RecipesDbContract.RecipesEntry.INGREDIENT_LINES + " TEXT," +
-                    RecipesDbContract.RecipesEntry.DIET_LABELS + " TEXT," +
-                    RecipesDbContract.RecipesEntry.HEALTH_LABELS + " TEXT," +
-                    RecipesDbContract.RecipesEntry.CUISINE_TYPE + " TEXT," +
-                    RecipesDbContract.RecipesEntry.MEAL_TYPE + " TEXT," +
-                    RecipesDbContract.RecipesEntry.DISH_TYPE + " TEXT" + ")"
+                    RecipesDbContract.RecipesEntry.URL + " TEXT" +
+//                    RecipesDbContract.RecipesEntry.INGREDIENT_LINES + " TEXT," +
+//                    RecipesDbContract.RecipesEntry.DIET_LABELS + " TEXT," +
+//                    RecipesDbContract.RecipesEntry.HEALTH_LABELS + " TEXT," +
+//                    RecipesDbContract.RecipesEntry.CUISINE_TYPE + " TEXT," +
+//                    RecipesDbContract.RecipesEntry.MEAL_TYPE + " TEXT," +
+                    /*RecipesDbContract.RecipesEntry.DISH_TYPE  + " TEXT" + */")"
+
+//        private const val CREATE_TABLE_INGREDIENT_LINES =
+//            "CREATE TABLE IF NOT EXISTS " + RecipesDbContract.IngredientLinesEntry.TABLE_NAME_INGREDIENT_LINES +
+//                    "(" +
+//                    BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+//                    RecipesDbContract.IngredientLinesEntry.INGREDIENT + " TEXT," +
+//                    " FOREIGN KEY ("+RecipesDbContract.IngredientLinesEntry.INGREDIENT_LINES+") REFERENCES "+RecipesDbContract.RecipesEntry.TABLE_NAME_RECIPES+"("+RecipesDbContract.RecipesEntry.INGREDIENT_LINES+"))"
+
         private const val DROP_TABLE_RECIPES =
-            "DROP TABLE IF EXISTS " + RecipesDbContract.RecipesEntry.TABLE_NAME
+            "DROP TABLE IF EXISTS " + RecipesDbContract.RecipesEntry.TABLE_NAME_RECIPES
     }
 }
 

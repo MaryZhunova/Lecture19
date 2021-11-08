@@ -1,15 +1,16 @@
 package com.example.recipe.models.converter
 
-import com.example.recipe.models.domain.RecipeDomainModel
-import com.example.recipe.models.presentation.RecipePresentationModel
+import com.example.recipe.models.data.Recipe
+import com.example.recipe.models.data.RecipeDB
 import javax.inject.Inject
 
 /**
- * Конвретер из [RecipeDomainModel] в [RecipePresentationModel]
+ * Конвретер из [Recipe] в [RecipeDB]
  */
-class DomainToPresentationConverter @Inject constructor(): Converter<RecipeDomainModel, RecipePresentationModel> {
-    override fun convert(from: RecipeDomainModel) =
-        RecipePresentationModel(
+class RecipeToRecipeDBConverter @Inject constructor() :Converter<Recipe, RecipeDB> {
+
+    override fun convert(from: Recipe) =
+        RecipeDB(
             uri = from.uri,
             label = from.label,
             image = from.image,

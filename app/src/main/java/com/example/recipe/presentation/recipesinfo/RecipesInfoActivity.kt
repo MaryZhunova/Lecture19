@@ -30,7 +30,6 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
     private lateinit var binding: RecipesListInfoBinding
     private lateinit var infoViewModel: RecipesInfoViewModel
     private var query: String? = null
-    private lateinit var recipe: List<RecipePresentationModel>
     private lateinit var adapter: RecipesInfoAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +38,7 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
         binding = RecipesListInfoBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-        showData(emptyList())
+        showData(mutableListOf())
 
         query = intent.getStringExtra("query")
         binding.result.text = getString(R.string.search_result, query)
@@ -49,10 +48,8 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
         //Наблюдать за LiveData
         observeLiveData()
 
-        if (savedInstanceState == null) {
-            //Отправить сетевой запрос с ключевым словом query через вью модель
-            query?.let { infoViewModel.get(it) }
-        }
+        //Отправить сетевой запрос с ключевым словом query через вью модель
+        query?.let { infoViewModel.get(it) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -84,8 +81,7 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
             .observe(this) { isVisible: Boolean -> showProgress(isVisible) }
         infoViewModel.getRecipesLiveData()
             .observe(this) { recipes: List<RecipePresentationModel> ->
-                showData(recipes)
-                recipe = recipes
+                showData(recipes.toMutableList())
             }
         infoViewModel.getErrorLiveData().observe(this) { throwable: Throwable -> showError(throwable) }
     }
@@ -94,7 +90,7 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
         binding.progressFrameLayout.visibility = if (isVisible) View.VISIBLE else View.GONE
     }
 
-    override fun showData(recipes: List<RecipePresentationModel>) {
+    override fun showData(recipes: MutableList<RecipePresentationModel>) {
         adapter = RecipesInfoAdapter(recipes, this)
         binding.recyclerView.adapter = adapter
         binding.recyclerView.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
@@ -107,19 +103,19 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
         }
     }
 
-    override fun onRecipeClick(position: Int) {
+    override fun onRecipeClick(recipePresentationModel: RecipePresentationModel) {
         val newIntent = Intent(applicationContext, RecipeDetailActivity::class.java)
-        newIntent.putExtra("recipe", recipe[position])
+        newIntent.putExtra("recipe", recipePresentationModel)
         startActivity(newIntent)
     }
 
-    override fun onFavouriteClick(position: Int, pressed: Boolean) {
+    override fun onFavouriteClick(recipePresentationModel: RecipePresentationModel, pressed: Boolean) {
         if (pressed) {
             Toast.makeText(applicationContext, "Added to favourites", Toast.LENGTH_SHORT).show()
-            //todo
+            infoViewModel.addToFavourites(recipePresentationModel)
         } else {
             Toast.makeText(applicationContext, "Removed from favourites", Toast.LENGTH_SHORT).show()
-            //todo
+            infoViewModel.deleteFromFavourites(recipePresentationModel)
         }
     }
 }

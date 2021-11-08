@@ -1,4 +1,4 @@
-package com.example.recipe.presentation.recipesinfo.viewmodel
+package com.example.recipe.presentation.favourites.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,7 +7,7 @@ import com.example.recipe.domain.RecipesInteractor
 import com.example.recipe.models.converter.Converter
 import com.example.recipe.models.domain.RecipeDomainModel
 import com.example.recipe.models.presentation.RecipePresentationModel
-import com.example.recipe.presentation.recipesinfo.RecipesInfoActivity
+import com.example.recipe.presentation.favourites.FavouritesActivity
 import com.example.recipe.utils.ISchedulersProvider
 import io.reactivex.Completable
 import io.reactivex.CompletableObserver
@@ -17,12 +17,12 @@ import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 /**
- * ViewModel [RecipesInfoActivity]
+ * ViewModel [FavouritesActivity]
  */
-class RecipesInfoViewModel @Inject constructor(private val recipesInteractor: RecipesInteractor,
-                                               private val schedulersProvider: ISchedulersProvider,
-                                               private val converterToPresentation: Converter<RecipeDomainModel, RecipePresentationModel>,
-                                               private val converterToDomain: Converter<RecipePresentationModel, RecipeDomainModel>) : ViewModel() {
+class FavouritesViewModel @Inject constructor(private val recipesInteractor: RecipesInteractor,
+                                              private val schedulersProvider: ISchedulersProvider,
+                                              private val converter: Converter<RecipeDomainModel, RecipePresentationModel>,
+                                              private val converterToDomain: Converter<RecipePresentationModel, RecipeDomainModel>) : ViewModel() {
 
     private val progressLiveData: MutableLiveData<Boolean> = MutableLiveData()
     private val errorLiveData: MutableLiveData<Throwable> = MutableLiveData()
@@ -30,40 +30,17 @@ class RecipesInfoViewModel @Inject constructor(private val recipesInteractor: Re
     private val composite: CompositeDisposable = CompositeDisposable()
 
     /**
-     * Получение списка рецептов
-     *
-     * @param query ключевое слово для запроса
+     * Получить список избранных рецептов
      */
-    fun get(query: String) {
-        val disposable = Single.fromCallable { recipesInteractor.get(query) }
-            .map { recipes -> recipes.map(converterToPresentation::convert) }
+    fun get() {
+        val disposable = Single.fromCallable { recipesInteractor.getFavouriteRecipes() }
+            .map { recipes -> recipes.map(converter::convert) }
             .doOnSubscribe { progressLiveData.postValue(true) }
             .doAfterTerminate { progressLiveData.postValue(false) }
             .subscribeOn(schedulersProvider.io())
             .observeOn(schedulersProvider.ui())
             .subscribe(recipesLiveData::setValue, errorLiveData::setValue)
         composite.add(disposable)
-    }
-
-    /**
-     * Добавление рецепта в избранное
-     *
-     * @param recipe рецепт
-     */
-    fun addToFavourites(recipe: RecipePresentationModel) {
-        val completable = object: CompletableObserver {
-            override fun onSubscribe(d: Disposable) {
-            }
-            override fun onComplete() {
-            }
-            override fun onError(e: Throwable) {
-                errorLiveData.value = e
-            }
-        }
-        Completable.fromRunnable {recipesInteractor.addToFavourites(converterToDomain.convert(recipe))}
-            .subscribeOn(schedulersProvider.io())
-            .observeOn(schedulersProvider.ui())
-            .subscribe(completable)
     }
 
     /**

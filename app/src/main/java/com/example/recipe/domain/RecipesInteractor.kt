@@ -13,7 +13,7 @@ class RecipesInteractor @Inject constructor(private val repository: RecipesRepos
      * Получить список рецептов
      *
      * @param query ключевое слово для запроса
-     * @return [List<Recipe>] список рецептов
+     * @return [List<RecipeDomainModel>] список рецептов
      */
     fun get(query: String): List<RecipeDomainModel> {
         return repository.get(query)
@@ -25,6 +25,24 @@ class RecipesInteractor @Inject constructor(private val repository: RecipesRepos
      */
     fun getFavouriteRecipes(): List<RecipeDomainModel> {
         return repository.getFavouriteRecipes()
+    }
+
+    /**
+     * Добавить рецепт в избранное
+     *
+     * @param [recipe] рецепт
+     */
+    fun addToFavourites(recipe: RecipeDomainModel) {
+        repository.addToFavourites(recipe)
+    }
+
+    /**
+     * Удалить рецепт из избранного
+     *
+     * @param [recipe] рецепт
+     */
+    fun deleteFromFavourites(recipe: RecipeDomainModel) {
+        repository.deleteFromFavourites(recipe)
     }
 
 }

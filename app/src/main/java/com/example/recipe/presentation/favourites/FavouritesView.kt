@@ -1,11 +1,11 @@
-package com.example.recipe.presentation.recipesinfo
+package com.example.recipe.presentation.favourites
 
 import com.example.recipe.models.presentation.RecipePresentationModel
 
 /**
  * Интерфейс, описывающий возможности View
  */
-interface RecipesInfoView {
+interface FavouritesView {
     /**
      * Показать/скрыть ProgressBar
      *

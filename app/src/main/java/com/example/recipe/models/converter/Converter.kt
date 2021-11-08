@@ -6,7 +6,7 @@ package com.example.recipe.models.converter
 interface Converter<F, T> {
 
     /**
-     * Конвеертировать из типа данных [F] в тип данных [T]
+     * Конвертировать из типа данных [F] в тип данных [T]
      *
      * @return [T]
      */

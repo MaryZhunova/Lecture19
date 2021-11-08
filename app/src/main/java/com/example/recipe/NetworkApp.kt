@@ -14,7 +14,7 @@ class NetworkApp : Application() {
     override fun onCreate() {
         super.onCreate()
         appComponent = DaggerAppComponent.builder()
-            .networkModule(NetworkModule(Constants.URL))
+            .networkModule(NetworkModule(Constants.URL, this))
             .build()
     }
 

@@ -1,5 +1,6 @@
 package com.example.recipe.di
 
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import okhttp3.CookieJar
@@ -11,7 +12,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Named
 
 @Module
-class NetworkModule(val url: String) {
+class NetworkModule(val url: String, val context: Context) {
 
     @Provides
     @Named("httpUrl")
@@ -28,5 +29,11 @@ class NetworkModule(val url: String) {
             .cookieJar(CookieJar.NO_COOKIES)
             .addNetworkInterceptor(HttpLoggingInterceptor())
             .build()
+    }
+
+    @Provides
+    @Named("context")
+    fun providesContext(): Context {
+        return context
     }
 }

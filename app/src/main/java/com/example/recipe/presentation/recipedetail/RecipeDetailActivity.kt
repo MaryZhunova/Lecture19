@@ -11,16 +11,24 @@ import android.text.method.LinkMovementMethod
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.recipe.NetworkApp
 import com.example.recipe.models.presentation.RecipePresentationModel
+import com.example.recipe.presentation.favourites.FavouritesAdapter
+import com.example.recipe.presentation.favourites.viewmodel.FavouritesViewModel
 import com.example.recipe.utils.GlideApp
 
 /**
  * Активити приложения, которая отображает детальную информацию об одном рецепте
  */
-class RecipeDetailActivity: AppCompatActivity() {
+class RecipeDetailActivity: AppCompatActivity(), RecipeDetailView {
 
     private lateinit var binding: RecipeDetailBinding
+    private lateinit var recipeDetailViewModel: RecipeDetailViewModel
     private var recipe: RecipePresentationModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +37,10 @@ class RecipeDetailActivity: AppCompatActivity() {
         setContentView(binding.root)
 
         recipe = intent.getParcelableExtra("recipe")
+
+        createViewModel()
+        //Наблюдать за LiveData
+        observeLiveData()
 
         //Отобразить картинку блюда
         if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("switch_images", true)) {
@@ -53,18 +65,22 @@ class RecipeDetailActivity: AppCompatActivity() {
         binding.fav.setOnClickListener {
             if (!binding.favFilled.isVisible) {
                 binding.favFilled.visibility = View.VISIBLE
+                recipe?.isFavourite = true
+                recipe?.let { it1 -> recipeDetailViewModel.addToFavourites(it1) }
                 Toast.makeText(applicationContext, "Added to favourites", Toast.LENGTH_SHORT).show()
                 //todo
             } else {
                 binding.favFilled.visibility = View.INVISIBLE
+                recipe?.isFavourite = false
+                recipe?.let { it2 -> recipeDetailViewModel.deleteFromFavourites(it2) }
                 Toast.makeText(applicationContext, "Removed from favourites", Toast.LENGTH_SHORT).show()
                 //todo
             }
         }
 
         //Отобразить список ингредиентов
-        val adapter = recipe?.let { ArrayAdapter(this, R.layout.ingredient, R.id.ingredient_name, it.ingredientLines) }
-        binding.ingredientsList.adapter = adapter
+//        val adapter = recipe?.let { ArrayAdapter(this, R.layout.ingredient, R.id.ingredient_name, it.ingredientLines) }
+//        binding.ingredientsList.adapter = adapter
 
 
         //Отобразить ссылку на подробный рецепт
@@ -72,6 +88,26 @@ class RecipeDetailActivity: AppCompatActivity() {
         binding.url.movementMethod = LinkMovementMethod.getInstance()
         val text = "<a href='${recipe?.url}'> ${recipe?.source} </a>"
         binding.url.text = Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT)
+    }
 
+    private fun createViewModel() {
+        recipeDetailViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                if (modelClass.isAssignableFrom(RecipeDetailViewModel::class.java)) {
+                    return NetworkApp.appComponent(applicationContext).getRecipeDetailViewModel() as T
+                }
+                throw IllegalArgumentException ("UnknownViewModel")
+            }
+        })[RecipeDetailViewModel::class.java]
+    }
+
+    private fun observeLiveData() {
+        recipeDetailViewModel.getErrorLiveData().observe(this) { throwable: Throwable -> showError(throwable) }
+    }
+
+    override fun showError(throwable: Throwable) {
+        throwable.message?.let {
+            Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT).show()
+        }
     }
 }

@@ -11,7 +11,7 @@ interface RecipesRepository {
      * Получить список рецептов
      *
      * @param query ключевое слово для запроса
-     * @return [List<Recipe>] список рецептов
+     * @return [List<RecipeDomainModel>] список рецептов
      */
     fun get(query: String): List<RecipeDomainModel>
 
@@ -21,4 +21,18 @@ interface RecipesRepository {
      * @return [List<RecipeDomainModel>] список рецептов
      */
     fun getFavouriteRecipes(): List<RecipeDomainModel>
+
+    /**
+     * Добавить рецепт в избранное
+     *
+     * @param [recipe] рецепт
+     */
+    fun addToFavourites(recipe: RecipeDomainModel)
+
+    /**
+     * Удалить рецепт из избранного
+     *
+     * @param [recipe] рецепт
+     */
+    fun deleteFromFavourites(recipe: RecipeDomainModel)
 }
