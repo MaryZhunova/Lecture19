@@ -51,7 +51,6 @@ class RecipesInfoAdapter(val recipes: MutableList<RecipePresentationModel>, priv
         private val onRecipeClick = onRecipeClickListener
 
         init {
-            itemView.setOnClickListener(this)
             favourite.setOnClickListener(this)
             favouriteFilled.setOnClickListener(this)
         }
@@ -77,8 +76,6 @@ class RecipesInfoAdapter(val recipes: MutableList<RecipePresentationModel>, priv
                         recipes[adapterPosition].isFavourite = false
                         onRecipeClick.onFavouriteClick(recipes[adapterPosition], false)
                     }
-                } else {
-                    onRecipeClick.onRecipeClick(recipes[adapterPosition])
                 }
             }
         }
@@ -90,12 +87,6 @@ class RecipesInfoAdapter(val recipes: MutableList<RecipePresentationModel>, priv
  */
 
 interface OnRecipeClickListener {
-    /**
-     * Обработка нажатия на элемент списка
-     *
-     * @param recipePresentationModel элемент из списка
-     */
-    fun onRecipeClick(recipePresentationModel: RecipePresentationModel)
     /**
      * Обработка нажатия на imageview "favorite" элемента списка
      *

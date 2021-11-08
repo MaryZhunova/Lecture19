@@ -1,6 +1,5 @@
 package com.example.recipe.presentation.favourites
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -14,7 +13,6 @@ import com.example.recipe.R
 import com.example.recipe.databinding.RecipesListInfoBinding
 import com.example.recipe.models.presentation.RecipePresentationModel
 import com.example.recipe.presentation.favourites.viewmodel.FavouritesViewModel
-import com.example.recipe.presentation.recipedetail.RecipeDetailActivity
 
 /**
  * Активити, которая отображает список избранных рецептов
@@ -79,12 +77,6 @@ class FavouritesActivity: AppCompatActivity(), FavouritesView, OnFavouriteRecipe
             binding.errorLayout.visibility = View.VISIBLE
             binding.errorText.text = it
         }
-    }
-
-    override fun onRecipeClick(recipePresentationModel: RecipePresentationModel) {
-        val newIntent = Intent(applicationContext, RecipeDetailActivity::class.java)
-        newIntent.putExtra("recipe", recipePresentationModel)
-        startActivity(newIntent)
     }
 
     override fun onFavouriteClick(recipePresentationModel: RecipePresentationModel) {

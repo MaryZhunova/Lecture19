@@ -16,12 +16,6 @@ class DomainToRecipeDBConverter @Inject constructor(): Converter<RecipeDomainMod
             image = from.image,
             source = from.source,
             url = from.url,
-//            ingredientLines = from.ingredientLines,
-//            dietLabels = from.dietLabels,
-//            healthLabels = from.healthLabels,
-//            cuisineType = from.cuisineType,
-//            mealType = from.mealType,
-//            dishType = from.dishType,
             isFavourite = from.isFavourite
         )
 }

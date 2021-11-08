@@ -17,12 +17,6 @@ interface RecipesDbContract {
             const val IMAGE = "image"
             const val SOURCE = "source"
             const val URL = "url"
-//            const val INGREDIENT_LINES = "ingredientLines"
-//            const val DIET_LABELS = "dietLabels"
-//            const val HEALTH_LABELS = "healthLabels"
-//            const val CUISINE_TYPE = "cuisineType"
-//            const val MEAL_TYPE = "mealType"
-//            const val DISH_TYPE = "dishType"
         }
     }
 }

@@ -27,5 +27,11 @@ interface RecipesDb {
      * @return [Boolean] true - является избранным рецептом, false - не является избранным рецептом
      */
     fun isFavourite(recipe: RecipeDB): Boolean
+
+    /**
+     * Удалить рецепт из избранного
+     *
+     * @param [recipe] рецепт
+     */
     fun deleteFromFavourites(recipe: RecipeDB)
 }
