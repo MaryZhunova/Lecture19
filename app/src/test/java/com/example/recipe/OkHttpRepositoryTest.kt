@@ -1,7 +1,7 @@
 package com.example.recipe
 
 import com.example.recipe.data.api.OkHttpRecipesApiImpl
-import com.example.recipe.data.repository.OkhttpRepository
+import com.example.recipe.data.repository.RecipesRepositoryImpl
 import com.example.recipe.models.converter.Converter
 import com.example.recipe.models.converter.RecipeToDomainConverter
 import com.example.recipe.models.data.Recipe
@@ -16,12 +16,12 @@ import java.lang.Exception
 class OkHttpRepositoryTest {
     private val api: OkHttpRecipesApiImpl = mockk()
     private lateinit var converter: Converter<Recipe, RecipeDomainModel>
-    private lateinit var repository: OkhttpRepository
+    private lateinit var repositoryImpl: RecipesRepositoryImpl
 
     @Before
     fun setUp() {
         converter = RecipeToDomainConverter()
-        repository = OkhttpRepository(api, converter)
+        repositoryImpl = RecipesRepositoryImpl(api, converter)
     }
 
     @Test
@@ -32,7 +32,7 @@ class OkHttpRepositoryTest {
             "url", listOf("ingredientLines"), listOf("dietLabels"), listOf("healthLabels"), listOf("cuisineType"), listOf("mealType"), listOf("dishType")))
         every { api.get(queryArgument) } returns apiResult
 
-        val testResult = repository.get(queryArgument)
+        val testResult = repositoryImpl.get(queryArgument)
 
         Truth.assertThat(testResult).isEqualTo(expectedResult)
     }
@@ -44,7 +44,7 @@ class OkHttpRepositoryTest {
 
         var testResult = false
         try {
-            repository.get(queryArgumentForException)
+            repositoryImpl.get(queryArgumentForException)
         } catch (e: Exception) {
             testResult = true
         }

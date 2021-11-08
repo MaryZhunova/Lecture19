@@ -1,6 +1,6 @@
 package com.example.recipe
 
-import com.example.recipe.data.repository.OkhttpRepository
+import com.example.recipe.data.repository.RecipesRepositoryImpl
 import com.example.recipe.domain.RecipesInteractor
 import com.example.recipe.models.domain.RecipeDomainModel
 import com.google.common.truth.Truth
@@ -11,18 +11,18 @@ import org.junit.Test
 import java.lang.Exception
 
 class RecipesInteractorTest {
-    private val repository: OkhttpRepository = mockk()
+    private val repositoryImpl: RecipesRepositoryImpl = mockk()
     private lateinit var interactor: RecipesInteractor
 
     @Before
     fun setUp() {
-        interactor = RecipesInteractor(repository)
+        interactor = RecipesInteractor(repositoryImpl)
     }
 
     @Test
     fun getTest() {
         val expectedResult: List<RecipeDomainModel> = mockk()
-        every { repository.get(queryArgument) } returns expectedResult
+        every { repositoryImpl.get(queryArgument) } returns expectedResult
 
         val testResult = interactor.get(queryArgument)
 
@@ -32,7 +32,7 @@ class RecipesInteractorTest {
     @Test
     fun getTestException() {
 
-        every { repository.get(queryArgumentForException) } throws Exception()
+        every { repositoryImpl.get(queryArgumentForException) } throws Exception()
 
         var testResult = false
         try {

@@ -10,7 +10,7 @@ interface RecipesApi {
      * Получить список рецептов
      *
      * @param query ключевое слово для запроса
-     * @return [List<Recipe>] список рецептов или пустой список, если ошибка
+     * @return [List<Recipe>] список рецептов
      */
     fun get(query: String): List<Recipe>
 }
