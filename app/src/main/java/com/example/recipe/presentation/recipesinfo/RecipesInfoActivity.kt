@@ -1,6 +1,8 @@
 package com.example.recipe.presentation.recipesinfo
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -16,6 +18,9 @@ import com.example.recipe.R
 import com.example.recipe.presentation.recipesinfo.viewmodel.RecipesInfoViewModel
 import com.example.recipe.databinding.RecipesListInfoBinding
 import com.example.recipe.models.presentation.RecipePresentationModel
+import com.example.recipe.presentation.recipedetail.RecipeDetailActivity
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 
 /**
  * Активити приложения, которая отображает список рецептов
@@ -96,6 +101,12 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
             binding.errorLayout.visibility = View.VISIBLE
             binding.errorText.text = it
         }
+    }
+
+    override fun onRecipeClick(recipePresentationModel: RecipePresentationModel) {
+        val newIntent = Intent(applicationContext, RecipeDetailActivity::class.java)
+        newIntent.putExtra("recipe", recipePresentationModel)
+        startActivity(newIntent)
     }
 
     override fun onFavouriteClick(recipePresentationModel: RecipePresentationModel, pressed: Boolean) {
