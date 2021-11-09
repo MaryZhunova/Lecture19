@@ -24,8 +24,11 @@
         <entry key="..\:/Users/Dmitry/Desktop/Lecture19/app/src/main/res/menu/menu_filter.xml" value="0.340625" />
         <entry key="..\:/Users/Dmitry/Desktop/Lecture19/app/src/main/res/menu/menu_settings.xml" value="0.2359375" />
         <entry key="..\:/Users/Dmitry/Desktop/Lecture19/app/src/main/res/xml/preferences.xml" value="0.33" />
+        <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout-land/recipe_detail.xml" value="0.3002645502645503" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/favourites_list.xml" value="0.3546875" />
+        <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/recipe_detail.xml" value="0.3546875" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/recipes_list_info.xml" value="0.39479166666666665" />
+        <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/recipes_list_info_item.xml" value="0.22735507246376813" />
         <entry key="..\:/Users/Dmitry/Desktop/recipe/app/src/main/res/drawable/background_frame.xml" value="0.1" />
         <entry key="..\:/Users/Dmitry/Desktop/recipe/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/Users/Dmitry/Desktop/recipe/app/src/main/res/layout/ingredient.xml" value="0.23505434782608695" />
@@ -34,6 +37,9 @@
         <entry key="..\:/Users/Dmitry/Desktop/recipe/app/src/main/res/layout/recipes_list_info_rv.xml" value="0.33" />
       </map>
     </option>
+  </component>
+  <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/example/recipe/models/converter/DomainToIngredientEntityConverter.kt" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />

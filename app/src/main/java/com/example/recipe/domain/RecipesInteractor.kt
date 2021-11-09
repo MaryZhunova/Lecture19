@@ -6,7 +6,7 @@ import javax.inject.Inject
 /**
  * Интерактор
  *
- * @param repository репозиторий с рецептами
+ * @param repository репозиторий
  */
 class RecipesInteractor @Inject constructor(private val repository: RecipesRepository) {
     /**
@@ -18,6 +18,7 @@ class RecipesInteractor @Inject constructor(private val repository: RecipesRepos
     fun get(query: String): List<RecipeDomainModel> {
         return repository.get(query)
     }
+
     /**
      * Получить список избранных рецептов
      *

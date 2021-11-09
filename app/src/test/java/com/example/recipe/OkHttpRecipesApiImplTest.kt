@@ -2,7 +2,7 @@ package com.example.recipe
 
 import com.example.recipe.utils.Constants
 import com.example.recipe.data.api.OkHttpRecipesApiImpl
-import com.example.recipe.models.data.Recipe
+import com.example.recipe.models.data.api.Recipe
 import com.google.common.truth.Truth
 import io.mockk.every
 import io.mockk.mockk
@@ -77,8 +77,10 @@ class OkHttpRecipesApiImplTest {
             .body(responseBody)
             .protocol(Protocol.HTTP_2)
             .build()
-        val expectedResult = listOf(Recipe("uri", "label", "image", "source",
-            "url", listOf("ingredientLines"), listOf("dietLabels"), listOf("healthLabels"), listOf("cuisineType"), listOf("mealType"), listOf("dishType")))
+        val expectedResult = listOf(
+            Recipe("uri", "label", "image", "source",
+            "url", listOf("ingredientLines"), listOf("dietLabels"), listOf("healthLabels"), listOf("cuisineType"), listOf("mealType"), listOf("dishType"))
+        )
         every { okHttpClient.newCall(any()).execute() } returns response
 
         val testResult = api.get(queryArgument)

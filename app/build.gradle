@@ -70,6 +70,10 @@ dependencies {
     kapt 'com.google.dagger:dagger-compiler:2.39.1'
     // Preferences
     implementation 'androidx.preference:preference-ktx:1.1.1'
+    //Room
+    implementation 'androidx.room:room-runtime:2.3.0'
+    kapt 'androidx.room:room-compiler:2.3.0'
+
     // Paging3
 //    implementation 'androidx.paging:paging-runtime:3.1.0'
     // Dependency for RxJava support (by Paging3)

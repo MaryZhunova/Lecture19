@@ -7,7 +7,8 @@ import javax.inject.Inject
 /**
  * Конвретер из [RecipeDomainModel] в [RecipePresentationModel]
  */
-class DomainToPresentationConverter @Inject constructor(): Converter<RecipeDomainModel, RecipePresentationModel> {
+class DomainToPresentationConverter @Inject constructor() :
+    Converter<RecipeDomainModel, RecipePresentationModel> {
     override fun convert(from: RecipeDomainModel) =
         RecipePresentationModel(
             uri = from.uri,
@@ -15,7 +16,7 @@ class DomainToPresentationConverter @Inject constructor(): Converter<RecipeDomai
             image = from.image,
             source = from.source,
             url = from.url,
-//            ingredientLines = from.ingredientLines,
+            ingredientLines = from.ingredientLines,
 //            dietLabels = from.dietLabels,
 //            healthLabels = from.healthLabels,
 //            cuisineType = from.cuisineType,

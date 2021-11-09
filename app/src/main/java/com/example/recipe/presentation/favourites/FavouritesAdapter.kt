@@ -16,14 +16,23 @@ import com.example.recipe.utils.GlideApp
 /**
  * Адаптер для отображения элементов списка
  */
-class FavouritesAdapter(val recipes: MutableList<RecipePresentationModel>, private val onFavouriteRecipeClickListener: OnFavouriteRecipeClickListener): RecyclerView.Adapter<FavouritesAdapter.MyViewHolder>(){
+class FavouritesAdapter(
+    val recipes: MutableList<RecipePresentationModel>,
+    private val onFavouriteRecipeClickListener: OnFavouriteRecipeClickListener
+) : RecyclerView.Adapter<FavouritesAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        return MyViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.recipes_list_info_item, parent, false), onFavouriteRecipeClickListener)
+        return MyViewHolder(
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.recipes_list_info_item, parent, false),
+            onFavouriteRecipeClickListener
+        )
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        if (PreferenceManager.getDefaultSharedPreferences(holder.getContext()).getBoolean("switch_images", true)) {
+        if (PreferenceManager.getDefaultSharedPreferences(holder.getContext())
+                .getBoolean("switch_images", true)
+        ) {
             val tempUri = Uri.parse(recipes[position].image)
             GlideApp.with(holder.getContext())
                 .asBitmap()
@@ -38,7 +47,10 @@ class FavouritesAdapter(val recipes: MutableList<RecipePresentationModel>, priva
         return recipes.size
     }
 
-    inner class MyViewHolder(itemView: View, onFavouriteRecipeClickListener: OnFavouriteRecipeClickListener) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class MyViewHolder(
+        itemView: View,
+        onFavouriteRecipeClickListener: OnFavouriteRecipeClickListener
+    ) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         val icon: ImageView = itemView.findViewById(R.id.preview_icon)
         val recipeName: TextView = itemView.findViewById(R.id.recipe_name)
         val favouriteFilled: ImageView = itemView.findViewById(R.id.fav_filled)
@@ -84,6 +96,7 @@ interface OnFavouriteRecipeClickListener {
      * @param recipePresentationModel элемент из списка
      */
     fun onRecipeClick(recipePresentationModel: RecipePresentationModel)
+
     /**
      * Обработка нажатия на imageview "favorite" элемента списка
      *

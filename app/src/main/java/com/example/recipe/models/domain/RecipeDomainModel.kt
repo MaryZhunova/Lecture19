@@ -1,8 +1,5 @@
 package com.example.recipe.models.domain
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
 /**
  * Модель для отображения данных о рецептах для domain слоя
  *
@@ -19,16 +16,17 @@ import kotlinx.parcelize.Parcelize
  * @param dishType вид блюда
  * @param isFavourite добавлено ли блюдо в избранное
  */
-@Parcelize
-data class RecipeDomainModel(val uri: String,
-                             val label: String,
-                             val image: String,
-                             val source: String,
-                             val url: String,
-//                             val ingredientLines: List<String>,
+
+data class RecipeDomainModel(
+    val uri: String,
+    val label: String,
+    val image: String,
+    val source: String,
+    val url: String,
+    var ingredientLines: List<String>,
 //                             val dietLabels: List<String>,
 //                             val healthLabels: List<String>,
 //                             val cuisineType: List<String>,
 //                             val mealType: List<String>,
 //                             val dishType: List<String>,
-                             var isFavourite: Boolean = false) : Parcelable
+    var isFavourite: Boolean = false)

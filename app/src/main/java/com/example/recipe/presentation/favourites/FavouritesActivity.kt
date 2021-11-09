@@ -19,7 +19,7 @@ import com.example.recipe.presentation.recipedetail.RecipeDetailActivity
 /**
  * Активити, которая отображает список избранных рецептов
  */
-class FavouritesActivity: AppCompatActivity(), FavouritesView, OnFavouriteRecipeClickListener{
+class FavouritesActivity : AppCompatActivity(), FavouritesView, OnFavouriteRecipeClickListener {
 
     private lateinit var binding: RecipesListInfoBinding
     private lateinit var favouritesViewModel: FavouritesViewModel
@@ -49,7 +49,7 @@ class FavouritesActivity: AppCompatActivity(), FavouritesView, OnFavouriteRecipe
                 if (modelClass.isAssignableFrom(FavouritesViewModel::class.java)) {
                     return NetworkApp.appComponent(applicationContext).getFavouritesViewModel() as T
                 }
-                throw IllegalArgumentException ("UnknownViewModel")
+                throw IllegalArgumentException("UnknownViewModel")
             }
         })[FavouritesViewModel::class.java]
     }
@@ -61,7 +61,8 @@ class FavouritesActivity: AppCompatActivity(), FavouritesView, OnFavouriteRecipe
             .observe(this) { recipes: List<RecipePresentationModel> ->
                 showData(recipes.toMutableList())
             }
-        favouritesViewModel.getErrorLiveData().observe(this) { throwable: Throwable -> showError(throwable) }
+        favouritesViewModel.getErrorLiveData()
+            .observe(this) { throwable: Throwable -> showError(throwable) }
     }
 
     override fun showProgress(isVisible: Boolean) {
@@ -71,7 +72,12 @@ class FavouritesActivity: AppCompatActivity(), FavouritesView, OnFavouriteRecipe
     override fun showData(recipes: MutableList<RecipePresentationModel>) {
         adapter = FavouritesAdapter(recipes, this)
         binding.recyclerView.adapter = adapter
-        binding.recyclerView.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
+        binding.recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                this,
+                LinearLayoutManager.VERTICAL
+            )
+        )
     }
 
     override fun showError(throwable: Throwable) {

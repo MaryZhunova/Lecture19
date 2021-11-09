@@ -14,18 +14,14 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipe.NetworkApp
 import com.example.recipe.models.presentation.RecipePresentationModel
-import com.example.recipe.presentation.favourites.FavouritesAdapter
-import com.example.recipe.presentation.favourites.viewmodel.FavouritesViewModel
 import com.example.recipe.utils.GlideApp
 
 /**
  * Активити приложения, которая отображает детальную информацию об одном рецепте
  */
-class RecipeDetailActivity: AppCompatActivity(), RecipeDetailView {
+class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
     private lateinit var binding: RecipeDetailBinding
     private lateinit var recipeDetailViewModel: RecipeDetailViewModel
@@ -61,26 +57,33 @@ class RecipeDetailActivity: AppCompatActivity(), RecipeDetailView {
             binding.favFilled.visibility = View.INVISIBLE
         }
 
-        //Обработать добавление/удаление рецепта в избранное
-        binding.fav.setOnClickListener {
-            if (!binding.favFilled.isVisible) {
-                binding.favFilled.visibility = View.VISIBLE
-                recipe?.isFavourite = true
-                recipe?.let { it1 -> recipeDetailViewModel.addToFavourites(it1) }
-                Toast.makeText(applicationContext, "Added to favourites", Toast.LENGTH_SHORT).show()
-                //todo
-            } else {
-                binding.favFilled.visibility = View.INVISIBLE
-                recipe?.isFavourite = false
-                recipe?.let { it2 -> recipeDetailViewModel.deleteFromFavourites(it2) }
-                Toast.makeText(applicationContext, "Removed from favourites", Toast.LENGTH_SHORT).show()
-                //todo
-            }
-        }
+//        binding.fav.setOnClickListener {
+//            if (!binding.favFilled.isVisible) {
+//                binding.favFilled.visibility = View.VISIBLE
+//                recipe?.isFavourite = true
+//                recipe?.let { it1 -> recipeDetailViewModel.addToFavourites(it1) }
+//                Toast.makeText(applicationContext, "Added to favourites", Toast.LENGTH_SHORT).show()
+//                //todo
+//            } else {
+//                binding.favFilled.visibility = View.INVISIBLE
+//                recipe?.isFavourite = false
+//                recipe?.let { it2 -> recipeDetailViewModel.deleteFromFavourites(it2) }
+//                Toast.makeText(applicationContext, "Removed from favourites", Toast.LENGTH_SHORT)
+//                    .show()
+//                //todo
+//            }
+//        }
 
         //Отобразить список ингредиентов
-//        val adapter = recipe?.let { ArrayAdapter(this, R.layout.ingredient, R.id.ingredient_name, it.ingredientLines) }
-//        binding.ingredientsList.adapter = adapter
+        val adapter = recipe?.let {
+            ArrayAdapter(
+                this,
+                R.layout.ingredient,
+                R.id.ingredient_name,
+                it.ingredientLines
+            )
+        }
+        binding.ingredientsList.adapter = adapter
 
 
         //Отобразить ссылку на подробный рецепт
@@ -94,15 +97,17 @@ class RecipeDetailActivity: AppCompatActivity(), RecipeDetailView {
         recipeDetailViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(RecipeDetailViewModel::class.java)) {
-                    return NetworkApp.appComponent(applicationContext).getRecipeDetailViewModel() as T
+                    return NetworkApp.appComponent(applicationContext)
+                        .getRecipeDetailViewModel() as T
                 }
-                throw IllegalArgumentException ("UnknownViewModel")
+                throw IllegalArgumentException("UnknownViewModel")
             }
         })[RecipeDetailViewModel::class.java]
     }
 
     private fun observeLiveData() {
-        recipeDetailViewModel.getErrorLiveData().observe(this) { throwable: Throwable -> showError(throwable) }
+        recipeDetailViewModel.getErrorLiveData()
+            .observe(this) { throwable: Throwable -> showError(throwable) }
     }
 
     override fun showError(throwable: Throwable) {

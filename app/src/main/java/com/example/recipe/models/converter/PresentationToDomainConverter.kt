@@ -15,7 +15,7 @@ class PresentationToDomainConverter @Inject constructor(): Converter<RecipePrese
             image = from.image,
             source = from.source,
             url = from.url,
-//            ingredientLines = from.ingredientLines,
+            ingredientLines = from.ingredientLines,
 //            dietLabels = from.dietLabels,
 //            healthLabels = from.healthLabels,
 //            cuisineType = from.cuisineType,

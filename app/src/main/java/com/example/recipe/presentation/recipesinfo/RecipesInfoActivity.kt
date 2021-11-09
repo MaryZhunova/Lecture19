@@ -2,7 +2,6 @@ package com.example.recipe.presentation.recipesinfo
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -19,13 +18,11 @@ import com.example.recipe.presentation.recipesinfo.viewmodel.RecipesInfoViewMode
 import com.example.recipe.databinding.RecipesListInfoBinding
 import com.example.recipe.models.presentation.RecipePresentationModel
 import com.example.recipe.presentation.recipedetail.RecipeDetailActivity
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
 
 /**
  * Активити приложения, которая отображает список рецептов
  */
-class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickListener {
+class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView, OnRecipeClickListener {
 
     private lateinit var binding: RecipesListInfoBinding
     private lateinit var infoViewModel: RecipesInfoViewModel
@@ -55,7 +52,7 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.menu_filter, menu)
-            return true
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -69,9 +66,10 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
         infoViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(RecipesInfoViewModel::class.java)) {
-                    return NetworkApp.appComponent(applicationContext).getRecipesInfoViewModel() as T
+                    return NetworkApp.appComponent(applicationContext)
+                        .getRecipesInfoViewModel() as T
                 }
-                throw IllegalArgumentException ("UnknownViewModel")
+                throw IllegalArgumentException("UnknownViewModel")
             }
         })[RecipesInfoViewModel::class.java]
     }
@@ -83,7 +81,8 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
             .observe(this) { recipes: List<RecipePresentationModel> ->
                 showData(recipes.toMutableList())
             }
-        infoViewModel.getErrorLiveData().observe(this) { throwable: Throwable -> showError(throwable) }
+        infoViewModel.getErrorLiveData()
+            .observe(this) { throwable: Throwable -> showError(throwable) }
     }
 
     override fun showProgress(isVisible: Boolean) {
@@ -93,7 +92,12 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
     override fun showData(recipes: MutableList<RecipePresentationModel>) {
         adapter = RecipesInfoAdapter(recipes, this)
         binding.recyclerView.adapter = adapter
-        binding.recyclerView.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
+        binding.recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                this,
+                LinearLayoutManager.VERTICAL
+            )
+        )
     }
 
     override fun showError(throwable: Throwable) {
@@ -109,7 +113,10 @@ class RecipesInfoActivity: AppCompatActivity(), RecipesInfoView, OnRecipeClickLi
         startActivity(newIntent)
     }
 
-    override fun onFavouriteClick(recipePresentationModel: RecipePresentationModel, pressed: Boolean) {
+    override fun onFavouriteClick(
+        recipePresentationModel: RecipePresentationModel,
+        pressed: Boolean
+    ) {
         if (pressed) {
             Toast.makeText(applicationContext, "Added to favourites", Toast.LENGTH_SHORT).show()
             infoViewModel.addToFavourites(recipePresentationModel)

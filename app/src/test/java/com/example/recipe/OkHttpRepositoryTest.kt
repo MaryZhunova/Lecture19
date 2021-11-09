@@ -1,10 +1,9 @@
 package com.example.recipe
 
 import com.example.recipe.data.api.OkHttpRecipesApiImpl
-import com.example.recipe.data.dao.RecipesDbImpl
 import com.example.recipe.data.repository.RecipesRepositoryImpl
 import com.example.recipe.models.converter.Converter
-import com.example.recipe.models.data.Recipe
+import com.example.recipe.models.data.api.Recipe
 import com.example.recipe.models.domain.RecipeDomainModel
 import com.google.common.truth.Truth
 import io.mockk.every
@@ -15,7 +14,7 @@ import java.lang.Exception
 
 class OkHttpRepositoryTest {
     private val api: OkHttpRecipesApiImpl = mockk()
-    private val db: RecipesDbImpl = mockk()
+    private val db: RecipesDaoImpl = mockk()
     private lateinit var converter: Converter<Recipe, RecipeDomainModel>
     private lateinit var repositoryImpl: RecipesRepositoryImpl
 
@@ -26,8 +25,10 @@ class OkHttpRepositoryTest {
 
     @Test
     fun getTest() {
-        val apiResult: List<Recipe> = listOf(Recipe("uri", "label", "image", "source",
-            "url", listOf("ingredientLines"), listOf("dietLabels"), listOf("healthLabels"), listOf("cuisineType"), listOf("mealType"), listOf("dishType")))
+        val apiResult: List<Recipe> = listOf(
+            Recipe("uri", "label", "image", "source",
+            "url", listOf("ingredientLines"), listOf("dietLabels"), listOf("healthLabels"), listOf("cuisineType"), listOf("mealType"), listOf("dishType"))
+        )
         val expectedResult: List<RecipeDomainModel> = listOf(RecipeDomainModel("uri", "label", "image", "source",
             "url", listOf("ingredientLines"), listOf("dietLabels"), listOf("healthLabels"), listOf("cuisineType"), listOf("mealType"), listOf("dishType")))
         every { api.get(queryArgument) } returns apiResult

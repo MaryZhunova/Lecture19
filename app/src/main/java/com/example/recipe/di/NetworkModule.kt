@@ -1,6 +1,8 @@
 package com.example.recipe.di
 
 import android.content.Context
+import com.example.recipe.data.dao.RecipesDao
+import com.example.recipe.data.dao.db.RecipesDatabase
 import dagger.Module
 import dagger.Provides
 import okhttp3.CookieJar
@@ -10,6 +12,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
+import javax.inject.Singleton
 
 @Module
 class NetworkModule(val url: String, val context: Context) {
@@ -32,8 +35,9 @@ class NetworkModule(val url: String, val context: Context) {
     }
 
     @Provides
-    @Named("context")
-    fun providesContext(): Context {
-        return context
+    @Singleton
+    @Named("dao")
+    fun providesDao(): RecipesDao {
+        return RecipesDatabase.getInstance(context).recipesDao
     }
 }

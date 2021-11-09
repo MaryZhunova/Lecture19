@@ -16,28 +16,39 @@ import javax.inject.Inject
 /**
  * ViewModel [RecipeDetailActivity]
  */
-class RecipeDetailViewModel @Inject constructor(private val recipesInteractor: RecipesInteractor,
-                                                private val schedulersProvider: ISchedulersProvider,
-                                                private val converterToDomain: Converter<RecipePresentationModel, RecipeDomainModel>) : ViewModel() {
+class RecipeDetailViewModel @Inject constructor(
+    private val recipesInteractor: RecipesInteractor,
+    private val schedulersProvider: ISchedulersProvider,
+    private val converterToDomain: Converter<RecipePresentationModel, RecipeDomainModel>
+) : ViewModel() {
 
     private val errorLiveData: MutableLiveData<Throwable> = MutableLiveData()
+
     /**
      * Добавить рецепт в избранное
      *
      * @param [recipe] рецепт
      */
     fun addToFavourites(recipe: RecipePresentationModel) {
-        val completable = object: CompletableObserver {
+        val completable = object : CompletableObserver {
             override fun onSubscribe(d: Disposable) {
             }
+
             override fun onComplete() {
             }
+
             override fun onError(e: Throwable) {
                 errorLiveData.value = e
             }
 
         }
-        Completable.fromRunnable {recipesInteractor.addToFavourites(converterToDomain.convert(recipe))}
+        Completable.fromRunnable {
+            recipesInteractor.addToFavourites(
+                converterToDomain.convert(
+                    recipe
+                )
+            )
+        }
             .subscribeOn(schedulersProvider.io())
             .observeOn(schedulersProvider.ui())
             .subscribe(completable)
@@ -49,16 +60,24 @@ class RecipeDetailViewModel @Inject constructor(private val recipesInteractor: R
      * @param [recipe] рецепт
      */
     fun deleteFromFavourites(recipe: RecipePresentationModel) {
-        val completable = object: CompletableObserver {
+        val completable = object : CompletableObserver {
             override fun onSubscribe(d: Disposable) {
             }
+
             override fun onComplete() {
             }
+
             override fun onError(e: Throwable) {
                 errorLiveData.value = e
             }
         }
-        Completable.fromRunnable {recipesInteractor.deleteFromFavourites(converterToDomain.convert(recipe))}
+        Completable.fromRunnable {
+            recipesInteractor.deleteFromFavourites(
+                converterToDomain.convert(
+                    recipe
+                )
+            )
+        }
             .subscribeOn(schedulersProvider.io())
             .observeOn(schedulersProvider.ui())
             .subscribe(completable)

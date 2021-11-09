@@ -1,6 +1,6 @@
 package com.example.recipe.data.api
 
-import com.example.recipe.models.data.Recipe
+import com.example.recipe.models.data.api.Recipe
 
 /**
  * Апи для получения данных о рецептах

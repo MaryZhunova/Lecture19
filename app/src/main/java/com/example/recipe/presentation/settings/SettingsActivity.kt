@@ -7,7 +7,7 @@ import com.example.recipe.R
 /**
  * Активити, которая отображает настройки
  */
-class SettingsActivity: AppCompatActivity() {
+class SettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

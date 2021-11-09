@@ -19,7 +19,7 @@ import com.example.recipe.presentation.settings.SettingsActivity
  * для поиска рецептов и отправить запрос
  */
 
-class MainRecipesActivity: AppCompatActivity() {
+class MainRecipesActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -42,6 +42,7 @@ class MainRecipesActivity: AppCompatActivity() {
             startActivity(newIntent)
         }
     }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.menu_settings, menu)

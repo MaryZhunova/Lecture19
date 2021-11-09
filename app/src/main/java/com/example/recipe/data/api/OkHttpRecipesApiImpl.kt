@@ -1,8 +1,8 @@
 package com.example.recipe.data.api
 
 import android.util.Log
-import com.example.recipe.models.data.Recipe
-import com.example.recipe.models.data.RecipeResponse
+import com.example.recipe.models.data.api.Recipe
+import com.example.recipe.models.data.api.RecipeResponse
 import com.example.recipe.utils.Constants
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
@@ -14,8 +14,14 @@ import javax.inject.Named
 
 /**
  * Реализация [RecipesApi] с помощью [OkHttpClient]
+ *
+ * @param httpClient клиент OkHttpClient
+ * @param url
  */
-class OkHttpRecipesApiImpl @Inject constructor(@Named("httpClient") val httpClient: OkHttpClient, @Named("httpUrl") val url: HttpUrl): RecipesApi {
+class OkHttpRecipesApiImpl @Inject constructor(
+    @Named("httpClient") val httpClient: OkHttpClient,
+    @Named("httpUrl") val url: HttpUrl
+) : RecipesApi {
 
     override fun get(query: String): List<Recipe> {
 
