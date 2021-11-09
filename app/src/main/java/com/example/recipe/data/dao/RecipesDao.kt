@@ -5,7 +5,7 @@ import com.example.recipe.models.data.RecipeDB
 /**
  * Интерфейс для получения данных об избранных рецептах из базы данных
  */
-interface RecipesDb {
+interface RecipesDao {
     /**
      * Получить список избранных рецептов
      *

@@ -3,9 +3,9 @@ package com.example.recipe.di
 import android.database.sqlite.SQLiteOpenHelper
 import com.example.recipe.data.api.OkHttpRecipesApiImpl
 import com.example.recipe.data.api.RecipesApi
-import com.example.recipe.data.dao.RecipesDb
+import com.example.recipe.data.dao.RecipesDao
 import com.example.recipe.data.dao.db.RecipesDbHelper
-import com.example.recipe.data.dao.RecipesDbImpl
+import com.example.recipe.data.dao.RecipesDaoImpl
 import com.example.recipe.data.repository.RecipesRepositoryImpl
 import com.example.recipe.domain.RecipesRepository
 import com.example.recipe.models.converter.Converter
@@ -33,7 +33,7 @@ interface AppModule {
     @Binds
     fun provideRecipesApi(okHttpRecipesApiImpl: OkHttpRecipesApiImpl): RecipesApi
     @Binds
-    fun provideRecipesDb(recipesDb: RecipesDbImpl): RecipesDb
+    fun provideRecipesDb(recipesDb: RecipesDaoImpl): RecipesDao
     @Binds
     fun provideConverter(recipeToRecipeDBConverter: RecipeToRecipeDBConverter): Converter<Recipe, RecipeDB>
     @Binds

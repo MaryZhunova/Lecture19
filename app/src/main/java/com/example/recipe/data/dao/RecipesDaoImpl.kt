@@ -7,7 +7,7 @@ import com.example.recipe.models.data.RecipeDB
 import java.lang.Exception
 import javax.inject.Inject
 
-class RecipesDbImpl @Inject constructor(private val recipesDbHelper: SQLiteOpenHelper) : RecipesDb {
+class RecipesDaoImpl @Inject constructor(private val recipesDbHelper: SQLiteOpenHelper) : RecipesDao {
 
     override fun getFavouriteRecipes(): List<RecipeDB> {
         val columns = arrayOf(
