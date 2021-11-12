@@ -1,6 +1,6 @@
 package com.example.recipe.data.api
 
-import com.example.recipe.models.data.api.Recipe
+import com.example.recipe.models.data.api.RecipeModel
 
 /**
  * Апи для получения данных о рецептах
@@ -10,7 +10,7 @@ interface RecipesApi {
      * Получить список рецептов
      *
      * @param query ключевое слово для запроса
-     * @return [List<Recipe>] список рецептов
+     * @return [List<RecipeModel>] список рецептов
      */
-    fun get(query: String): List<Recipe>
+    fun get(query: String): List<RecipeModel>
 }

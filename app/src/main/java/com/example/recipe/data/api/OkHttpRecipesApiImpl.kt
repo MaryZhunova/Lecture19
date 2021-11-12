@@ -1,7 +1,7 @@
 package com.example.recipe.data.api
 
 import android.util.Log
-import com.example.recipe.models.data.api.Recipe
+import com.example.recipe.models.data.api.RecipeModel
 import com.example.recipe.models.data.api.RecipeResponse
 import com.example.recipe.utils.Constants
 import com.google.gson.Gson
@@ -23,7 +23,7 @@ class OkHttpRecipesApiImpl @Inject constructor(
     @Named("httpUrl") val url: HttpUrl
 ) : RecipesApi {
 
-    override fun get(query: String): List<Recipe> {
+    override fun get(query: String): List<RecipeModel> {
 
         //Создать url с параметрами (тип, ключевое слово, айди и ключ)
         val httpBuilder: HttpUrl.Builder = url.newBuilder()
@@ -44,12 +44,12 @@ class OkHttpRecipesApiImpl @Inject constructor(
             throw Exception("Server error ${response.code}")
         }
         val body = response.body?.string()
-        //Преобразовать полученный результат в модель Recipe
+        //Преобразовать полученный результат в модель RecipeModel
         val res = Gson().fromJson(body, RecipeResponse::class.java)
         if (res.hits.isEmpty()) {
             Log.d("error body", "tt")
-            throw Exception("Couldn't find any recipe")
+            throw Exception("Couldn't find any recipeModel")
         }
-        return res.hits.map { hit -> hit.recipe }
+        return res.hits.map { hit -> hit.recipeModel }
     }
 }

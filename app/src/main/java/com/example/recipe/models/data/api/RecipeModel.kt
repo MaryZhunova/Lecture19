@@ -16,15 +16,15 @@ package com.example.recipe.models.data.api
  * @param dishType вид блюда
  * @param isFavourite добавлено ли блюдо в избранное
  */
-data class Recipe(val uri: String,
-                  val label: String,
-                  val image: String,
-                  val source: String,
-                  val url: String,
-                  val ingredientLines: List<String>,
+data class RecipeModel(val uri: String,
+                       val label: String,
+                       val image: String,
+                       val source: String,
+                       val url: String,
+                       val ingredientLines: List<String>,
 //                  val dietLabels: List<String>,
 //                  val healthLabels: List<String>,
 //                  val cuisineType: List<String>,
 //                  val mealType: List<String>,
 //                  val dishType: List<String>,
-                  var isFavourite: Boolean = false)
+                       var isFavourite: Boolean = false)

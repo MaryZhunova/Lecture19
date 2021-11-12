@@ -32,7 +32,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
         binding = RecipeDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        recipe = intent.getParcelableExtra("recipe")
+        recipe = intent.getParcelableExtra("recipeModel")
 
         createViewModel()
         //Наблюдать за LiveData
@@ -60,14 +60,14 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 //        binding.fav.setOnClickListener {
 //            if (!binding.favFilled.isVisible) {
 //                binding.favFilled.visibility = View.VISIBLE
-//                recipe?.isFavourite = true
-//                recipe?.let { it1 -> recipeDetailViewModel.addToFavourites(it1) }
+//                recipeModel?.isFavourite = true
+//                recipeModel?.let { it1 -> recipeDetailViewModel.addToFavourites(it1) }
 //                Toast.makeText(applicationContext, "Added to favourites", Toast.LENGTH_SHORT).show()
 //                //todo
 //            } else {
 //                binding.favFilled.visibility = View.INVISIBLE
-//                recipe?.isFavourite = false
-//                recipe?.let { it2 -> recipeDetailViewModel.deleteFromFavourites(it2) }
+//                recipeModel?.isFavourite = false
+//                recipeModel?.let { it2 -> recipeDetailViewModel.deleteFromFavourites(it2) }
 //                Toast.makeText(applicationContext, "Removed from favourites", Toast.LENGTH_SHORT)
 //                    .show()
 //                //todo

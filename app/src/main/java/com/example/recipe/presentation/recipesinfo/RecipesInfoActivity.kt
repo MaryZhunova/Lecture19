@@ -109,7 +109,7 @@ class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView, OnRecipeClickL
 
     override fun onRecipeClick(recipePresentationModel: RecipePresentationModel) {
         val newIntent = Intent(applicationContext, RecipeDetailActivity::class.java)
-        newIntent.putExtra("recipe", recipePresentationModel)
+        newIntent.putExtra("recipeModel", recipePresentationModel)
         startActivity(newIntent)
     }
 

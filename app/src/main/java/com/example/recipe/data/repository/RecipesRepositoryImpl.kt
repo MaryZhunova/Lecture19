@@ -5,7 +5,7 @@ import com.example.recipe.data.dao.RecipesDao
 import com.example.recipe.data.dao.entity.IngredientEntity
 import com.example.recipe.domain.RecipesRepository
 import com.example.recipe.models.converter.Converter
-import com.example.recipe.models.data.api.Recipe
+import com.example.recipe.models.data.api.RecipeModel
 import com.example.recipe.data.dao.entity.RecipeEntity
 import com.example.recipe.models.domain.RecipeDomainModel
 import javax.inject.Inject
@@ -16,18 +16,18 @@ import javax.inject.Named
  *
  * @param recipesDao интерфейс для получения данных об избранных рецептах из базы данных
  * @param recipesApi апи для работы с сервераными данными
- * @param converter конвертер из Recipe в RecipeDomainModel
+ * @param converter конвертер из RecipeModel в RecipeDomainModel
  * @param converterFromEntity из RecipeEntity в RecipeDomainModel
  * @param converterToEntity из RecipeDomainModel в RecipeEntity
  */
 class RecipesRepositoryImpl @Inject constructor(@Named("dao") private val recipesDao: RecipesDao,
                                                 private val recipesApi: RecipesApi,
-                                                private val converter: Converter<Recipe, RecipeDomainModel>,
+                                                private val converter: Converter<RecipeModel, RecipeDomainModel>,
                                                 private val converterFromEntity: Converter<RecipeEntity, RecipeDomainModel>,
                                                 private val converterToEntity: Converter<RecipeDomainModel, RecipeEntity>): RecipesRepository {
 
     override fun get(query: String): List<RecipeDomainModel> {
-        // Получить список Recipe из базы данных
+        // Получить список RecipeModel из базы данных
         val recipes = recipesApi.get(query)
         for (recipe in recipes) {
             // Проверить, занесен ли рецепт в базу данных
@@ -36,7 +36,7 @@ class RecipesRepositoryImpl @Inject constructor(@Named("dao") private val recipe
                 recipe.isFavourite = true
             }
         }
-        // Конвертировать список Recipe в список RecipeDomainModel
+        // Конвертировать список RecipeModel в список RecipeDomainModel
         return recipes.map(converter::convert)
     }
 
