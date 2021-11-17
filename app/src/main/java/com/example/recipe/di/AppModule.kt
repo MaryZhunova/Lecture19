@@ -9,9 +9,9 @@ import com.example.recipe.models.converter.DomainToPresentationConverter
 import com.example.recipe.models.converter.DomainToRecipeEntityConverter
 import com.example.recipe.models.converter.PresentationToDomainConverter
 import com.example.recipe.models.converter.RecipeEntityToDomainConverter
-import com.example.recipe.models.data.api.RecipeModel
 import com.example.recipe.data.dao.entity.RecipeEntity
-import com.example.recipe.models.converter.RecipeModelToDomainConverter
+import com.example.recipe.models.converter.RecipeToDomainConverter
+import com.example.recipe.models.data.api.Recipe
 import com.example.recipe.models.domain.RecipeDomainModel
 import com.example.recipe.models.presentation.RecipePresentationModel
 import com.example.recipe.utils.ISchedulersProvider
@@ -29,7 +29,7 @@ interface AppModule {
     fun provideRecipesApi(okHttpRecipesApiImpl: OkHttpRecipesApiImpl): RecipesApi
 
     @Binds
-    fun provideConverter(modelToDomainConverter: RecipeModelToDomainConverter): Converter<RecipeModel, RecipeDomainModel>
+    fun provideConverter(toDomainConverter: RecipeToDomainConverter): Converter<Recipe, RecipeDomainModel>
 
     @Binds
     fun provideConverter2(domainToPresentationConverter: DomainToPresentationConverter): Converter<RecipeDomainModel, RecipePresentationModel>

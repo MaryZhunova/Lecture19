@@ -16,7 +16,7 @@ package com.example.recipe.models.data.api
  * @param dishType вид блюда
  * @param isFavourite добавлено ли блюдо в избранное
  */
-data class RecipeModel(val uri: String,
+data class Recipe(val uri: String,
                        val label: String,
                        val image: String,
                        val source: String,

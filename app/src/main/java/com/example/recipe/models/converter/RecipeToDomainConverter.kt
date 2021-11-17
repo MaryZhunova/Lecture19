@@ -1,15 +1,15 @@
 package com.example.recipe.models.converter
 
-import com.example.recipe.models.data.api.RecipeModel
+import com.example.recipe.models.data.api.Recipe
 import com.example.recipe.models.domain.RecipeDomainModel
 import javax.inject.Inject
 
 /**
  * Конвретер из [RecipeModel] в [RecipeDomainModel]
  */
-class RecipeModelToDomainConverter @Inject constructor() : Converter<RecipeModel, RecipeDomainModel> {
+class RecipeToDomainConverter @Inject constructor() : Converter<Recipe, RecipeDomainModel> {
 
-    override fun convert(from: RecipeModel) =
+    override fun convert(from: Recipe) =
         RecipeDomainModel(
             uri = from.uri,
             label = from.label,

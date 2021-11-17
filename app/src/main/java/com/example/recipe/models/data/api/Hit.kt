@@ -3,6 +3,6 @@ package com.example.recipe.models.data.api
 /**
  * Модель для отображения данных о рецептах  для работы с сервером
  *
- * @param recipeModel рецепт
+ * @param recipe рецепт
  */
-data class Hit(val recipeModel: RecipeModel)
+data class Hit(val recipe: Recipe)

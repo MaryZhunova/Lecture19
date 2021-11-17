@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipe.NetworkApp
 import com.example.recipe.R
-import com.example.recipe.presentation.recipesinfo.viewmodel.RecipesInfoViewModel
 import com.example.recipe.databinding.RecipesListInfoBinding
+import com.example.recipe.presentation.recipesinfo.viewmodel.RecipesInfoViewModel
 import com.example.recipe.models.presentation.RecipePresentationModel
 import com.example.recipe.presentation.recipedetail.RecipeDetailActivity
 
