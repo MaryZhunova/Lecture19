@@ -1,4 +1,4 @@
-package com.example.recipe.presentation.recipedetail
+package com.example.recipe.presentation.recipedetail.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

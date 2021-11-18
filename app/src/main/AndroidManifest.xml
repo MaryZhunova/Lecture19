@@ -24,7 +24,7 @@
             android:exported="true">
         </activity>
         <activity
-            android:name="com.example.recipe.presentation.favourites.FavouritesActivity"
+            android:name="com.example.recipe.presentation.switchfavourites.SwitchFavouritesActivity"
             android:exported="true">
         </activity>
         <activity android:name="com.example.recipe.presentation.recipesinfo.RecipesInfoActivity"

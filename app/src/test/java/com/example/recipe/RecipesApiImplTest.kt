@@ -1,7 +1,7 @@
 package com.example.recipe
 
 import com.example.recipe.utils.Constants
-import com.example.recipe.data.api.OkHttpRecipesApiImpl
+import com.example.recipe.data.api.RecipesApiImpl
 import com.example.recipe.models.data.api.RecipeModel
 import com.google.common.truth.Truth
 import io.mockk.every
@@ -18,16 +18,16 @@ import org.junit.Test
 import org.junit.Before
 import java.lang.Exception
 
-class OkHttpRecipesApiImplTest {
+class RecipesApiImplTest {
 
     private lateinit var url: HttpUrl
-    private lateinit var api: OkHttpRecipesApiImpl
+    private lateinit var api: RecipesApiImpl
     private val okHttpClient: OkHttpClient = mockk()
 
     @Before
     fun setUp() {
         url = Constants.URL.toHttpUrl()
-        api = OkHttpRecipesApiImpl(okHttpClient, url)
+        api = RecipesApiImpl(okHttpClient, url)
     }
 
     @Test

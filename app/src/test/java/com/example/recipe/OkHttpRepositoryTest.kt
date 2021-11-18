@@ -1,6 +1,6 @@
 package com.example.recipe
 
-import com.example.recipe.data.api.OkHttpRecipesApiImpl
+import com.example.recipe.data.api.RecipesApiImpl
 import com.example.recipe.data.repository.RecipesRepositoryImpl
 import com.example.recipe.models.converter.Converter
 import com.example.recipe.models.data.api.RecipeModel
@@ -13,7 +13,7 @@ import org.junit.Before
 import java.lang.Exception
 
 class OkHttpRepositoryTest {
-    private val api: OkHttpRecipesApiImpl = mockk()
+    private val api: RecipesApiImpl = mockk()
     private val db: RecipesDaoImpl = mockk()
     private lateinit var converter: Converter<RecipeModel, RecipeDomainModel>
     private lateinit var repositoryImpl: RecipesRepositoryImpl

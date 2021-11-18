@@ -10,12 +10,12 @@ import android.text.Html
 import android.text.method.LinkMovementMethod
 import android.view.View
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import com.example.recipe.NetworkApp
 import com.example.recipe.models.presentation.RecipePresentationModel
+import com.example.recipe.presentation.recipedetail.viewmodel.RecipeDetailViewModel
 import com.example.recipe.utils.GlideApp
 
 /**

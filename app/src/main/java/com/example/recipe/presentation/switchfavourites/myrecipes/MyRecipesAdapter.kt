@@ -1,4 +1,4 @@
-package com.example.recipe.presentation.favourites
+package com.example.recipe.presentation.switchfavourites.myrecipes
 
 import android.content.Context
 import android.net.Uri
@@ -16,16 +16,19 @@ import com.example.recipe.utils.GlideApp
 /**
  * Адаптер для отображения элементов списка
  */
-class FavouritesAdapter(
+class MyRecipesAdapter(
     val recipes: MutableList<RecipePresentationModel>,
-    private val onFavouriteRecipeClickListener: OnFavouriteRecipeClickListener
-) : RecyclerView.Adapter<FavouritesAdapter.MyViewHolder>() {
+    private val onMyRecipeClickListener: OnMyRecipeClickListener
+) : RecyclerView.Adapter<MyRecipesAdapter.MyViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): MyViewHolder {
         return MyViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.recipes_list_info_item, parent, false),
-            onFavouriteRecipeClickListener
+                .inflate(R.layout.my_recipes_item, parent, false),
+            onMyRecipeClickListener
         )
     }
 
@@ -40,25 +43,20 @@ class FavouritesAdapter(
                 .into(holder.icon)
         }
         holder.recipeName.text = recipes[position].label
-        holder.favouriteFilled.visibility = View.VISIBLE
     }
 
     override fun getItemCount(): Int {
         return recipes.size
     }
 
-    inner class MyViewHolder(
-        itemView: View,
-        onFavouriteRecipeClickListener: OnFavouriteRecipeClickListener
-    ) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class MyViewHolder(itemView: View, onMyRecipeClickListener: OnMyRecipeClickListener) :
+        RecyclerView.ViewHolder(itemView), View.OnClickListener {
         val icon: ImageView = itemView.findViewById(R.id.preview_icon)
         val recipeName: TextView = itemView.findViewById(R.id.recipe_name)
-        val favouriteFilled: ImageView = itemView.findViewById(R.id.fav_filled)
-        private val onRecipeClick = onFavouriteRecipeClickListener
+        private val onRecipeClick = onMyRecipeClickListener
 
         init {
             itemView.setOnClickListener(this)
-            favouriteFilled.setOnClickListener(this)
         }
 
         /**
@@ -72,14 +70,7 @@ class FavouritesAdapter(
 
         override fun onClick(v: View?) {
             if (v != null) {
-                if (v.id == favouriteFilled.id) {
-                    val position = adapterPosition
-                    onRecipeClick.onFavouriteClick(recipes[position])
-                    recipes.removeAt(position)
-                    notifyItemRemoved(position)
-                } else {
-                    onRecipeClick.onRecipeClick(recipes[adapterPosition])
-                }
+                onRecipeClick.onRecipeClick(recipes[adapterPosition])
             }
         }
     }
@@ -89,18 +80,11 @@ class FavouritesAdapter(
  * Интерфейс слушателя клика на элемент списка
  */
 
-interface OnFavouriteRecipeClickListener {
+interface OnMyRecipeClickListener {
     /**
      * Обработка нажатия на элемент списка
      *
      * @param recipePresentationModel элемент из списка
      */
     fun onRecipeClick(recipePresentationModel: RecipePresentationModel)
-
-    /**
-     * Обработка нажатия на imageview "favorite" элемента списка
-     *
-     * @param recipePresentationModel элемент из списка
-     */
-    fun onFavouriteClick(recipePresentationModel: RecipePresentationModel)
 }

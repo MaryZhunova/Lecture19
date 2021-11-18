@@ -18,7 +18,7 @@ import javax.inject.Named
  * @param httpClient клиент OkHttpClient
  * @param url
  */
-class OkHttpRecipesApiImpl @Inject constructor(
+class RecipesApiImpl @Inject constructor(
     @Named("httpClient") val httpClient: OkHttpClient,
     @Named("httpUrl") val url: HttpUrl
 ) : RecipesApi {

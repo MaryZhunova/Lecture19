@@ -1,6 +1,6 @@
 package com.example.recipe.di
 
-import com.example.recipe.data.api.OkHttpRecipesApiImpl
+import com.example.recipe.data.api.RecipesApiImpl
 import com.example.recipe.data.api.RecipesApi
 import com.example.recipe.data.repository.RecipesRepositoryImpl
 import com.example.recipe.domain.RecipesRepository
@@ -26,7 +26,7 @@ interface AppModule {
     fun provideBaseRepository(recipesRepositoryImpl: RecipesRepositoryImpl): RecipesRepository
 
     @Binds
-    fun provideRecipesApi(okHttpRecipesApiImpl: OkHttpRecipesApiImpl): RecipesApi
+    fun provideRecipesApi(recipesApiImpl: RecipesApiImpl): RecipesApi
 
     @Binds
     fun provideConverter(toDomainConverter: RecipeToDomainConverter): Converter<Recipe, RecipeDomainModel>

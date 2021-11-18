@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
 import com.example.recipe.R
 import com.example.recipe.databinding.ActivityMainBinding
-import com.example.recipe.presentation.favourites.FavouritesActivity
+import com.example.recipe.presentation.switchfavourites.SwitchFavouritesActivity
 import com.example.recipe.presentation.recipesinfo.RecipesInfoActivity
 import com.example.recipe.presentation.settings.SettingsActivity
 
@@ -54,7 +54,7 @@ class MainRecipesActivity : AppCompatActivity() {
             val newIntent = Intent(applicationContext, SettingsActivity::class.java)
             startActivity(newIntent)
         } else if (item.itemId == R.id.favourites) {
-            val newIntent = Intent(applicationContext, FavouritesActivity::class.java)
+            val newIntent = Intent(applicationContext, SwitchFavouritesActivity::class.java)
             startActivity(newIntent)
         }
         return true
