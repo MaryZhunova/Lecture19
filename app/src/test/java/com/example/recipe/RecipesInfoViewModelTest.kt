@@ -49,9 +49,9 @@ class RecipesInfoViewModelTest {
     @Test
     fun getTest() {
         val recipesInteractorResult: List<RecipeDomainModel> = listOf(RecipeDomainModel("uri", "label", "image", "source",
-            "url", listOf("ingredientLines"), listOf("dietLabels"), listOf("healthLabels"), listOf("cuisineType"), listOf("mealType"), listOf("dishType")))
+            "url", listOf("ingredientLines")))
         val expectedResult: List<RecipePresentationModel> = listOf(RecipePresentationModel("uri", "label", "image", "source",
-            "url", listOf("ingredientLines"), listOf("dietLabels"), listOf("healthLabels"), listOf("cuisineType"), listOf("mealType"), listOf("dishType")))
+            "url", listOf("ingredientLines")))
 
         every { recipesInteractor.get(queryArgument) } returns recipesInteractorResult
         every { progressLiveDataObserver.onChanged(any()) } answers {}

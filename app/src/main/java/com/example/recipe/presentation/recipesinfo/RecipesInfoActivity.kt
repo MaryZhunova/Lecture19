@@ -1,12 +1,7 @@
 package com.example.recipe.presentation.recipesinfo
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -17,12 +12,11 @@ import com.example.recipe.R
 import com.example.recipe.databinding.RecipesListInfoBinding
 import com.example.recipe.presentation.recipesinfo.viewmodel.RecipesInfoViewModel
 import com.example.recipe.models.presentation.RecipePresentationModel
-import com.example.recipe.presentation.recipedetail.RecipeDetailActivity
 
 /**
  * Активити приложения, которая отображает список рецептов
  */
-class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView, OnRecipeClickListener {
+class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView {
 
     private lateinit var binding: RecipesListInfoBinding
     private lateinit var infoViewModel: RecipesInfoViewModel
@@ -47,19 +41,6 @@ class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView, OnRecipeClickL
 
         //Отправить сетевой запрос с ключевым словом query через вью модель
         query?.let { infoViewModel.get(it) }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.menu_filter, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.filter) {
-            //todo
-        }
-        return true
     }
 
     private fun createViewModel() {
@@ -90,7 +71,7 @@ class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView, OnRecipeClickL
     }
 
     override fun showData(recipes: MutableList<RecipePresentationModel>) {
-        adapter = RecipesInfoAdapter(recipes, this)
+        adapter = RecipesInfoAdapter(recipes)
         binding.recyclerView.adapter = adapter
         binding.recyclerView.addItemDecoration(
             DividerItemDecoration(
@@ -104,25 +85,6 @@ class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView, OnRecipeClickL
         throwable.message?.let {
             binding.errorLayout.visibility = View.VISIBLE
             binding.errorText.text = it
-        }
-    }
-
-    override fun onRecipeClick(recipePresentationModel: RecipePresentationModel) {
-        val newIntent = Intent(applicationContext, RecipeDetailActivity::class.java)
-        newIntent.putExtra("recipeModel", recipePresentationModel)
-        startActivity(newIntent)
-    }
-
-    override fun onFavouriteClick(
-        recipePresentationModel: RecipePresentationModel,
-        pressed: Boolean
-    ) {
-        if (pressed) {
-            Toast.makeText(applicationContext, "Added to favourites", Toast.LENGTH_SHORT).show()
-            infoViewModel.addToFavourites(recipePresentationModel)
-        } else {
-            Toast.makeText(applicationContext, "Removed from favourites", Toast.LENGTH_SHORT).show()
-            infoViewModel.deleteFromFavourites(recipePresentationModel)
         }
     }
 }

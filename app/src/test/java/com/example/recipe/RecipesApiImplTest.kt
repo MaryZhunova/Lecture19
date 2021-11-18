@@ -1,8 +1,8 @@
 package com.example.recipe
 
-import com.example.recipe.utils.Constants
 import com.example.recipe.data.api.RecipesApiImpl
-import com.example.recipe.models.data.api.RecipeModel
+import com.example.recipe.models.data.api.Recipe
+import com.example.recipe.utils.Constants
 import com.google.common.truth.Truth
 import io.mockk.every
 import io.mockk.mockk
@@ -18,10 +18,10 @@ import org.junit.Test
 import org.junit.Before
 import java.lang.Exception
 
-class RecipesApiImplTest {
+class OkHttpRecipesApiImplTest {
 
-    private lateinit var url: HttpUrl
     private lateinit var api: RecipesApiImpl
+    private lateinit var url: HttpUrl
     private val okHttpClient: OkHttpClient = mockk()
 
     @Before
@@ -33,34 +33,20 @@ class RecipesApiImplTest {
     @Test
     fun getTest() {
         val expectedJson = "{\n" +
-                "  \"from\": 0,\n" +
-                "  \"to\": 0,\n" +
-                "  \"count\": 0,\n" +
+                "  \"from\": 1,\n" +
+                "  \"to\": 1,\n" +
+                "  \"count\": 1,\n" +
+                "  \"_links\": {},\n" +
                 "  \"hits\": [\n" +
                 "    {\n" +
-                "      \"recipeModel\": {\n" +
+                "      \"recipe\": {\n" +
                 "        \"uri\": \"uri\",\n" +
                 "        \"label\": \"label\",\n" +
                 "        \"image\": \"image\",\n" +
                 "        \"source\": \"source\",\n" +
                 "        \"url\": \"url\",\n" +
-                "        \"dietLabels\": [\n" +
-                "          \"dietLabels\"\n" +
-                "        ],\n" +
-                "        \"healthLabels\": [\n" +
-                "          \"healthLabels\"\n" +
-                "        ],\n" +
                 "        \"ingredientLines\": [\n" +
                 "          \"ingredientLines\"\n" +
-                "        ],\n" +
-                "        \"cuisineType\": [\n" +
-                "          \"cuisineType\"\n" +
-                "        ],\n" +
-                "        \"mealType\": [\n" +
-                "          \"mealType\"\n" +
-                "        ],\n" +
-                "        \"dishType\": [\n" +
-                "          \"dishType\"\n" +
                 "        ]\n" +
                 "      }\n" +
                 "    }\n" +
@@ -71,18 +57,14 @@ class RecipesApiImplTest {
             .code(200)
             .request(
                 Request.Builder()
-                .url("https://api.edamam.com/api/recipes/v2?type=public&q=Nyama&app_id=f2aed758&app_key=e906d60b053299bd251af78fa297f507")
-                .build())
+                    .url("https://api.edamam.com/api/recipes/v2?type=public&q=Nyama&app_id=f2aed758&app_key=1c70177c0b5d56057410b74bd9ae1283")
+                    .build())
             .message("")
             .body(responseBody)
             .protocol(Protocol.HTTP_2)
             .build()
-        val expectedResult = listOf(
-            RecipeModel("uri", "label", "image", "source",
-            "url", listOf("ingredientLines"), listOf("dietLabels"), listOf("healthLabels"), listOf("cuisineType"), listOf("mealType"), listOf("dishType"))
-        )
+        val expectedResult = listOf(Recipe("uri", "label", "image", "source", "url", listOf("ingredientLines")))
         every { okHttpClient.newCall(any()).execute() } returns response
-
         val testResult = api.get(queryArgument)
 
         Truth.assertThat(testResult).isEqualTo(expectedResult)

@@ -6,10 +6,7 @@ import com.example.recipe.data.repository.RecipesRepositoryImpl
 import com.example.recipe.domain.RecipesRepository
 import com.example.recipe.models.converter.Converter
 import com.example.recipe.models.converter.DomainToPresentationConverter
-import com.example.recipe.models.converter.DomainToRecipeEntityConverter
 import com.example.recipe.models.converter.PresentationToDomainConverter
-import com.example.recipe.models.converter.RecipeEntityToDomainConverter
-import com.example.recipe.data.dao.entity.RecipeEntity
 import com.example.recipe.models.converter.RecipeToDomainConverter
 import com.example.recipe.models.data.api.Recipe
 import com.example.recipe.models.domain.RecipeDomainModel
@@ -35,13 +32,7 @@ interface AppModule {
     fun provideConverter2(domainToPresentationConverter: DomainToPresentationConverter): Converter<RecipeDomainModel, RecipePresentationModel>
 
     @Binds
-    fun provideConverter3(recipeEntityToDomainConverter: RecipeEntityToDomainConverter): Converter<RecipeEntity, RecipeDomainModel>
-
-    @Binds
-    fun provideConverter4(domainToRecipeEntityConverter: DomainToRecipeEntityConverter): Converter<RecipeDomainModel, RecipeEntity>
-
-    @Binds
-    fun provideConverter5(presentationToDomainConverter: PresentationToDomainConverter): Converter<RecipePresentationModel, RecipeDomainModel>
+    fun provideConverter3(presentationToDomainConverter: PresentationToDomainConverter): Converter<RecipePresentationModel, RecipeDomainModel>
 
     @Binds
     fun provideSchedulers(schedulersProvider: SchedulersProvider): ISchedulersProvider
