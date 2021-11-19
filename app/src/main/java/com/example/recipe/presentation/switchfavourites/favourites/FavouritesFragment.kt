@@ -17,12 +17,15 @@ import com.example.recipe.databinding.RecipesListInfoBinding
 import com.example.recipe.models.presentation.RecipePresentationModel
 import com.example.recipe.presentation.switchfavourites.favourites.viewmodel.FavouritesViewModel
 import com.example.recipe.presentation.recipedetail.RecipeDetailActivity
+import javax.inject.Inject
 
 class FavouritesFragment : Fragment(), OnFavouriteRecipeClickListener {
 
     private lateinit var binding: RecipesListInfoBinding
     private lateinit var favouritesViewModel: FavouritesViewModel
     private lateinit var adapter: FavouritesAdapter
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,6 +40,8 @@ class FavouritesFragment : Fragment(), OnFavouriteRecipeClickListener {
         showData(mutableListOf())
         binding.result.text = getString(R.string.favourite_recipes)
 
+        NetworkApp.appComponent(requireContext()).inject(this)
+
         //Создать вью модель
         createViewModel()
         //Наблюдать за LiveData
@@ -50,14 +55,7 @@ class FavouritesFragment : Fragment(), OnFavouriteRecipeClickListener {
     }
 
     private fun createViewModel() {
-        favouritesViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                if (modelClass.isAssignableFrom(FavouritesViewModel::class.java)) {
-                    return NetworkApp.appComponent(requireContext()).getFavouritesViewModel() as T
-                }
-                throw IllegalArgumentException("UnknownViewModel")
-            }
-        })[FavouritesViewModel::class.java]
+        favouritesViewModel = ViewModelProvider(this, viewModelFactory)[FavouritesViewModel::class.java]
     }
 
     private fun observeLiveData() {
@@ -95,7 +93,7 @@ class FavouritesFragment : Fragment(), OnFavouriteRecipeClickListener {
 
     override fun onRecipeClick(recipePresentationModel: RecipePresentationModel) {
         val newIntent = Intent(requireContext(), RecipeDetailActivity::class.java)
-        newIntent.putExtra("recipeModel", recipePresentationModel)
+        newIntent.putExtra("recipe", recipePresentationModel)
         startActivity(newIntent)
     }
 

@@ -42,7 +42,7 @@ class RecipesInfoViewModel @Inject constructor(
      * @param query ключевое слово для запроса
      */
     fun get(query: String) {
-        val disposable = Single.fromCallable { recipesInteractor.get(query) }
+        val disposable = recipesInteractor.get(query)
             .map { recipes -> recipes.map(converterToPresentation::convert) }
             .doOnSubscribe { progressLiveData.postValue(true) }
             .doAfterTerminate { progressLiveData.postValue(false) }

@@ -1,13 +1,14 @@
 package com.example.recipe.data.repository
 
-import com.example.recipe.data.api.RecipesApi
 import com.example.recipe.data.dao.RecipesDao
 import com.example.recipe.data.dao.entity.IngredientEntity
 import com.example.recipe.domain.RecipesRepository
 import com.example.recipe.models.converter.Converter
 import com.example.recipe.data.dao.entity.RecipeEntity
+import com.example.recipe.data.network.RetrofitService
 import com.example.recipe.models.data.api.Recipe
 import com.example.recipe.models.domain.RecipeDomainModel
+import io.reactivex.Observable
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -15,29 +16,31 @@ import javax.inject.Named
  * Реализация [RecipesRepository]
  *
  * @param recipesDao интерфейс для получения данных об избранных рецептах из базы данных
- * @param recipesApi апи для работы с сервераными данными
+ * @param retrofitService сервис для работы с сервером
  * @param converter конвертер из RecipeModel в RecipeDomainModel
  * @param converterFromEntity из RecipeEntity в RecipeDomainModel
  * @param converterToEntity из RecipeDomainModel в RecipeEntity
  */
 class RecipesRepositoryImpl @Inject constructor(@Named("dao") private val recipesDao: RecipesDao,
-                                                private val recipesApi: RecipesApi,
+                                                private val retrofitService: RetrofitService,
                                                 private val converter: Converter<Recipe, RecipeDomainModel>,
                                                 private val converterFromEntity: Converter<RecipeEntity, RecipeDomainModel>,
                                                 private val converterToEntity: Converter<RecipeDomainModel, RecipeEntity>): RecipesRepository {
 
-    override fun get(query: String): List<RecipeDomainModel> {
-        // Получить список RecipeModel из базы данных
-        val recipes = recipesApi.get(query)
-        for (recipe in recipes) {
-            // Проверить, занесен ли рецепт в базу данных
-            if (recipesDao.isFavourite(recipe.uri).isNotEmpty()) {
-                // Заменить значение поля isFavourite на true
-                recipe.isFavourite = true
-            }
+    override fun get (query: String): Observable<List<RecipeDomainModel>> {
+        return retrofitService.get(query)
+            .map { it.hits.map { hit -> hit.recipe } }
+            .map {recipes -> recipes.map(converter::convert)}
+            .map { recipes -> recipes.map(::checkFavourites) }
+    }
+
+    private fun checkFavourites(recipe: RecipeDomainModel): RecipeDomainModel {
+        // Проверить, есть ли рецепт в избранном
+        if (recipesDao.isFavourite(recipe.uri).isNotEmpty()) {
+            // Заменить значение поля isFavourite на true
+            recipe.isFavourite = true
         }
-        // Конвертировать список RecipeModel в список RecipeDomainModel
-        return recipes.map(converter::convert)
+        return recipe
     }
 
     override fun getFavouriteRecipes(): List<RecipeDomainModel> {

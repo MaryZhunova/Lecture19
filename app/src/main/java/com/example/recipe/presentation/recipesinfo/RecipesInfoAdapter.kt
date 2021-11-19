@@ -79,15 +79,15 @@ class RecipesInfoAdapter(
                 if (v.id == favourite.id || v.id == favouriteFilled.id) {
                     if (!favouriteFilled.isVisible) {
                         favouriteFilled.visibility = View.VISIBLE
-                        recipes[adapterPosition].isFavourite = true
-                        onRecipeClick.onFavouriteClick(recipes[adapterPosition], true)
+                        recipes[absoluteAdapterPosition].isFavourite = true
+                        onRecipeClick.onFavouriteClick(recipes[absoluteAdapterPosition], true)
                     } else {
                         favouriteFilled.visibility = View.INVISIBLE
-                        recipes[adapterPosition].isFavourite = false
-                        onRecipeClick.onFavouriteClick(recipes[adapterPosition], false)
+                        recipes[absoluteAdapterPosition].isFavourite = false
+                        onRecipeClick.onFavouriteClick(recipes[absoluteAdapterPosition], false)
                     }
                 } else {
-                    onRecipeClick.onRecipeClick(recipes[adapterPosition])
+                    onRecipeClick.onRecipeClick(recipes[absoluteAdapterPosition])
                 }
             }
         }

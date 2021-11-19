@@ -73,12 +73,12 @@ class FavouritesAdapter(
         override fun onClick(v: View?) {
             if (v != null) {
                 if (v.id == favouriteFilled.id) {
-                    val position = adapterPosition
+                    val position = absoluteAdapterPosition
                     onRecipeClick.onFavouriteClick(recipes[position])
                     recipes.removeAt(position)
                     notifyItemRemoved(position)
                 } else {
-                    onRecipeClick.onRecipeClick(recipes[adapterPosition])
+                    onRecipeClick.onRecipeClick(recipes[absoluteAdapterPosition])
                 }
             }
         }

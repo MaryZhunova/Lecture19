@@ -8,7 +8,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +17,7 @@ import com.example.recipe.databinding.RecipesListInfoBinding
 import com.example.recipe.presentation.recipesinfo.viewmodel.RecipesInfoViewModel
 import com.example.recipe.models.presentation.RecipePresentationModel
 import com.example.recipe.presentation.recipedetail.RecipeDetailActivity
+import javax.inject.Inject
 
 /**
  * Активити приложения, которая отображает список рецептов
@@ -26,6 +26,9 @@ class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView, OnRecipeClickL
 
     private lateinit var binding: RecipesListInfoBinding
     private lateinit var infoViewModel: RecipesInfoViewModel
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
     private var query: String? = null
     private lateinit var adapter: RecipesInfoAdapter
 
@@ -35,10 +38,14 @@ class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView, OnRecipeClickL
         binding = RecipesListInfoBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        NetworkApp.appComponent(applicationContext).inject(this)
+
+
         showData(mutableListOf())
 
         query = intent.getStringExtra("query")
-        binding.result.text = getString(R.string.search_result, query)
+        (getString(R.string.search_result) + " " + query).also { binding.result.text = it }
 
         //Создать вью модель
         createViewModel()
@@ -63,15 +70,7 @@ class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView, OnRecipeClickL
     }
 
     private fun createViewModel() {
-        infoViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                if (modelClass.isAssignableFrom(RecipesInfoViewModel::class.java)) {
-                    return NetworkApp.appComponent(applicationContext)
-                        .getRecipesInfoViewModel() as T
-                }
-                throw IllegalArgumentException("UnknownViewModel")
-            }
-        })[RecipesInfoViewModel::class.java]
+        infoViewModel = ViewModelProvider(this, viewModelFactory)[RecipesInfoViewModel::class.java]
     }
 
     private fun observeLiveData() {
@@ -79,7 +78,8 @@ class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView, OnRecipeClickL
             .observe(this) { isVisible: Boolean -> showProgress(isVisible) }
         infoViewModel.getRecipesLiveData()
             .observe(this) { recipes: List<RecipePresentationModel> ->
-                showData(recipes.toMutableList())
+                if (recipes.isEmpty()) showError(Exception("Couldn't find any recipe"))
+                else showData(recipes.toMutableList())
             }
         infoViewModel.getErrorLiveData()
             .observe(this) { throwable: Throwable -> showError(throwable) }
@@ -109,7 +109,7 @@ class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView, OnRecipeClickL
 
     override fun onRecipeClick(recipePresentationModel: RecipePresentationModel) {
         val newIntent = Intent(applicationContext, RecipeDetailActivity::class.java)
-        newIntent.putExtra("recipeModel", recipePresentationModel)
+        newIntent.putExtra("recipe", recipePresentationModel)
         startActivity(newIntent)
     }
 

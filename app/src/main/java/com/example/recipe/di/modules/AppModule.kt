@@ -1,7 +1,5 @@
-package com.example.recipe.di
+package com.example.recipe.di.modules
 
-import com.example.recipe.data.api.RecipesApiImpl
-import com.example.recipe.data.api.RecipesApi
 import com.example.recipe.data.repository.RecipesRepositoryImpl
 import com.example.recipe.domain.RecipesRepository
 import com.example.recipe.models.converter.Converter
@@ -21,12 +19,8 @@ import dagger.Module
 
 @Module
 interface AppModule {
-
     @Binds
     fun provideBaseRepository(recipesRepositoryImpl: RecipesRepositoryImpl): RecipesRepository
-
-    @Binds
-    fun provideRecipesApi(recipesApiImpl: RecipesApiImpl): RecipesApi
 
     @Binds
     fun provideConverter(toDomainConverter: RecipeToDomainConverter): Converter<Recipe, RecipeDomainModel>

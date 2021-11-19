@@ -73,7 +73,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/error" />
+            android:src="@drawable/error"
+            android:contentDescription="@string/error_logo_description" />
 
         <TextView
             android:id="@+id/error_text"

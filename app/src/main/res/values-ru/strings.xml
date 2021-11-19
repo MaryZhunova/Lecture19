@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Рецепты</string>
+    <string name="add_a_new_recipe">Добавить новый рецепт</string>
+    <string name="enter_a_key_word">Введите ключевое слово:</string>
+    <string name="yum">Ням!</string>
+    <string name="ingredients">Ингредиенты:</string>
+    <string name="for_detailed_recipe_go_to">Подробный рецепт по ссылке</string>
+    <string name="loading">загрузка…</string>
+    <string name="settings">Настройки</string>
+    <string name="filters">Фильтры</string>
+    <string name="favourites">Избранное</string>
+    <string name="search">Поиск</string>
+    <string name="search_result">Результаты поиска по запросу</string>
+    <string name="favourite_recipes">Избранные рецепты</string>
+    <string name="logo_content_description">Логотип приложения Рецепты коричневого цвета</string>
+    <string name="error_logo_description">Черный треугольник с прозрачным восклицательным знаком внутри</string>
+    <string name="recipe_icon">Изображение рецепта</string>
+    <string name="heart">Прозрачное сердце с коричневым контуром</string>
+    <string name="brown_heart">Коричневое сердце</string>
+    <string name="my_recipes">Мои рецепты</string>
+    <string name="dark_theme">Темная тема</string>
+    <string name="download_images">Загружать изображения</string>
+    <string name="theme">Тема</string>
+    <string name="images">Изображения</string>
+</resources>

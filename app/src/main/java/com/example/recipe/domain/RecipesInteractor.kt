@@ -1,6 +1,8 @@
 package com.example.recipe.domain
 
 import com.example.recipe.models.domain.RecipeDomainModel
+import io.reactivex.Observable
+import java.lang.Exception
 import javax.inject.Inject
 
 /**
@@ -15,7 +17,7 @@ class RecipesInteractor @Inject constructor(private val repository: RecipesRepos
      * @param query ключевое слово для запроса
      * @return [List<RecipeDomainModel>] список рецептов
      */
-    fun get(query: String): List<RecipeDomainModel> {
+    fun get(query: String): Observable<List<RecipeDomainModel>> {
         return repository.get(query)
     }
 

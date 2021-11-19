@@ -70,7 +70,7 @@ class MyRecipesAdapter(
 
         override fun onClick(v: View?) {
             if (v != null) {
-                onRecipeClick.onRecipeClick(recipes[adapterPosition])
+                onRecipeClick.onRecipeClick(recipes[absoluteAdapterPosition])
             }
         }
     }

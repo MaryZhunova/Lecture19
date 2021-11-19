@@ -17,6 +17,7 @@ import com.example.recipe.NetworkApp
 import com.example.recipe.models.presentation.RecipePresentationModel
 import com.example.recipe.presentation.recipedetail.viewmodel.RecipeDetailViewModel
 import com.example.recipe.utils.GlideApp
+import javax.inject.Inject
 
 /**
  * Активити приложения, которая отображает детальную информацию об одном рецепте
@@ -26,13 +27,17 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
     private lateinit var binding: RecipeDetailBinding
     private lateinit var recipeDetailViewModel: RecipeDetailViewModel
     private var recipe: RecipePresentationModel? = null
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = RecipeDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        recipe = intent.getParcelableExtra("recipeModel")
+        NetworkApp.appComponent(applicationContext).inject(this)
+
+        recipe = intent.getParcelableExtra("recipe")
 
         createViewModel()
         //Наблюдать за LiveData
@@ -94,15 +99,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
     }
 
     private fun createViewModel() {
-        recipeDetailViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                if (modelClass.isAssignableFrom(RecipeDetailViewModel::class.java)) {
-                    return NetworkApp.appComponent(applicationContext)
-                        .getRecipeDetailViewModel() as T
-                }
-                throw IllegalArgumentException("UnknownViewModel")
-            }
-        })[RecipeDetailViewModel::class.java]
+        recipeDetailViewModel = ViewModelProvider(this, viewModelFactory)[RecipeDetailViewModel::class.java]
     }
 
     private fun observeLiveData() {

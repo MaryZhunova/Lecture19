@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.fragment.app.FragmentContainerView
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +18,7 @@ import com.example.recipe.models.presentation.RecipePresentationModel
 import com.example.recipe.presentation.switchfavourites.myrecipes.viewmodel.MyRecipesViewModel
 import com.example.recipe.presentation.recipedetail.RecipeDetailActivity
 import com.example.recipe.presentation.switchfavourites.addrecipe.AddRecipeFragment
+import javax.inject.Inject
 
 /**
  * Фрагмент для отображения списка своих рецептов
@@ -27,7 +27,12 @@ class MyRecipesFragment : Fragment(), OnMyRecipeClickListener {
     private lateinit var binding: FragmentMyRecipesBinding
     private lateinit var myRecipesViewModel: MyRecipesViewModel
     private lateinit var adapter: MyRecipesAdapter
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
+    companion object {
+        fun newInstance() = MyRecipesFragment()
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,6 +43,9 @@ class MyRecipesFragment : Fragment(), OnMyRecipeClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        NetworkApp.appComponent(requireContext()).inject(this)
+
         //Создать вью модель
         createViewModel()
         //Наблюдать за LiveData
@@ -56,22 +64,10 @@ class MyRecipesFragment : Fragment(), OnMyRecipeClickListener {
                 .addToBackStack("fragment")
                 .commit()
         }
-        }
-    }
-
-    companion object {
-        fun newInstance() = MyRecipesFragment()
     }
 
     private fun createViewModel() {
-        myRecipesViewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                if (modelClass.isAssignableFrom(MyRecipesViewModel::class.java)) {
-                    return NetworkApp.appComponent(requireContext()).getMyRecipesViewModel() as T
-                }
-                throw IllegalArgumentException("UnknownViewModel")
-            }
-        })[MyRecipesViewModel::class.java]
+        myRecipesViewModel = ViewModelProvider(this, viewModelFactory)[MyRecipesViewModel::class.java]
     }
 
     private fun observeLiveData() {

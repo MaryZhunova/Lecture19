@@ -2,10 +2,9 @@ package com.example.recipe
 
 import android.app.Application
 import android.content.Context
-import com.example.recipe.utils.Constants
-import com.example.recipe.di.AppComponent
-import com.example.recipe.di.DaggerAppComponent
-import com.example.recipe.di.NetworkModule
+import com.example.recipe.di.components.AppComponent
+import com.example.recipe.di.components.DaggerAppComponent
+import com.example.recipe.di.modules.NetworkModule
 
 class NetworkApp : Application() {
 
@@ -14,7 +13,7 @@ class NetworkApp : Application() {
     override fun onCreate() {
         super.onCreate()
         appComponent = DaggerAppComponent.builder()
-            .networkModule(NetworkModule(Constants.URL, this))
+            .networkModule(NetworkModule(this))
             .build()
     }
 
