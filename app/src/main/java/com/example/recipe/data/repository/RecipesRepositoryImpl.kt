@@ -10,11 +10,8 @@ import javax.inject.Inject
 /**
  * Реализация [RecipesRepository]
  *
- * @param recipesDao интерфейс для получения данных об избранных рецептах из базы данных
  * @param recipesApi апи для работы с сервераными данными
  * @param converter конвертер из RecipeModel в RecipeDomainModel
- * @param converterFromEntity из RecipeEntity в RecipeDomainModel
- * @param converterToEntity из RecipeDomainModel в RecipeEntity
  */
 class RecipesRepositoryImpl @Inject constructor(private val recipesApi: RecipesApi,
                                                 private val converter: Converter<Recipe, RecipeDomainModel>): RecipesRepository {

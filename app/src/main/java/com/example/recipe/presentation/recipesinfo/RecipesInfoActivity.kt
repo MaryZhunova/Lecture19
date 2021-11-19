@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipe.NetworkApp
-import com.example.recipe.R
 import com.example.recipe.databinding.RecipesListInfoBinding
 import com.example.recipe.presentation.recipesinfo.viewmodel.RecipesInfoViewModel
 import com.example.recipe.models.presentation.RecipePresentationModel
@@ -29,10 +28,12 @@ class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView {
         binding = RecipesListInfoBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        setSupportActionBar(binding.toolbar)
+
         showData(mutableListOf())
 
         query = intent.getStringExtra("query")
-        binding.result.text = getString(R.string.search_result, query)
 
         //Создать вью модель
         createViewModel()
