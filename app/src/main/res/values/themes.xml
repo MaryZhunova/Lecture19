@@ -28,6 +28,4 @@
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:windowBackground">@color/light_brown</item>
     </style>
-
-
 </resources>
