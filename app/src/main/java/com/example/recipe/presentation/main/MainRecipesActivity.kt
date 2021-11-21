@@ -2,12 +2,12 @@ package com.example.recipe.presentation.main
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.preference.PreferenceManager
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.preference.PreferenceManager
 import com.example.recipe.R
 import com.example.recipe.databinding.ActivityMainBinding
 import com.example.recipe.presentation.switchfavourites.SwitchFavouritesActivity
