@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.recipe.domain.RecipesInteractor
 import com.example.recipe.models.converter.Converter
-import com.example.recipe.models.converter.PresentationToDomainConverter
 import com.example.recipe.models.domain.RecipeDomainModel
 import com.example.recipe.models.presentation.RecipePresentationModel
 import com.example.recipe.presentation.recipesinfo.RecipesInfoActivity
@@ -34,6 +33,9 @@ class RecipesInfoViewModel @Inject constructor(
     private val progressLiveData: MutableLiveData<Boolean> = MutableLiveData()
     private val errorLiveData: MutableLiveData<Throwable> = MutableLiveData()
     private val recipesLiveData: MutableLiveData<MutableList<RecipePresentationModel>> = MutableLiveData()
+    private val nextPageLiveData: MutableLiveData<String> = MutableLiveData()
+
+
     private val composite: CompositeDisposable = CompositeDisposable()
     /**
      * Получение списка рецептов
@@ -42,13 +44,14 @@ class RecipesInfoViewModel @Inject constructor(
      */
     fun get(query: String) {
         val disposable = recipesInteractor.get(query)
-            .map { recipes -> recipes.recipes.map(converterToPresentation::convert) }
-            .map { it.toMutableList() }
             .doOnSubscribe { progressLiveData.postValue(true) }
             .doAfterTerminate { progressLiveData.postValue(false) }
             .subscribeOn(schedulersProvider.io())
             .observeOn(schedulersProvider.ui())
-            .subscribe(recipesLiveData::setValue, errorLiveData::setValue)
+            .subscribe ({ result ->
+                nextPageLiveData.value = result.first
+                recipesLiveData.value = result.second.map(converterToPresentation::convert).toMutableList()
+            }, errorLiveData::setValue)
         composite.add(disposable)
     }
 
@@ -56,12 +59,14 @@ class RecipesInfoViewModel @Inject constructor(
 
     fun get(query: String, cont: String?) {
         val disposable = recipesInteractor.get(query, cont!!)
-                .map { recipes -> recipes.recipes.map(converterToPresentation::convert) }
-                .doOnSubscribe { progressLiveData.postValue(true) }
+            .doOnSubscribe { progressLiveData.postValue(true) }
                 .doAfterTerminate { progressLiveData.postValue(false) }
                 .subscribeOn(schedulersProvider.io())
                 .observeOn(schedulersProvider.ui())
-                .subscribe(::addList, errorLiveData::setValue)
+            .subscribe ({ result ->
+                nextPageLiveData.value = result.first
+                addList(result.second.map(converterToPresentation::convert))},
+                errorLiveData::setValue)
         composite.add(disposable)
     }
 
@@ -130,9 +135,8 @@ class RecipesInfoViewModel @Inject constructor(
 
     fun getProgressLiveData(): LiveData<Boolean> = progressLiveData
     fun getErrorLiveData(): LiveData<Throwable> = errorLiveData
-    fun getRecipesLiveData(): LiveData<MutableList<RecipePresentationModel>> {
-      return recipesLiveData
-    }
+    fun getRecipesLiveData(): LiveData<MutableList<RecipePresentationModel>> = recipesLiveData
+    fun getNextPageLiveData(): LiveData<String> = nextPageLiveData
 
 
     private fun addList(list: List<RecipePresentationModel>) {

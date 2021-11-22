@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName
  */
 data class RecipeResponse(@SerializedName("_links") val link: Link, val hits: List<Hit>)
 
-data class Link(val next: Next)
+data class Link(val next: Next?)
 
 data class Next(val href: String)
 

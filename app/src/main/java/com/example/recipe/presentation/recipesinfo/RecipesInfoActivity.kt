@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipe.NetworkApp
 import com.example.recipe.R
-import com.example.recipe.data.repository.RecipesRepositoryImpl
 import com.example.recipe.databinding.RecipesListInfoBinding
 import com.example.recipe.presentation.recipesinfo.viewmodel.RecipesInfoViewModel
 import com.example.recipe.models.presentation.RecipePresentationModel
@@ -34,6 +33,7 @@ class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView, OnRecipeClickL
     private var query: String? = null
     private lateinit var adapter: RecipesInfoAdapter
     var size = 0
+    var nextPage = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,8 +75,8 @@ class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView, OnRecipeClickL
             super.onScrolled(recyclerView, dx, dy)
             val linearLayoutManager = binding.recyclerView.layoutManager as LinearLayoutManager
             if (linearLayoutManager.findLastCompletelyVisibleItemPosition() == size - 1) {
-                if ( RecipesRepositoryImpl.next != null) {
-                    query?.let { infoViewModel.get(it, RecipesRepositoryImpl.next) }
+                if (nextPage.isNotEmpty()) {
+                    query?.let { infoViewModel.get(it, nextPage) }
                 }
             }
         }
@@ -112,6 +112,9 @@ class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView, OnRecipeClickL
             }
         infoViewModel.getErrorLiveData()
             .observe(this) { throwable: Throwable -> showError(throwable) }
+        infoViewModel.getNextPageLiveData().observe(this) {
+            nextPage -> this.nextPage = nextPage
+        }
     }
 
     override fun showProgress(isVisible: Boolean) {

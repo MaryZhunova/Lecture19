@@ -10,9 +10,7 @@ import com.example.recipe.models.converter.RecipeEntityToDomainConverter
 import com.example.recipe.data.dao.entity.RecipeEntity
 import com.example.recipe.models.converter.RecipeToDomainConverter
 import com.example.recipe.models.data.api.Recipe
-import com.example.recipe.models.data.api.RecipeResponse
 import com.example.recipe.models.domain.RecipeDomainModel
-import com.example.recipe.models.domain.RecipeDomainModel2
 import com.example.recipe.models.presentation.RecipePresentationModel
 import com.example.recipe.utils.ISchedulersProvider
 import com.example.recipe.utils.SchedulersProvider
@@ -25,7 +23,7 @@ interface AppModule {
     fun provideBaseRepository(recipesRepositoryImpl: RecipesRepositoryImpl): RecipesRepository
 
     @Binds
-    fun provideConverter(toDomainConverter: RecipeToDomainConverter): Converter<RecipeResponse, RecipeDomainModel2>
+    fun provideConverter(toDomainConverter: RecipeToDomainConverter): Converter<Recipe, RecipeDomainModel>
 
     @Binds
     fun provideConverter2(domainToPresentationConverter: DomainToPresentationConverter): Converter<RecipeDomainModel, RecipePresentationModel>
