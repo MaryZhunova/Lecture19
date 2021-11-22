@@ -11,8 +11,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.recipe.NetworkApp
 import com.example.recipe.R
+import com.example.recipe.data.repository.RecipesRepositoryImpl
 import com.example.recipe.databinding.RecipesListInfoBinding
 import com.example.recipe.presentation.recipesinfo.viewmodel.RecipesInfoViewModel
 import com.example.recipe.models.presentation.RecipePresentationModel
@@ -31,6 +33,7 @@ class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView, OnRecipeClickL
 
     private var query: String? = null
     private lateinit var adapter: RecipesInfoAdapter
+    var size = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,8 +44,15 @@ class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView, OnRecipeClickL
 
         NetworkApp.appComponent(applicationContext).inject(this)
 
-
-        showData(mutableListOf())
+        adapter = RecipesInfoAdapter(this)
+        binding.recyclerView.adapter = adapter
+        binding.recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                this,
+                LinearLayoutManager.VERTICAL
+            )
+        )
+        adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
 
         query = intent.getStringExtra("query")
         (getString(R.string.search_result) + " " + query).also { binding.result.text = it }
@@ -52,8 +62,24 @@ class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView, OnRecipeClickL
         //Наблюдать за LiveData
         observeLiveData()
 
+        binding.recyclerView.addOnScrollListener(MyOnScrollListener())
+
         //Отправить сетевой запрос с ключевым словом query через вью модель
-        query?.let { infoViewModel.get(it) }
+        if (savedInstanceState == null) {
+            query?.let { infoViewModel.get(it) }
+        }
+    }
+
+    inner class MyOnScrollListener: RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            val linearLayoutManager = binding.recyclerView.layoutManager as LinearLayoutManager
+            if (linearLayoutManager.findLastCompletelyVisibleItemPosition() == size - 1) {
+                if ( RecipesRepositoryImpl.next != null) {
+                    query?.let { infoViewModel.get(it, RecipesRepositoryImpl.next) }
+                }
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -77,9 +103,12 @@ class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView, OnRecipeClickL
         infoViewModel.getProgressLiveData()
             .observe(this) { isVisible: Boolean -> showProgress(isVisible) }
         infoViewModel.getRecipesLiveData()
-            .observe(this) { recipes: List<RecipePresentationModel> ->
+            .observe(this) { recipes: MutableList<RecipePresentationModel> ->
                 if (recipes.isEmpty()) showError(Exception("Couldn't find any recipe"))
-                else showData(recipes.toMutableList())
+                else {
+                    size = recipes.size
+                    showData(recipes)
+                }
             }
         infoViewModel.getErrorLiveData()
             .observe(this) { throwable: Throwable -> showError(throwable) }
@@ -90,20 +119,16 @@ class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView, OnRecipeClickL
     }
 
     override fun showData(recipes: MutableList<RecipePresentationModel>) {
-        adapter = RecipesInfoAdapter(recipes, this)
-        binding.recyclerView.adapter = adapter
-        binding.recyclerView.addItemDecoration(
-            DividerItemDecoration(
-                this,
-                LinearLayoutManager.VERTICAL
-            )
-        )
+        adapter.update(recipes)
+
+
     }
 
     override fun showError(throwable: Throwable) {
         throwable.message?.let {
             binding.errorLayout.visibility = View.VISIBLE
             binding.errorText.text = it
+//            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -30,3 +30,8 @@ data class RecipeDomainModel(
 //                             val mealType: List<String>,
 //                             val dishType: List<String>,
     var isFavourite: Boolean = false)
+
+data class RecipeDomainModel2(
+    var next: String,
+    val recipes: List<RecipeDomainModel>
+)

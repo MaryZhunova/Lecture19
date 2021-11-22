@@ -10,7 +10,8 @@ interface RetrofitService {
     @GET("v2?type=public")
     fun get(
         @Query("q") query: String,
-        @Query("app_id") apiId: String = Constants.ID,
-        @Query("app_key") apiKey: String = Constants.KEY
+        @Query("_cont", encoded = true) cont: String? = null,
+        @Query("app_key") apiKey: String = Constants.KEY,
+        @Query("app_id") apiId: String = Constants.ID
     ): Observable<RecipeResponse>
 }

@@ -7,7 +7,9 @@ import com.example.recipe.models.converter.Converter
 import com.example.recipe.data.dao.entity.RecipeEntity
 import com.example.recipe.data.network.RetrofitService
 import com.example.recipe.models.data.api.Recipe
+import com.example.recipe.models.data.api.RecipeResponse
 import com.example.recipe.models.domain.RecipeDomainModel
+import com.example.recipe.models.domain.RecipeDomainModel2
 import io.reactivex.Observable
 import javax.inject.Inject
 import javax.inject.Named
@@ -21,17 +23,24 @@ import javax.inject.Named
  * @param converterFromEntity из RecipeEntity в RecipeDomainModel
  * @param converterToEntity из RecipeDomainModel в RecipeEntity
  */
-class RecipesRepositoryImpl @Inject constructor(@Named("dao") private val recipesDao: RecipesDao,
-                                                private val retrofitService: RetrofitService,
-                                                private val converter: Converter<Recipe, RecipeDomainModel>,
-                                                private val converterFromEntity: Converter<RecipeEntity, RecipeDomainModel>,
-                                                private val converterToEntity: Converter<RecipeDomainModel, RecipeEntity>): RecipesRepository {
+class RecipesRepositoryImpl @Inject constructor(
+    @Named("dao") private val recipesDao: RecipesDao,
+    private val retrofitService: RetrofitService,
+    private val converter: Converter<RecipeResponse, RecipeDomainModel2>,
+    private val converterFromEntity: Converter<RecipeEntity, RecipeDomainModel>,
+    private val converterToEntity: Converter<RecipeDomainModel, RecipeEntity>
+) : RecipesRepository {
 
-    override fun get (query: String): Observable<List<RecipeDomainModel>> {
+    override fun get (query: String): Observable<RecipeDomainModel2> {
         return retrofitService.get(query)
-            .map { it.hits.map { hit -> hit.recipe } }
-            .map {recipes -> recipes.map(converter::convert)}
-            .map { recipes -> recipes.map(::checkFavourites) }
+//            .map { it.hits.map { hit -> hit.recipe } }
+            .map { recipe -> converter.convert(recipe) }
+//            .map { recipes -> recipes.map(::checkFavourites) }
+    }
+
+    override fun get(query: String, cont: String): Observable<RecipeDomainModel2> {
+        return retrofitService.get(query, cont)
+            .map { recipe -> converter.convert(recipe) }
     }
 
     private fun checkFavourites(recipe: RecipeDomainModel): RecipeDomainModel {
@@ -79,5 +88,9 @@ class RecipesRepositoryImpl @Inject constructor(@Named("dao") private val recipe
         for (ingredient in recipe.ingredientLines) {
             recipesDao.deleteIngredient(IngredientEntity(ingredient, recipe.uri))
         }
+    }
+
+    companion object {
+        var next: String? = null
     }
 }

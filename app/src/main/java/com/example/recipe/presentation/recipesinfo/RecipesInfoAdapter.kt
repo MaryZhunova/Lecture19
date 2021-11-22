@@ -18,10 +18,15 @@ import com.example.recipe.utils.GlideApp
  * Адаптер для отображения элементов списка
  */
 class RecipesInfoAdapter(
-    val recipes: MutableList<RecipePresentationModel>,
     private val onRecipeClickListener: OnRecipeClickListener
 ) : RecyclerView.Adapter<RecipesInfoAdapter.MyViewHolder>() {
 
+    var recipes: MutableList<RecipePresentationModel> = mutableListOf()
+
+    fun update(list: MutableList<RecipePresentationModel>) {
+        recipes = list
+        notifyDataSetChanged()
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder(
             LayoutInflater.from(parent.context)

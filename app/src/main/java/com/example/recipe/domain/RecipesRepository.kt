@@ -1,6 +1,7 @@
 package com.example.recipe.domain
 
 import com.example.recipe.models.domain.RecipeDomainModel
+import com.example.recipe.models.domain.RecipeDomainModel2
 import io.reactivex.Observable
 
 /**
@@ -14,7 +15,9 @@ interface RecipesRepository {
      * @param query ключевое слово для запроса
      * @return [List<RecipeDomainModel>] список рецептов
      */
-    fun get(query: String): Observable<List<RecipeDomainModel>>
+    fun get(query: String): Observable<RecipeDomainModel2>
+
+    fun get(query: String, cont: String): Observable<RecipeDomainModel2>
 
     /**
      * Получить список избранных рецептов

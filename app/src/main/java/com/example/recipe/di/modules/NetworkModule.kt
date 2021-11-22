@@ -22,8 +22,7 @@ import javax.inject.Named
 import javax.inject.Singleton
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
-
+import okhttp3.Request
 
 @Module(includes = [ViewModelModule::class])
 class NetworkModule(val context: Context) {
@@ -51,7 +50,21 @@ class NetworkModule(val context: Context) {
             .addInterceptor(httpLoggingInterceptor())
             .addNetworkInterceptor(onlineInterceptor())
             .addInterceptor(offlineInterceptor())
+            .addInterceptor(retryInterceptor())
             .build()
+    }
+
+    private fun retryInterceptor(): Interceptor {
+        return Interceptor { chain ->
+            val request = chain.request()
+            var response = chain.proceed(request)
+            while (response.code == 429) {
+                // retry the request
+                response.close()
+                response = chain.proceed(request)
+            }
+            return@Interceptor response
+        }
     }
 
     private fun cache(): Cache {
@@ -66,8 +79,6 @@ class NetworkModule(val context: Context) {
                     .maxStale(30, TimeUnit.DAYS)
                     .build()
                 request = request.newBuilder()
-//                    .removeHeader("Cache-Control")
-//                    .removeHeader("Pragma")
                     .cacheControl(cacheControl)
                     .build()
             }
@@ -82,8 +93,6 @@ class NetworkModule(val context: Context) {
                 .maxAge(5, TimeUnit.DAYS)
                 .build()
             response.newBuilder()
-//                .removeHeader("Cache-Control")
-//                .removeHeader("Pragma")
                 .header("Cache-Control", cacheControl.toString())
                 .build()
         }
@@ -104,10 +113,10 @@ class NetworkModule(val context: Context) {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork) ?: return false
         return when {
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ->    true
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) ->   true
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ->   true
-            else ->     false
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            else -> false
         }
     }
 
