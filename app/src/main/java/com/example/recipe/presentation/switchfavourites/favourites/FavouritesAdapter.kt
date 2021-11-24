@@ -37,6 +37,7 @@ class FavouritesAdapter(
             GlideApp.with(holder.getContext())
                 .asBitmap()
                 .load(tempUri)
+                .error(R.drawable.no_image_logo)
                 .into(holder.icon)
         }
         holder.recipeName.text = recipes[position].label

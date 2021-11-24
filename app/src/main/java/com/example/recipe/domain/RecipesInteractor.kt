@@ -1,5 +1,6 @@
 package com.example.recipe.domain
 
+import com.example.recipe.models.domain.MyRecipeDomainModel
 import com.example.recipe.models.domain.RecipeDomainModel
 import io.reactivex.Observable
 import javax.inject.Inject
@@ -14,12 +15,19 @@ class RecipesInteractor @Inject constructor(private val repository: RecipesRepos
      * Получить список рецептов
      *
      * @param query ключевое слово для запроса
-     * @return [List<RecipeDomainModel>] список рецептов
+     * @return [Observable<Pair<String, List<RecipeDomainModel>>>] String - строка с параметром для перехода на следующую страницу запроса, List<RecipeDomainModel> - список рецептов
      */
     fun get(query: String): Observable<Pair<String, List<RecipeDomainModel>>> {
         return repository.get(query)
     }
 
+    /**
+     * Получить список рецептов
+     *
+     * @param query ключевое слово для запроса
+     * @param cont параметр для перехода на следующую страницу запроса
+     * @return [Observable<Pair<String, List<RecipeDomainModel>>>] String - строка с параметром для перехода на следующую страницу запроса, List<RecipeDomainModel> - список рецептов
+     */
     fun get(query: String, cont: String): Observable<Pair<String, List<RecipeDomainModel>>> {
         return repository.get(query, cont)
     }
@@ -51,4 +59,30 @@ class RecipesInteractor @Inject constructor(private val repository: RecipesRepos
         repository.deleteFromFavourites(recipe)
     }
 
+    /**
+     * Добавить рецепт в базу данных
+     *
+     * @param [recipe] рецепт
+     */
+    fun addToMyRecipes(recipe: MyRecipeDomainModel) {
+        repository.addToMyRecipes(recipe)
+    }
+
+    /**
+     * Удалить рецепт из базы данных
+     *
+     * @param [recipe] рецепт
+     */
+    fun deleteFromMyRecipes(recipe: MyRecipeDomainModel) {
+        repository.deleteFromMyRecipes(recipe)
+    }
+
+    /**
+     * Получить список рецептов из базы данных
+     *
+     * @return [List<MyRecipeDomainModel>] список рецептов
+     */
+    fun getMyRecipes(): List<MyRecipeDomainModel> {
+        return repository.getMyRecipes()
+    }
 }

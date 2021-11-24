@@ -50,10 +50,6 @@ class FavouritesFragment : Fragment(), OnFavouriteRecipeClickListener {
         favouritesViewModel.get()
     }
 
-    companion object {
-        fun newInstance() = FavouritesFragment()
-    }
-
     private fun createViewModel() {
         favouritesViewModel = ViewModelProvider(this, viewModelFactory)[FavouritesViewModel::class.java]
     }
@@ -92,13 +88,16 @@ class FavouritesFragment : Fragment(), OnFavouriteRecipeClickListener {
     }
 
     override fun onRecipeClick(recipePresentationModel: RecipePresentationModel) {
-        val newIntent = Intent(requireContext(), RecipeDetailActivity::class.java)
-        newIntent.putExtra("recipe", recipePresentationModel)
-        startActivity(newIntent)
+        val intent = RecipeDetailActivity.newIntent(requireContext(), recipePresentationModel)
+        startActivity(intent)
     }
 
     override fun onFavouriteClick(recipePresentationModel: RecipePresentationModel) {
         Toast.makeText(requireContext(), "Removed from favourites", Toast.LENGTH_SHORT).show()
         favouritesViewModel.deleteFromFavourites(recipePresentationModel)
+    }
+
+    companion object {
+        fun newInstance() = FavouritesFragment()
     }
 }

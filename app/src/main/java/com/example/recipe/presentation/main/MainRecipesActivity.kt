@@ -1,6 +1,5 @@
 package com.example.recipe.presentation.main
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.preference.PreferenceManager
 import android.view.Menu
@@ -37,8 +36,7 @@ class MainRecipesActivity : AppCompatActivity() {
 
         //По клику на кнопку создать новую активити и передать в нее ключевое слово для поиска
         binding.goBtn.setOnClickListener {
-            val newIntent = Intent(applicationContext, RecipesInfoActivity::class.java)
-            newIntent.putExtra("query", binding.editQuery.text.toString())
+            val newIntent = RecipesInfoActivity.newIntent(this, binding.editQuery.text.toString())
             startActivity(newIntent)
         }
     }
@@ -51,10 +49,10 @@ class MainRecipesActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.settings) {
-            val newIntent = Intent(applicationContext, SettingsActivity::class.java)
+            val newIntent = SettingsActivity.newIntent(this)
             startActivity(newIntent)
         } else if (item.itemId == R.id.favourites) {
-            val newIntent = Intent(applicationContext, SwitchFavouritesActivity::class.java)
+            val newIntent = SwitchFavouritesActivity.newIntent(this)
             startActivity(newIntent)
         }
         return true

@@ -1,25 +1,27 @@
 package com.example.recipe.presentation.switchfavourites.myrecipes
 
 import android.content.Context
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipe.R
-import com.example.recipe.models.presentation.RecipePresentationModel
-import com.example.recipe.utils.GlideApp
+import com.example.recipe.models.presentation.MyRecipePresentationModel
 
 /**
  * Адаптер для отображения элементов списка
  */
-class MyRecipesAdapter(
-    val recipes: MutableList<RecipePresentationModel>,
-    private val onMyRecipeClickListener: OnMyRecipeClickListener
-) : RecyclerView.Adapter<MyRecipesAdapter.MyViewHolder>() {
+class MyRecipesAdapter(private val onMyRecipeClickListener: OnMyRecipeClickListener) : RecyclerView.Adapter<MyRecipesAdapter.MyViewHolder>() {
+
+    var recipes: MutableList<MyRecipePresentationModel> = mutableListOf()
+    var onItemClickListener: ((MyRecipePresentationModel) -> Unit)? = null
+
+    fun updateList(recipes: MutableList<MyRecipePresentationModel>) {
+        this.recipes = recipes
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -27,22 +29,22 @@ class MyRecipesAdapter(
     ): MyViewHolder {
         return MyViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.my_recipes_item, parent, false),
-            onMyRecipeClickListener
+                .inflate(R.layout.my_recipes_item, parent, false), onMyRecipeClickListener
         )
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        if (PreferenceManager.getDefaultSharedPreferences(holder.getContext())
-                .getBoolean("switch_images", true)
-        ) {
-            val tempUri = Uri.parse(recipes[position].image)
-            GlideApp.with(holder.getContext())
-                .asBitmap()
-                .load(tempUri)
-                .into(holder.icon)
-        }
-        holder.recipeName.text = recipes[position].label
+//        if (PreferenceManager.getDefaultSharedPreferences(holder.getContext())
+//                .getBoolean("switch_images", true)
+//        ) {
+//            val tempUri = Uri.parse(recipes[position].image)
+//            GlideApp.with(holder.getContext())
+//                .asBitmap()
+//                .load(tempUri)
+//                .error(R.drawable.no_image_logo)
+//                .into(holder.icon)
+//        }
+        holder.recipeName.text = recipes[position].recipeName
     }
 
     override fun getItemCount(): Int {
@@ -53,10 +55,12 @@ class MyRecipesAdapter(
         RecyclerView.ViewHolder(itemView), View.OnClickListener {
         val icon: ImageView = itemView.findViewById(R.id.preview_icon)
         val recipeName: TextView = itemView.findViewById(R.id.recipe_name)
+        private val delete: ImageView = itemView.findViewById(R.id.delete)
         private val onRecipeClick = onMyRecipeClickListener
 
         init {
             itemView.setOnClickListener(this)
+            delete.setOnClickListener(this)
         }
 
         /**
@@ -70,7 +74,14 @@ class MyRecipesAdapter(
 
         override fun onClick(v: View?) {
             if (v != null) {
-                onRecipeClick.onRecipeClick(recipes[adapterPosition])
+                if (v.id == delete.id) {
+                    val position = adapterPosition
+                    onRecipeClick.onDeleteClick(recipes[adapterPosition])
+                    recipes.removeAt(position)
+                    notifyItemRemoved(position)
+                } else {
+                    onItemClickListener?.invoke(recipes[adapterPosition])
+                }
             }
         }
     }
@@ -82,9 +93,9 @@ class MyRecipesAdapter(
 
 interface OnMyRecipeClickListener {
     /**
-     * Обработка нажатия на элемент списка
+     * Обработка нажатия на imageview "delete" элемента списка
      *
      * @param recipePresentationModel элемент из списка
      */
-    fun onRecipeClick(recipePresentationModel: RecipePresentationModel)
+    fun onDeleteClick(recipePresentationModel: MyRecipePresentationModel)
 }

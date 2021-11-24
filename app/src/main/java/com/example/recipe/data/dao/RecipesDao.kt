@@ -7,8 +7,10 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.example.recipe.data.dao.entity.IngredientEntity
+import com.example.recipe.data.dao.entity.MyRecipeEntity
 import com.example.recipe.data.dao.entity.RecipesDbContract.RecipesEntry
 import com.example.recipe.data.dao.entity.RecipeEntity
+import com.example.recipe.data.dao.entity.RecipesDbContract
 import com.example.recipe.data.dao.entity.relations.RecipeWithIngredients
 
 /**
@@ -23,14 +25,6 @@ interface RecipesDao {
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addToFavourites(recipe: RecipeEntity)
-
-    /**
-     * Добавить ингредиент в базу данных
-     *
-     * @param [ingredient] ингредиент
-     */
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addIngredientLinesToFavourites(ingredient: IngredientEntity)
 
     /**
      * Проверить, занесен ли рецепт в базу данных
@@ -50,6 +44,23 @@ interface RecipesDao {
     fun deleteFromFavourites(recipe: RecipeEntity)
 
     /**
+     * Получить все рецепты и ингредиенты из базы данных
+     *
+     * @return List<RecipeWithIngredients> список с рецептами и ингридиентами
+     */
+    @Transaction
+    @Query("SELECT * FROM " + RecipesEntry.TABLE_NAME_RECIPES + " ORDER BY " + RecipesEntry.LABEL)
+    fun getAllFavourites(): List<RecipeWithIngredients>
+
+    /**
+     * Добавить ингредиент в базу данных
+     *
+     * @param [ingredient] ингредиент
+     */
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addIngredientLinesToFavourites(ingredient: IngredientEntity)
+
+    /**
      * Удалить ингредиент из базы данных
      *
      * @param [ingredient] ингредиент
@@ -58,11 +69,26 @@ interface RecipesDao {
     fun deleteIngredient(ingredient: IngredientEntity)
 
     /**
-     * Получить все рецепты и ингредиенты из базы данных
+     * Добавить рецепт в базу данных
      *
-     * @return List<RecipeWithIngredients> список с рецептами и ингридиентами
+     * @param [recipe] рецепт
      */
-    @Transaction
-    @Query("SELECT * FROM " + RecipesEntry.TABLE_NAME_RECIPES + " ORDER BY " + RecipesEntry.LABEL)
-    fun getAllFavourites(): List<RecipeWithIngredients>
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addToMyRecipes(recipe: MyRecipeEntity)
+
+    /**
+     * Удалить рецепт из базы данных
+     *
+     * @param [recipe] рецепт
+     */
+    @Delete
+    fun deleteFromMyRecipes(recipe: MyRecipeEntity)
+
+    /**
+     * Получить все рецепты из базы данных
+     *
+     * @return List<MyRecipeEntity> список с рецептами
+     */
+    @Query("SELECT * FROM " + RecipesDbContract.MyRecipesEntry.TABLE_NAME_MY_RECIPES + " ORDER BY " + RecipesDbContract.MyRecipesEntry.RECIPE_NAME)
+    fun getAllMyRecipes(): List<MyRecipeEntity>
 }

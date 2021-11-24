@@ -1,5 +1,7 @@
 package com.example.recipe.presentation.recipedetail
 
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.preference.PreferenceManager
@@ -35,7 +37,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
 
         NetworkApp.appComponent(applicationContext).inject(this)
 
-        recipe = intent.getParcelableExtra("recipe")
+        recipe = intent.getParcelableExtra(RECIPE)
 
         createViewModel()
         //Наблюдать за LiveData
@@ -47,12 +49,12 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
             GlideApp.with(applicationContext)
                 .asBitmap()
                 .load(tempUri)
+                .error(R.drawable.no_image_logo)
                 .into(binding.image)
         }
         //Отобразить название рецепта
         setSupportActionBar(binding.toolbar)
         supportActionBar?.title = recipe?.label
-
         //Отобразить список ингредиентов
         val adapter = recipe?.let {
             ArrayAdapter(
@@ -83,6 +85,15 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
     override fun showError(throwable: Throwable) {
         throwable.message?.let {
             Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    companion object {
+        private const val RECIPE = "recipe"
+        fun newIntent(context: Context, recipe: RecipePresentationModel): Intent {
+            val intent = Intent(context, RecipeDetailActivity::class.java)
+            intent.putExtra(RECIPE, recipe)
+            return intent
         }
     }
 }

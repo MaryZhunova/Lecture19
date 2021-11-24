@@ -2,18 +2,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.recipe">
 
+    <uses-permission android:name="android.permission.ACTION_OPEN_DOCUMENT" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
+        android:name=".NetworkApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Recipe"
-        android:name=".NetworkApp">
+        android:theme="@style/Theme.Recipe">
         <activity
-            android:name="com.example.recipe.presentation.main.MainRecipesActivity"
+            android:name=".presentation.switchfavourites.addrecipe.AddRecipeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.main.MainRecipesActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,20 +27,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.recipe.presentation.settings.SettingsActivity"
-            android:exported="true">
-        </activity>
+            android:name=".presentation.settings.SettingsActivity"
+            android:exported="true"></activity>
         <activity
-            android:name="com.example.recipe.presentation.switchfavourites.SwitchFavouritesActivity"
-            android:exported="true">
-        </activity>
-        <activity android:name="com.example.recipe.presentation.recipesinfo.RecipesInfoActivity"
-            android:exported="true">
-        </activity>
-        <activity android:name="com.example.recipe.presentation.recipedetail.RecipeDetailActivity"
-            android:theme="@style/Theme.RecipeDetail"
-            android:exported="true">
-        </activity>
+            android:name=".presentation.switchfavourites.SwitchFavouritesActivity"
+            android:exported="true"></activity>
+        <activity
+            android:name=".presentation.recipesinfo.RecipesInfoActivity"
+            android:exported="true"></activity>
+        <activity
+            android:name=".presentation.recipedetail.RecipeDetailActivity"
+            android:exported="true"
+            android:theme="@style/Theme.RecipeDetail"></activity>
     </application>
 
 </manifest>

@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.recipe.data.dao.RecipesDao
 import com.example.recipe.data.dao.entity.IngredientEntity
+import com.example.recipe.data.dao.entity.MyRecipeEntity
 import com.example.recipe.data.dao.entity.RecipeEntity
 import com.example.recipe.data.dao.entity.RecipesDbContract
 
@@ -15,7 +16,8 @@ import com.example.recipe.data.dao.entity.RecipesDbContract
 @Database(
     entities = [
         RecipeEntity::class,
-        IngredientEntity::class
+        IngredientEntity::class,
+        MyRecipeEntity::class
     ],
     version = RecipesDbContract.DB_VERSION
 )

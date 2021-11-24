@@ -28,6 +28,19 @@ interface RecipesDbContract {
         }
     }
 
+    interface MyRecipesEntry : BaseColumns {
+        companion object {
+            const val TABLE_NAME_MY_RECIPES = "myRecipes"
+            const val RECIPE_NAME = "recipeName"
+            const val INGREDIENTS = "ingredients"
+            const val INSTRUCTIONS = "instructions"
+            const val IMAGE = "image"
+        }
+    }
+
+
+
+
     interface DietLabelsEntry : BaseColumns {
         companion object {
             const val TABLE_NAME_DIET_LABELS = "dietLabels"

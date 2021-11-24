@@ -2,12 +2,14 @@ package com.example.recipe.data.repository
 
 import com.example.recipe.data.dao.RecipesDao
 import com.example.recipe.data.dao.entity.IngredientEntity
+import com.example.recipe.data.dao.entity.MyRecipeEntity
 import com.example.recipe.domain.RecipesRepository
 import com.example.recipe.models.converter.Converter
 import com.example.recipe.data.dao.entity.RecipeEntity
 import com.example.recipe.data.network.RetrofitService
 import com.example.recipe.models.data.api.Recipe
 import com.example.recipe.models.data.api.RecipeResponse
+import com.example.recipe.models.domain.MyRecipeDomainModel
 import com.example.recipe.models.domain.RecipeDomainModel
 import io.reactivex.Observable
 import javax.inject.Inject
@@ -21,33 +23,29 @@ import javax.inject.Named
  * @param converter конвертер из RecipeModel в RecipeDomainModel
  * @param converterFromEntity из RecipeEntity в RecipeDomainModel
  * @param converterToEntity из RecipeDomainModel в RecipeEntity
+ * @param converterToMyEntity из MyRecipeDomainModel в MyRecipeEntity
  */
 class RecipesRepositoryImpl @Inject constructor(
     @Named("dao") private val recipesDao: RecipesDao,
     private val retrofitService: RetrofitService,
     private val converter: Converter<Recipe, RecipeDomainModel>,
     private val converterFromEntity: Converter<RecipeEntity, RecipeDomainModel>,
-    private val converterToEntity: Converter<RecipeDomainModel, RecipeEntity>
+    private val converterFromMyEntity: Converter<MyRecipeEntity, MyRecipeDomainModel>,
+    private val converterToEntity: Converter<RecipeDomainModel, RecipeEntity>,
+    private val converterToMyEntity: Converter<MyRecipeDomainModel, MyRecipeEntity>,
+
 ) : RecipesRepository {
 
-    override fun get(query: String): Observable<Pair<String, List<RecipeDomainModel>>> {//Pair<String, Observable<List<RecipeDomainModel>>> {
-        return retrofitService.get(query).map(::doEverything)
+    override fun get(query: String): Observable<Pair<String, List<RecipeDomainModel>>> {
+        return retrofitService.get(query).map(::transformData)
 
-    }
-
-    private fun doEverything(recipeResponse: RecipeResponse): Pair<String, List<RecipeDomainModel>> {
-        val nextPage = if (recipeResponse.link.next != null) recipeResponse.link.next.href.substringAfter("_cont=").substringBefore("&type") else ""
-        val recipes = recipeResponse.hits.map { hit -> hit.recipe }
-            .map (converter::convert)
-            .map (::checkFavourites)
-        return Pair(nextPage, recipes)
     }
 
     override fun get(
         query: String,
         cont: String
     ): Observable<Pair<String, List<RecipeDomainModel>>> {
-        return retrofitService.get(query, cont).map(::doEverything)
+        return retrofitService.get(query, cont).map(::transformData)
     }
 
     override fun getFavouriteRecipes(): List<RecipeDomainModel> {
@@ -86,6 +84,29 @@ class RecipesRepositoryImpl @Inject constructor(
         for (ingredient in recipe.ingredientLines) {
             recipesDao.deleteIngredient(IngredientEntity(ingredient, recipe.uri))
         }
+    }
+
+    override fun addToMyRecipes(recipe: MyRecipeDomainModel) {
+        recipesDao.addToMyRecipes(converterToMyEntity.convert(recipe))
+    }
+
+    override fun deleteFromMyRecipes(recipe: MyRecipeDomainModel) {
+        recipesDao.deleteFromMyRecipes(converterToMyEntity.convert(recipe))
+    }
+
+    override fun getMyRecipes(): List<MyRecipeDomainModel> {
+        return recipesDao.getAllMyRecipes().map(converterFromMyEntity::convert)
+    }
+
+
+    private fun transformData(recipeResponse: RecipeResponse): Pair<String, List<RecipeDomainModel>> {
+        // Параметр для перехода на следующую страницу
+        val nextPage = if (recipeResponse.link.next != null) recipeResponse.link.next.href.substringAfter("_cont=").substringBefore("&type") else ""
+        // Список рецептов
+        val recipes = recipeResponse.hits.map { hit -> hit.recipe }
+            .map (converter::convert)
+            .map (::checkFavourites)
+        return Pair(nextPage, recipes)
     }
 
     private fun checkFavourites(recipe: RecipeDomainModel): RecipeDomainModel {

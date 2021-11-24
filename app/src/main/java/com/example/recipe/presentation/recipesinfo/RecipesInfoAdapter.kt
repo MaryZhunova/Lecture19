@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.recipe.R
 import com.example.recipe.models.presentation.RecipePresentationModel
 import com.example.recipe.utils.GlideApp
+import java.io.FileNotFoundException
 
 /**
  * Адаптер для отображения элементов списка
@@ -42,6 +43,7 @@ class RecipesInfoAdapter(
             GlideApp.with(holder.getContext())
                 .asBitmap()
                 .load(tempUri)
+                .error(R.drawable.no_image_logo)
                 .into(holder.icon)
         }
         holder.recipeName.text = recipes[position].label

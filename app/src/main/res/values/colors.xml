@@ -9,7 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="light_brown">#e0cfb1</color>
     <color name="logo_color">#782701</color>
-    <color name="hint_color">#a47668</color>
+    <color name="hint_color">#A47668</color>
+    <color name="background">#996F62</color>
     <color name="primary_color">#705148</color>
     <color name="primary_color2">#553E37</color>
     <color name="brown">#7c3314</color>

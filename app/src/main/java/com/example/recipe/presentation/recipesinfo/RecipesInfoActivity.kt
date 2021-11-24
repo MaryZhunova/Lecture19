@@ -1,5 +1,6 @@
 package com.example.recipe.presentation.recipesinfo
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -27,6 +28,7 @@ class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView, OnRecipeClickL
 
     private lateinit var binding: RecipesListInfoBinding
     private lateinit var infoViewModel: RecipesInfoViewModel
+
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -52,9 +54,10 @@ class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView, OnRecipeClickL
                 LinearLayoutManager.VERTICAL
             )
         )
-        adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        adapter.stateRestorationPolicy =
+            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
 
-        query = intent.getStringExtra("query")
+        query = intent.getStringExtra(QUERY)
         (getString(R.string.search_result) + " " + query).also { binding.result.text = it }
 
         //Создать вью модель
@@ -70,7 +73,7 @@ class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView, OnRecipeClickL
         }
     }
 
-    inner class MyOnScrollListener: RecyclerView.OnScrollListener() {
+    inner class MyOnScrollListener : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
             val linearLayoutManager = binding.recyclerView.layoutManager as LinearLayoutManager
@@ -112,8 +115,8 @@ class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView, OnRecipeClickL
             }
         infoViewModel.getErrorLiveData()
             .observe(this) { throwable: Throwable -> showError(throwable) }
-        infoViewModel.getNextPageLiveData().observe(this) {
-            nextPage -> this.nextPage = nextPage
+        infoViewModel.getNextPageLiveData().observe(this) { nextPage ->
+            this.nextPage = nextPage
         }
     }
 
@@ -123,8 +126,6 @@ class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView, OnRecipeClickL
 
     override fun showData(recipes: MutableList<RecipePresentationModel>) {
         adapter.update(recipes)
-
-
     }
 
     override fun showError(throwable: Throwable) {
@@ -136,9 +137,8 @@ class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView, OnRecipeClickL
     }
 
     override fun onRecipeClick(recipePresentationModel: RecipePresentationModel) {
-        val newIntent = Intent(applicationContext, RecipeDetailActivity::class.java)
-        newIntent.putExtra("recipe", recipePresentationModel)
-        startActivity(newIntent)
+        val intent = RecipeDetailActivity.newIntent(this, recipePresentationModel)
+        startActivity(intent)
     }
 
     override fun onFavouriteClick(
@@ -153,4 +153,14 @@ class RecipesInfoActivity : AppCompatActivity(), RecipesInfoView, OnRecipeClickL
             infoViewModel.deleteFromFavourites(recipePresentationModel)
         }
     }
+
+    companion object {
+        private const val QUERY = "query"
+        fun newIntent(context: Context, query: String): Intent {
+            val intent = Intent(context, RecipesInfoActivity::class.java)
+            intent.putExtra(QUERY, query)
+            return intent
+        }
+    }
 }
+

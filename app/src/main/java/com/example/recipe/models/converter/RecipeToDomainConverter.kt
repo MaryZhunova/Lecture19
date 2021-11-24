@@ -5,7 +5,7 @@ import com.example.recipe.models.domain.RecipeDomainModel
 import javax.inject.Inject
 
 /**
- * Конвретер из [RecipeModel] в [RecipeDomainModel]
+ * Конвретер из [Recipe] в [RecipeDomainModel]
  */
 class RecipeToDomainConverter @Inject constructor() : Converter<Recipe, RecipeDomainModel> {
 
