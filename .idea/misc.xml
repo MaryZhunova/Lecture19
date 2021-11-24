@@ -26,19 +26,25 @@
         <entry key="..\:/Users/Dmitry/Desktop/Lecture19/app/src/main/res/xml/preferences.xml" value="0.33" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/drawable-v24/background_frame_bottom.xml" value="0.3567708333333333" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/drawable-v24/ic_baseline_add_24.xml" value="0.37083333333333335" />
+        <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/drawable/background.xml" value="0.3567708333333333" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/drawable/background_frame.xml" value="0.3567708333333333" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/drawable/background_frame_.xml" value="0.3567708333333333" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/drawable/background_frame_bottom.xml" value="0.3567708333333333" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/drawable/ic_baseline_delete_24.xml" value="0.16354166666666667" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/drawable/ic_baseline_favorite_24.xml" value="0.16354166666666667" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/drawable/ic_baseline_favorite_24_filled.xml" value="0.16354166666666667" />
+        <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout-land/choose_image.xml" value="0.28835978835978837" />
+        <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout-land/image.xml" value="0.15343915343915343" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout-land/recipe_detail.xml" value="0.3002645502645503" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/activity_main.xml" value="0.3546875" />
+        <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/activity_my_recipe_det.xml" value="0.3546875" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/add_recipe.xml" value="0.25" />
+        <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/choose_image.xml" value="0.340625" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/favorites.xml" value="0.35052083333333334" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/favourites_list.xml" value="0.3546875" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/fragment_favourites.xml" value="0.35052083333333334" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/fragment_my_recipes.xml" value="0.3546875" />
+        <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/image.xml" value="0.1390625" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/ingredient.xml" value="0.3546875" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/my_recipe_detail.xml" value="0.340625" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/my_recipe_item.xml" value="0.14739583333333334" />
@@ -49,6 +55,7 @@
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/recipes_list_info_item.xml" value="0.22735507246376813" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/settings.xml" value="0.340625" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/switch_favourites.xml" value="0.340625" />
+        <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/menu/menu_done.xml" value="0.3265625" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/menu/menu_filter.xml" value="0.340625" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/menu/menu_settings.xml" value="0.340625" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/xml/preferences.xml" value="0.3125" />

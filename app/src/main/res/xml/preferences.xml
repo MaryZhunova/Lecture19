@@ -11,6 +11,7 @@
         app:title="@string/images">
         <SwitchPreference
             android:key="switch_images"
-            android:title="@string/download_images" />
+            android:title="@string/download_images"
+            android:defaultValue="true"/>
     </PreferenceCategory>
 </PreferenceScreen>

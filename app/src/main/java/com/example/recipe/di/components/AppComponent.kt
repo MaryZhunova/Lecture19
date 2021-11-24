@@ -4,7 +4,7 @@ import com.example.recipe.di.modules.AppModule
 import com.example.recipe.di.modules.NetworkModule
 import com.example.recipe.presentation.recipedetail.RecipeDetailActivity
 import com.example.recipe.presentation.recipesinfo.RecipesInfoActivity
-import com.example.recipe.presentation.switchfavourites.addrecipe.AddRecipeFragment
+import com.example.recipe.presentation.switchfavourites.addrecipe.AddRecipeActivity
 import com.example.recipe.presentation.switchfavourites.favourites.FavouritesFragment
 import com.example.recipe.presentation.switchfavourites.myrecipes.MyRecipesFragment
 import dagger.Component
@@ -18,6 +18,6 @@ interface AppComponent {
     fun inject(fragment: FavouritesFragment)
     fun inject(fragment: MyRecipesFragment)
     fun inject(activity: RecipesInfoActivity)
-    fun inject(fragment: AddRecipeFragment)
+    fun inject(activity: AddRecipeActivity)
 }
 

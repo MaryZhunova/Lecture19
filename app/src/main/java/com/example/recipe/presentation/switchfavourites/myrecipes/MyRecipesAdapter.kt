@@ -1,27 +1,26 @@
 package com.example.recipe.presentation.switchfavourites.myrecipes
 
 import android.content.Context
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipe.R
 import com.example.recipe.models.presentation.MyRecipePresentationModel
+import com.example.recipe.models.presentation.RecipePresentationModel
+import com.example.recipe.presentation.recipesinfo.RecipesInfoAdapter
+import com.example.recipe.utils.GlideApp
 
 /**
  * Адаптер для отображения элементов списка
  */
-class MyRecipesAdapter(private val onMyRecipeClickListener: OnMyRecipeClickListener) : RecyclerView.Adapter<MyRecipesAdapter.MyViewHolder>() {
-
-    var recipes: MutableList<MyRecipePresentationModel> = mutableListOf()
-    var onItemClickListener: ((MyRecipePresentationModel) -> Unit)? = null
-
-    fun updateList(recipes: MutableList<MyRecipePresentationModel>) {
-        this.recipes = recipes
-        notifyDataSetChanged()
-    }
+class MyRecipesAdapter(private val onMyRecipeClickListener: OnMyRecipeClickListener) : ListAdapter<MyRecipePresentationModel, MyRecipesAdapter.MyViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -34,21 +33,21 @@ class MyRecipesAdapter(private val onMyRecipeClickListener: OnMyRecipeClickListe
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-//        if (PreferenceManager.getDefaultSharedPreferences(holder.getContext())
-//                .getBoolean("switch_images", true)
-//        ) {
-//            val tempUri = Uri.parse(recipes[position].image)
-//            GlideApp.with(holder.getContext())
-//                .asBitmap()
-//                .load(tempUri)
-//                .error(R.drawable.no_image_logo)
-//                .into(holder.icon)
-//        }
-        holder.recipeName.text = recipes[position].recipeName
+        if (PreferenceManager.getDefaultSharedPreferences(holder.getContext())
+                .getBoolean("switch_images", true)
+        ) {
+            val tempUri = Uri.parse(currentList[position].image)
+            GlideApp.with(holder.getContext())
+                .asBitmap()
+                .load(tempUri)
+                .error(R.drawable.no_image_logo)
+                .into(holder.icon)
+        }
+        holder.recipeName.text = currentList[position].recipeName
     }
 
     override fun getItemCount(): Int {
-        return recipes.size
+        return currentList.size
     }
 
     inner class MyViewHolder(itemView: View, onMyRecipeClickListener: OnMyRecipeClickListener) :
@@ -76,14 +75,22 @@ class MyRecipesAdapter(private val onMyRecipeClickListener: OnMyRecipeClickListe
             if (v != null) {
                 if (v.id == delete.id) {
                     val position = adapterPosition
-                    onRecipeClick.onDeleteClick(recipes[adapterPosition])
-                    recipes.removeAt(position)
+                    onRecipeClick.onDeleteClick(currentList[adapterPosition])
+                    currentList.removeAt(position)
                     notifyItemRemoved(position)
                 } else {
-                    onItemClickListener?.invoke(recipes[adapterPosition])
+                    onRecipeClick.onRecipeClick(currentList[adapterPosition])
                 }
             }
         }
+    }
+    private class DiffCallback : DiffUtil.ItemCallback<MyRecipePresentationModel>() {
+
+        override fun areItemsTheSame(oldItem: MyRecipePresentationModel, newItem: MyRecipePresentationModel) =
+            oldItem.recipeName == newItem.recipeName
+
+        override fun areContentsTheSame(oldItem: MyRecipePresentationModel, newItem: MyRecipePresentationModel) =
+            oldItem == newItem
     }
 }
 
@@ -92,6 +99,13 @@ class MyRecipesAdapter(private val onMyRecipeClickListener: OnMyRecipeClickListe
  */
 
 interface OnMyRecipeClickListener {
+    /**
+     * Обработка нажатия на элемент списка
+     *
+     * @param recipePresentationModel элемент из списка
+     */
+    fun onRecipeClick(recipePresentationModel: MyRecipePresentationModel)
+
     /**
      * Обработка нажатия на imageview "delete" элемента списка
      *

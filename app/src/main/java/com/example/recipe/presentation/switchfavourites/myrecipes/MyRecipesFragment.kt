@@ -1,23 +1,28 @@
 package com.example.recipe.presentation.switchfavourites.myrecipes
 
+import android.Manifest
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.Settings
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.fragment.app.FragmentContainerView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipe.NetworkApp
-import com.example.recipe.R
 import com.example.recipe.databinding.MyRecipesBinding
 import com.example.recipe.models.presentation.MyRecipePresentationModel
 import com.example.recipe.presentation.switchfavourites.myrecipes.viewmodel.MyRecipesViewModel
-import com.example.recipe.presentation.switchfavourites.addrecipe.AddRecipeFragment
 import javax.inject.Inject
 
 /**
@@ -64,22 +69,15 @@ class MyRecipesFragment : Fragment(), OnMyRecipeClickListener {
         createViewModel()
         //Наблюдать за LiveData
         observeLiveData()
-        //Отправить сетевой запрос с ключевым словом query через вью модель
-        myRecipesViewModel.get()
-
 
         binding.addWord.setOnClickListener {
-//            val viewGroup = FragmentContainerView(requireContext())
-//            val params = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1.0f)
-//            viewGroup.layoutParams = params
-//            viewGroup.id = R.id.fragment_id
-//            binding.root.addView(viewGroup)
-//            requireActivity().supportFragmentManager.beginTransaction()
-//                .add(R.id.fragment_id, AddRecipeFragment.newInstance())
-//                .addToBackStack("fragment")
-//                .commit()
             mCallback.addRecipe()
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        myRecipesViewModel.get()
     }
 
     private fun initRecycleview() {
@@ -91,9 +89,6 @@ class MyRecipesFragment : Fragment(), OnMyRecipeClickListener {
                 LinearLayoutManager.VERTICAL
             )
         )
-        adapter.onItemClickListener = {
-            mCallback.onClick(it)
-        }
     }
 
     private fun createViewModel() {
@@ -116,7 +111,39 @@ class MyRecipesFragment : Fragment(), OnMyRecipeClickListener {
     }
 
     private fun showData(recipes: MutableList<MyRecipePresentationModel>) {
-        adapter.updateList(recipes)
+        if (checkPermission()) {
+            adapter.submitList(recipes)
+        } else {
+            requestPermission()
+            adapter.submitList(recipes)
+        }
+
+    }
+
+    private fun requestPermission() {
+        when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> {
+                val uri = Uri.parse("package:com.example.recipe")
+                startActivity(
+                    Intent(
+                        Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
+                        uri
+                    )
+                )
+            } else -> {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                REQUEST_CODE
+            )
+        }
+        }
+    }
+
+    private fun checkPermission() = when {
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> Environment.isExternalStorageManager()
+        else -> checkSelfPermission(requireContext(),
+            Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun showError(throwable: Throwable) {
@@ -125,12 +152,18 @@ class MyRecipesFragment : Fragment(), OnMyRecipeClickListener {
             binding.errorText.text = it
         }
     }
+
+    override fun onRecipeClick(recipePresentationModel: MyRecipePresentationModel) {
+        mCallback.onClick(recipePresentationModel)
+    }
+
     override fun onDeleteClick(recipePresentationModel: MyRecipePresentationModel) {
         Toast.makeText(requireContext(), "Deleted", Toast.LENGTH_SHORT).show()
         myRecipesViewModel.deleteFromMyRecipes(recipePresentationModel)
     }
 
     companion object {
+        const val REQUEST_CODE = 333
         fun newInstance() = MyRecipesFragment()
     }
 }
