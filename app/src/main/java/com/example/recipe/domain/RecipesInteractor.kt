@@ -1,7 +1,7 @@
 package com.example.recipe.domain
 
-import com.example.recipe.models.domain.MyRecipeDomainModel
-import com.example.recipe.models.domain.RecipeDomainModel
+import com.example.recipe.domain.models.MyRecipeDomainModel
+import com.example.recipe.domain.models.RecipeDomainModel
 import io.reactivex.Observable
 import javax.inject.Inject
 

@@ -11,9 +11,8 @@ import androidx.core.view.isVisible
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipe.R
-import com.example.recipe.models.presentation.RecipePresentationModel
+import com.example.recipe.presentation.models.RecipePresentationModel
 import com.example.recipe.utils.GlideApp
-import java.io.FileNotFoundException
 
 /**
  * Адаптер для отображения элементов списка
@@ -28,10 +27,11 @@ class RecipesInfoAdapter(
         recipes = list
         notifyDataSetChanged()
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.recipes_list_info_item, parent, false), onRecipeClickListener
+                .inflate(R.layout.recipes_info_item, parent, false), onRecipeClickListener
         )
     }
 
@@ -86,15 +86,15 @@ class RecipesInfoAdapter(
                 if (v.id == favourite.id || v.id == favouriteFilled.id) {
                     if (!favouriteFilled.isVisible) {
                         favouriteFilled.visibility = View.VISIBLE
-                        recipes[adapterPosition].isFavourite = true
-                        onRecipeClick.onFavouriteClick(recipes[adapterPosition], true)
+                        recipes[absoluteAdapterPosition].isFavourite = true
+                        onRecipeClick.onFavouriteClick(recipes[absoluteAdapterPosition], true)
                     } else {
                         favouriteFilled.visibility = View.INVISIBLE
-                        recipes[adapterPosition].isFavourite = false
-                        onRecipeClick.onFavouriteClick(recipes[adapterPosition], false)
+                        recipes[absoluteAdapterPosition].isFavourite = false
+                        onRecipeClick.onFavouriteClick(recipes[absoluteAdapterPosition], false)
                     }
                 } else {
-                    onRecipeClick.onRecipeClick(recipes[adapterPosition])
+                    onRecipeClick.onRecipeClick(recipes[absoluteAdapterPosition])
                 }
             }
         }

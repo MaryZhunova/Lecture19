@@ -13,8 +13,8 @@ class SwitchFavouritesAdapter(activity: FragmentActivity) : FragmentStateAdapter
     override fun getItemCount(): Int = 2
 
     override fun createFragment(position: Int): Fragment {
-        return if (position == 0) MyRecipesFragment.newInstance()
-        else FavouritesFragment.newInstance()
+        return if (position == 0) FavouritesFragment.newInstance()
+        else MyRecipesFragment.newInstance()
     }
 
 }

@@ -1,29 +1,30 @@
 package com.example.recipe.presentation.switchfavourites.favourites
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipe.NetworkApp
 import com.example.recipe.R
-import com.example.recipe.databinding.RecipesListInfoBinding
-import com.example.recipe.models.presentation.RecipePresentationModel
+import com.example.recipe.databinding.ActivityRecipesInfoBinding
+import com.example.recipe.presentation.models.RecipePresentationModel
 import com.example.recipe.presentation.switchfavourites.favourites.viewmodel.FavouritesViewModel
 import com.example.recipe.presentation.recipedetail.RecipeDetailActivity
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
 class FavouritesFragment : Fragment(), OnFavouriteRecipeClickListener {
 
-    private lateinit var binding: RecipesListInfoBinding
+    private lateinit var binding: ActivityRecipesInfoBinding
     private lateinit var favouritesViewModel: FavouritesViewModel
     private lateinit var adapter: FavouritesAdapter
+
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -31,17 +32,18 @@ class FavouritesFragment : Fragment(), OnFavouriteRecipeClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = RecipesListInfoBinding.inflate(inflater, container, false)
+        binding = ActivityRecipesInfoBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        showData(mutableListOf())
+
         binding.result.text = getString(R.string.favourite_recipes)
 
         NetworkApp.appComponent(requireContext()).inject(this)
 
+        initRecyclerview()
         //Создать вью модель
         createViewModel()
         //Наблюдать за LiveData
@@ -50,8 +52,20 @@ class FavouritesFragment : Fragment(), OnFavouriteRecipeClickListener {
         favouritesViewModel.get()
     }
 
+    private fun initRecyclerview() {
+        adapter = FavouritesAdapter(this)
+        binding.recyclerView.adapter = adapter
+        binding.recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                requireContext(),
+                LinearLayoutManager.VERTICAL
+            )
+        )
+    }
+
     private fun createViewModel() {
-        favouritesViewModel = ViewModelProvider(this, viewModelFactory)[FavouritesViewModel::class.java]
+        favouritesViewModel =
+            ViewModelProvider(this, viewModelFactory)[FavouritesViewModel::class.java]
     }
 
     private fun observeLiveData() {
@@ -70,20 +84,12 @@ class FavouritesFragment : Fragment(), OnFavouriteRecipeClickListener {
     }
 
     private fun showData(recipes: MutableList<RecipePresentationModel>) {
-        adapter = FavouritesAdapter(recipes, this)
-        binding.recyclerView.adapter = adapter
-        binding.recyclerView.addItemDecoration(
-            DividerItemDecoration(
-                requireContext(),
-                LinearLayoutManager.VERTICAL
-            )
-        )
+        adapter.submitList(recipes)
     }
 
     private fun showError(throwable: Throwable) {
         throwable.message?.let {
-            binding.errorLayout.visibility = View.VISIBLE
-            binding.errorText.text = it
+            Snackbar.make(binding.root, it, BaseTransientBottomBar.LENGTH_LONG).show()
         }
     }
 

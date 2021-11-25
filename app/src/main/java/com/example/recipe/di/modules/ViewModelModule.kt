@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.recipe.presentation.recipedetail.viewmodel.RecipeDetailViewModel
 import com.example.recipe.presentation.recipesinfo.viewmodel.RecipesInfoViewModel
-import com.example.recipe.presentation.switchfavourites.addrecipe.viewmodel.AddRecipeViewModel
+import com.example.recipe.presentation.addrecipe.viewmodel.AddRecipeViewModel
 import com.example.recipe.presentation.switchfavourites.favourites.viewmodel.FavouritesViewModel
 import com.example.recipe.presentation.switchfavourites.myrecipes.viewmodel.MyRecipesViewModel
 import com.example.recipe.utils.ViewModelFactory

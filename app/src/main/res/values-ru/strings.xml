@@ -23,4 +23,13 @@
     <string name="download_images">Загружать изображения</string>
     <string name="theme">Тема</string>
     <string name="images">Изображения</string>
+    <string name="enter_recipe_name">Введите название рецепта</string>
+    <string name="gallery">Галлерея</string>
+    <string name="camera">Камера</string>
+    <string name="enter_ingredients">Введите список ингредиентов</string>
+    <string name="enter_recipe_description">Введите пошаговую инструкцию</string>
+    <string name="directions">Инструкция:</string>
+    <string name="round_button_to_add_new_recipe">Круглая кнопка для добавления рецепта</string>
+    <string name="a_brown_bucket">Коричневая корзина для мусора</string>
+    <string name="done">Готово</string>
 </resources>

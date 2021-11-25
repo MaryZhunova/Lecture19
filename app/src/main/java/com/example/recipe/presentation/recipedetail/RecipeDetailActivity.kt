@@ -8,13 +8,13 @@ import androidx.preference.PreferenceManager
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.example.recipe.R
-import com.example.recipe.databinding.RecipeDetailBinding
 import android.text.Html
 import android.text.method.LinkMovementMethod
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.recipe.NetworkApp
-import com.example.recipe.models.presentation.RecipePresentationModel
+import com.example.recipe.databinding.ActivityRecipeDetailBinding
+import com.example.recipe.presentation.models.RecipePresentationModel
 import com.example.recipe.presentation.recipedetail.viewmodel.RecipeDetailViewModel
 import com.example.recipe.utils.GlideApp
 import javax.inject.Inject
@@ -22,17 +22,18 @@ import javax.inject.Inject
 /**
  * Активити приложения, которая отображает детальную информацию об одном рецепте
  */
-class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
+class RecipeDetailActivity : AppCompatActivity() {
 
-    private lateinit var binding: RecipeDetailBinding
+    private lateinit var binding: ActivityRecipeDetailBinding
     private lateinit var recipeDetailViewModel: RecipeDetailViewModel
     private var recipe: RecipePresentationModel? = null
+
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = RecipeDetailBinding.inflate(layoutInflater)
+        binding = ActivityRecipeDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         NetworkApp.appComponent(applicationContext).inject(this)
@@ -59,7 +60,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
         val adapter = recipe?.let {
             ArrayAdapter(
                 this,
-                R.layout.ingredient,
+                R.layout.recipe_detail_ingredient_item,
                 R.id.ingredient_name,
                 it.ingredientLines
             )
@@ -74,7 +75,8 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
     }
 
     private fun createViewModel() {
-        recipeDetailViewModel = ViewModelProvider(this, viewModelFactory)[RecipeDetailViewModel::class.java]
+        recipeDetailViewModel =
+            ViewModelProvider(this, viewModelFactory)[RecipeDetailViewModel::class.java]
     }
 
     private fun observeLiveData() {
@@ -82,7 +84,7 @@ class RecipeDetailActivity : AppCompatActivity(), RecipeDetailView {
             .observe(this) { throwable: Throwable -> showError(throwable) }
     }
 
-    override fun showError(throwable: Throwable) {
+    private fun showError(throwable: Throwable) {
         throwable.message?.let {
             Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT).show()
         }

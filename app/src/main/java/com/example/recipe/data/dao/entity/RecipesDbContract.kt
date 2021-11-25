@@ -37,42 +37,4 @@ interface RecipesDbContract {
             const val IMAGE = "image"
         }
     }
-
-
-
-
-    interface DietLabelsEntry : BaseColumns {
-        companion object {
-            const val TABLE_NAME_DIET_LABELS = "dietLabels"
-            const val DIET_LABEL = "dietLabel"
-        }
-    }
-
-    interface HealthLabelsEntry : BaseColumns {
-        companion object {
-            const val TABLE_NAME_HEALTH_LABELS = "healthLabels"
-            const val HEALTH_LABEL = "healthLabel"
-        }
-    }
-
-    interface CuisineTypeEntry : BaseColumns {
-        companion object {
-            const val TABLE_NAME_CUISINE_TYPES = "cuisineTypes"
-            const val CUISINE_TYPE = "ingredient"
-        }
-    }
-
-    interface MealTypeEntry : BaseColumns {
-        companion object {
-            const val TABLE_NAME_MEAL_TYPES = "mealTypes"
-            const val MEAL_TYPE = "mealType"
-        }
-    }
-
-    interface DishTypeEntry : BaseColumns {
-        companion object {
-            const val TABLE_NAME_DISH_TYPES = "dishTypes"
-            const val DISH_TYPE = "dishType"
-        }
-    }
 }

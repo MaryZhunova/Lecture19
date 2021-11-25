@@ -12,15 +12,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipe.R
-import com.example.recipe.models.presentation.MyRecipePresentationModel
-import com.example.recipe.models.presentation.RecipePresentationModel
-import com.example.recipe.presentation.recipesinfo.RecipesInfoAdapter
+import com.example.recipe.presentation.models.MyRecipePresentationModel
 import com.example.recipe.utils.GlideApp
 
 /**
  * Адаптер для отображения элементов списка
  */
-class MyRecipesAdapter(private val onMyRecipeClickListener: OnMyRecipeClickListener) : ListAdapter<MyRecipePresentationModel, MyRecipesAdapter.MyViewHolder>(DiffCallback()) {
+class MyRecipesAdapter(private val onMyRecipeClickListener: OnMyRecipeClickListener) :
+    ListAdapter<MyRecipePresentationModel, MyRecipesAdapter.MyViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -74,21 +73,26 @@ class MyRecipesAdapter(private val onMyRecipeClickListener: OnMyRecipeClickListe
         override fun onClick(v: View?) {
             if (v != null) {
                 if (v.id == delete.id) {
-                    val position = adapterPosition
-                    onRecipeClick.onDeleteClick(currentList[adapterPosition])
-                    notifyItemRemoved(position)
+                    onRecipeClick.onDeleteClick(currentList[absoluteAdapterPosition])
                 } else {
-                    onRecipeClick.onRecipeClick(currentList[adapterPosition])
+                    onRecipeClick.onRecipeClick(currentList[absoluteAdapterPosition])
                 }
             }
         }
     }
+
     private class DiffCallback : DiffUtil.ItemCallback<MyRecipePresentationModel>() {
 
-        override fun areItemsTheSame(oldItem: MyRecipePresentationModel, newItem: MyRecipePresentationModel) =
+        override fun areItemsTheSame(
+            oldItem: MyRecipePresentationModel,
+            newItem: MyRecipePresentationModel
+        ) =
             oldItem.recipeName == newItem.recipeName
 
-        override fun areContentsTheSame(oldItem: MyRecipePresentationModel, newItem: MyRecipePresentationModel) =
+        override fun areContentsTheSame(
+            oldItem: MyRecipePresentationModel,
+            newItem: MyRecipePresentationModel
+        ) =
             oldItem == newItem
     }
 }

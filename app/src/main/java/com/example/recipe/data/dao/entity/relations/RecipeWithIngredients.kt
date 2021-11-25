@@ -8,7 +8,8 @@ import com.example.recipe.data.dao.entity.RecipeEntity
 data class RecipeWithIngredients(
     @Embedded val recipeEntity: RecipeEntity,
     @Relation(
-                            parentColumn = "uri",
-                            entityColumn = "uri")
-                        val ingredients: List<IngredientEntity>
-                        )
+        parentColumn = "uri",
+        entityColumn = "uri"
+    )
+    val ingredients: List<IngredientEntity>
+)

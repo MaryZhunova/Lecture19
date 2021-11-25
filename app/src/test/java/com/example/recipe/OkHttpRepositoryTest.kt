@@ -2,9 +2,9 @@ package com.example.recipe
 
 import com.example.recipe.data.api.RecipesApiImpl
 import com.example.recipe.data.repository.RecipesRepositoryImpl
-import com.example.recipe.models.converter.Converter
+import com.example.recipe.utils.converters.Converter
 import com.example.recipe.models.data.api.RecipeModel
-import com.example.recipe.models.domain.RecipeDomainModel
+import com.example.recipe.domain.models.RecipeDomainModel
 import com.google.common.truth.Truth
 import io.mockk.every
 import io.mockk.mockk
@@ -29,8 +29,10 @@ class OkHttpRepositoryTest {
             RecipeModel("uri", "label", "image", "source",
             "url", listOf("ingredientLines"), listOf("dietLabels"), listOf("healthLabels"), listOf("cuisineType"), listOf("mealType"), listOf("dishType"))
         )
-        val expectedResult: List<RecipeDomainModel> = listOf(RecipeDomainModel("uri", "label", "image", "source",
-            "url", listOf("ingredientLines"), listOf("dietLabels"), listOf("healthLabels"), listOf("cuisineType"), listOf("mealType"), listOf("dishType")))
+        val expectedResult: List<RecipeDomainModel> = listOf(
+            RecipeDomainModel("uri", "label", "image", "source",
+            "url", listOf("ingredientLines"), listOf("dietLabels"), listOf("healthLabels"), listOf("cuisineType"), listOf("mealType"), listOf("dishType"))
+        )
         every { api.get(queryArgument) } returns apiResult
 
         val testResult = repositoryImpl.get(queryArgument)

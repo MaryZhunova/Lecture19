@@ -2,7 +2,7 @@ package com.example.recipe
 
 import com.example.recipe.data.repository.RecipesRepositoryImpl
 import com.example.recipe.domain.RecipesInteractor
-import com.example.recipe.models.domain.RecipeDomainModel
+import com.example.recipe.domain.models.RecipeDomainModel
 import com.google.common.truth.Truth
 import io.mockk.every
 import io.mockk.mockk

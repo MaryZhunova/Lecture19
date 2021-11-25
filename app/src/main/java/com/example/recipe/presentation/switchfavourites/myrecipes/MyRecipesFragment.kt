@@ -20,9 +20,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipe.NetworkApp
-import com.example.recipe.databinding.MyRecipesBinding
-import com.example.recipe.models.presentation.MyRecipePresentationModel
+import com.example.recipe.databinding.FragmentMyRecipesBinding
+import com.example.recipe.presentation.models.MyRecipePresentationModel
 import com.example.recipe.presentation.switchfavourites.myrecipes.viewmodel.MyRecipesViewModel
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 import javax.inject.Inject
 
 /**
@@ -31,7 +33,7 @@ import javax.inject.Inject
 class MyRecipesFragment : Fragment(), OnMyRecipeClickListener {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    private lateinit var binding: MyRecipesBinding
+    private lateinit var binding: FragmentMyRecipesBinding
     private lateinit var myRecipesViewModel: MyRecipesViewModel
     private lateinit var adapter: MyRecipesAdapter
     private lateinit var mCallback: OnItemClickListener
@@ -55,7 +57,7 @@ class MyRecipesFragment : Fragment(), OnMyRecipeClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = MyRecipesBinding.inflate(inflater, container, false)
+        binding = FragmentMyRecipesBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -64,7 +66,7 @@ class MyRecipesFragment : Fragment(), OnMyRecipeClickListener {
 
         NetworkApp.appComponent(requireContext()).inject(this)
 
-        initRecycleview()
+        initRecyclerview()
         //Создать вью модель
         createViewModel()
         //Наблюдать за LiveData
@@ -80,7 +82,7 @@ class MyRecipesFragment : Fragment(), OnMyRecipeClickListener {
         myRecipesViewModel.get()
     }
 
-    private fun initRecycleview() {
+    private fun initRecyclerview() {
         adapter = MyRecipesAdapter(this)
         binding.recyclerView.adapter = adapter
         binding.recyclerView.addItemDecoration(
@@ -92,7 +94,8 @@ class MyRecipesFragment : Fragment(), OnMyRecipeClickListener {
     }
 
     private fun createViewModel() {
-        myRecipesViewModel = ViewModelProvider(this, viewModelFactory)[MyRecipesViewModel::class.java]
+        myRecipesViewModel =
+            ViewModelProvider(this, viewModelFactory)[MyRecipesViewModel::class.java]
     }
 
     private fun observeLiveData() {
@@ -130,28 +133,35 @@ class MyRecipesFragment : Fragment(), OnMyRecipeClickListener {
                         uri
                     )
                 )
-            } else -> {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                REQUEST_CODE
-            )
-        }
+            }
+            else -> {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ),
+                    REQUEST_CODE
+                )
+            }
         }
     }
 
     private fun checkPermission() = when {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> Environment.isExternalStorageManager()
-        else -> checkSelfPermission(requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-                && checkSelfPermission(requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+        else -> checkSelfPermission(
+            requireContext(),
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+                && checkSelfPermission(
+            requireContext(),
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun showError(throwable: Throwable) {
         throwable.message?.let {
-            binding.errorLayout.visibility = View.VISIBLE
-            binding.errorText.text = it
+            Snackbar.make(binding.root, it, BaseTransientBottomBar.LENGTH_LONG).show()
         }
     }
 

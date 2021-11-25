@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.recipe.domain.RecipesInteractor
-import com.example.recipe.models.converter.Converter
-import com.example.recipe.models.domain.RecipeDomainModel
-import com.example.recipe.models.presentation.RecipePresentationModel
+import com.example.recipe.utils.converters.Converter
+import com.example.recipe.domain.models.RecipeDomainModel
+import com.example.recipe.presentation.models.RecipePresentationModel
 import com.example.recipe.presentation.recipesinfo.RecipesInfoActivity
 import com.example.recipe.utils.ISchedulersProvider
 import io.reactivex.Completable
@@ -32,11 +32,13 @@ class RecipesInfoViewModel @Inject constructor(
 
     private val progressLiveData: MutableLiveData<Boolean> = MutableLiveData()
     private val errorLiveData: MutableLiveData<Throwable> = MutableLiveData()
-    private val recipesLiveData: MutableLiveData<MutableList<RecipePresentationModel>> = MutableLiveData()
+    private val recipesLiveData: MutableLiveData<MutableList<RecipePresentationModel>> =
+        MutableLiveData()
     private val nextPageLiveData: MutableLiveData<String> = MutableLiveData()
 
 
     private val composite: CompositeDisposable = CompositeDisposable()
+
     /**
      * Получение списка рецептов
      *
@@ -48,25 +50,33 @@ class RecipesInfoViewModel @Inject constructor(
             .doAfterTerminate { progressLiveData.postValue(false) }
             .subscribeOn(schedulersProvider.io())
             .observeOn(schedulersProvider.ui())
-            .subscribe ({ result ->
+            .subscribe({ result ->
                 nextPageLiveData.value = result.first
-                recipesLiveData.value = result.second.map(converterToPresentation::convert).toMutableList()
+                recipesLiveData.value =
+                    result.second.map(converterToPresentation::convert).toMutableList()
             }, errorLiveData::setValue)
         composite.add(disposable)
     }
 
-
-
+    /**
+     * Получение списка рецептов
+     *
+     * @param query ключевое слово для запроса
+     * @param cont параметр для перехода на следующую страницу запроса
+     */
     fun get(query: String, cont: String?) {
         val disposable = recipesInteractor.get(query, cont!!)
             .doOnSubscribe { progressLiveData.postValue(true) }
-                .doAfterTerminate { progressLiveData.postValue(false) }
-                .subscribeOn(schedulersProvider.io())
-                .observeOn(schedulersProvider.ui())
-            .subscribe ({ result ->
-                nextPageLiveData.value = result.first
-                addList(result.second.map(converterToPresentation::convert))},
-                errorLiveData::setValue)
+            .doAfterTerminate { progressLiveData.postValue(false) }
+            .subscribeOn(schedulersProvider.io())
+            .observeOn(schedulersProvider.ui())
+            .subscribe(
+                { result ->
+                    nextPageLiveData.value = result.first
+                    addList(result.second.map(converterToPresentation::convert))
+                },
+                errorLiveData::setValue
+            )
         composite.add(disposable)
     }
 

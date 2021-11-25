@@ -7,19 +7,19 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.preference.PreferenceManager
 import com.example.recipe.R
-import com.example.recipe.databinding.MyRecipeDetailBinding
-import com.example.recipe.models.presentation.MyRecipePresentationModel
+import com.example.recipe.databinding.ActivityMyRecipeDetailBinding
+import com.example.recipe.presentation.models.MyRecipePresentationModel
 import com.example.recipe.utils.GlideApp
 
 class MyRecipeDetailActivity : AppCompatActivity() {
 
-    private lateinit var binding: MyRecipeDetailBinding
+    private lateinit var binding: ActivityMyRecipeDetailBinding
     private var recipe: MyRecipePresentationModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = MyRecipeDetailBinding.inflate(layoutInflater)
+        binding = ActivityMyRecipeDetailBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
@@ -30,10 +30,10 @@ class MyRecipeDetailActivity : AppCompatActivity() {
         ) {
             val tempUri = Uri.parse(recipe?.image)
             GlideApp.with(this)
-                    .asBitmap()
-                    .load(tempUri)
-                    .error(R.drawable.no_image_logo)
-                    .into(binding.image)
+                .asBitmap()
+                .load(tempUri)
+                .error(R.drawable.no_image_logo)
+                .into(binding.image)
         }
 
         binding.name.text = recipe?.recipeName ?: ""

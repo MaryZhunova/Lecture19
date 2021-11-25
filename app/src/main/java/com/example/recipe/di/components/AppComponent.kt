@@ -4,7 +4,7 @@ import com.example.recipe.di.modules.AppModule
 import com.example.recipe.di.modules.NetworkModule
 import com.example.recipe.presentation.recipedetail.RecipeDetailActivity
 import com.example.recipe.presentation.recipesinfo.RecipesInfoActivity
-import com.example.recipe.presentation.switchfavourites.addrecipe.AddRecipeActivity
+import com.example.recipe.presentation.addrecipe.AddRecipeActivity
 import com.example.recipe.presentation.switchfavourites.favourites.FavouritesFragment
 import com.example.recipe.presentation.switchfavourites.myrecipes.MyRecipesFragment
 import dagger.Component

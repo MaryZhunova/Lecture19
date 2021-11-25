@@ -22,7 +22,6 @@ import javax.inject.Named
 import javax.inject.Singleton
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import okhttp3.Request
 
 @Module(includes = [ViewModelModule::class])
 class NetworkModule(val context: Context) {
@@ -110,8 +109,11 @@ class NetworkModule(val context: Context) {
     }
 
     private fun isNetworkConnected(): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork) ?: return false
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val capabilities =
+            connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+                ?: return false
         return when {
             capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
             capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true

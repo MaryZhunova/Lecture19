@@ -3,10 +3,10 @@ package com.example.recipe
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.example.recipe.domain.RecipesInteractor
-import com.example.recipe.models.converter.Converter
-import com.example.recipe.models.converter.DomainToPresentationConverter
-import com.example.recipe.models.domain.RecipeDomainModel
-import com.example.recipe.models.presentation.RecipePresentationModel
+import com.example.recipe.utils.converters.Converter
+import com.example.recipe.utils.converters.DomainToPresentationConverter
+import com.example.recipe.domain.models.RecipeDomainModel
+import com.example.recipe.presentation.models.RecipePresentationModel
 import com.example.recipe.presentation.recipesinfo.viewmodel.RecipesInfoViewModel
 import com.example.recipe.utils.SchedulersProvider
 import io.mockk.confirmVerified
@@ -48,10 +48,14 @@ class RecipesInfoViewModelTest {
 
     @Test
     fun getTest() {
-        val recipesInteractorResult: List<RecipeDomainModel> = listOf(RecipeDomainModel("uri", "label", "image", "source",
-            "url", listOf("ingredientLines"), listOf("dietLabels"), listOf("healthLabels"), listOf("cuisineType"), listOf("mealType"), listOf("dishType")))
-        val expectedResult: List<RecipePresentationModel> = listOf(RecipePresentationModel("uri", "label", "image", "source",
-            "url", listOf("ingredientLines"), listOf("dietLabels"), listOf("healthLabels"), listOf("cuisineType"), listOf("mealType"), listOf("dishType")))
+        val recipesInteractorResult: List<RecipeDomainModel> = listOf(
+            RecipeDomainModel("uri", "label", "image", "source",
+            "url", listOf("ingredientLines"), listOf("dietLabels"), listOf("healthLabels"), listOf("cuisineType"), listOf("mealType"), listOf("dishType"))
+        )
+        val expectedResult: List<RecipePresentationModel> = listOf(
+            RecipePresentationModel("uri", "label", "image", "source",
+            "url", listOf("ingredientLines"), listOf("dietLabels"), listOf("healthLabels"), listOf("cuisineType"), listOf("mealType"), listOf("dishType"))
+        )
 
         every { recipesInteractor.get(queryArgument) } returns recipesInteractorResult
         every { progressLiveDataObserver.onChanged(any()) } answers {}

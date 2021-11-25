@@ -4,13 +4,13 @@ import com.example.recipe.data.dao.RecipesDao
 import com.example.recipe.data.dao.entity.IngredientEntity
 import com.example.recipe.data.dao.entity.MyRecipeEntity
 import com.example.recipe.domain.RecipesRepository
-import com.example.recipe.models.converter.Converter
+import com.example.recipe.utils.converters.Converter
 import com.example.recipe.data.dao.entity.RecipeEntity
 import com.example.recipe.data.network.RetrofitService
-import com.example.recipe.models.data.api.Recipe
-import com.example.recipe.models.data.api.RecipeResponse
-import com.example.recipe.models.domain.MyRecipeDomainModel
-import com.example.recipe.models.domain.RecipeDomainModel
+import com.example.recipe.data.network.models.Recipe
+import com.example.recipe.data.network.models.RecipeResponse
+import com.example.recipe.domain.models.MyRecipeDomainModel
+import com.example.recipe.domain.models.RecipeDomainModel
 import io.reactivex.Observable
 import javax.inject.Inject
 import javax.inject.Named
@@ -34,7 +34,7 @@ class RecipesRepositoryImpl @Inject constructor(
     private val converterToEntity: Converter<RecipeDomainModel, RecipeEntity>,
     private val converterToMyEntity: Converter<MyRecipeDomainModel, MyRecipeEntity>,
 
-) : RecipesRepository {
+    ) : RecipesRepository {
 
     override fun get(query: String): Observable<Pair<String, List<RecipeDomainModel>>> {
         return retrofitService.get(query).map(::transformData)
@@ -97,7 +97,6 @@ class RecipesRepositoryImpl @Inject constructor(
     override fun getMyRecipes(): List<MyRecipeDomainModel> {
         return recipesDao.getAllMyRecipes().map(converterFromMyEntity::convert)
     }
-
 
     private fun transformData(recipeResponse: RecipeResponse): Pair<String, List<RecipeDomainModel>> {
         // Параметр для перехода на следующую страницу

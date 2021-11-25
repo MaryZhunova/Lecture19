@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.recipe.domain.RecipesInteractor
-import com.example.recipe.models.converter.Converter
-import com.example.recipe.models.domain.MyRecipeDomainModel
-import com.example.recipe.models.presentation.MyRecipePresentationModel
+import com.example.recipe.utils.converters.Converter
+import com.example.recipe.domain.models.MyRecipeDomainModel
+import com.example.recipe.presentation.models.MyRecipePresentationModel
 import com.example.recipe.presentation.switchfavourites.myrecipes.MyRecipesFragment
 import com.example.recipe.utils.ISchedulersProvider
 import io.reactivex.Completable
@@ -19,7 +19,7 @@ import javax.inject.Inject
 /**
  * ViewModel [MyRecipesFragment]
  */
-class MyRecipesViewModel@Inject constructor(
+class MyRecipesViewModel @Inject constructor(
     private val recipesInteractor: RecipesInteractor,
     private val schedulersProvider: ISchedulersProvider,
     private val converterToPresentation: Converter<MyRecipeDomainModel, MyRecipePresentationModel>,
@@ -28,7 +28,8 @@ class MyRecipesViewModel@Inject constructor(
 
     private val progressLiveData: MutableLiveData<Boolean> = MutableLiveData()
     private val errorLiveData: MutableLiveData<Throwable> = MutableLiveData()
-    private val recipesLiveData: MutableLiveData<List<MyRecipePresentationModel>> = MutableLiveData()
+    private val recipesLiveData: MutableLiveData<List<MyRecipePresentationModel>> =
+        MutableLiveData()
     private val composite: CompositeDisposable = CompositeDisposable()
 
     /**
@@ -53,7 +54,9 @@ class MyRecipesViewModel@Inject constructor(
     fun deleteFromMyRecipes(recipe: MyRecipePresentationModel) {
         val completable = object : CompletableObserver {
             override fun onSubscribe(d: Disposable) {}
-            override fun onComplete() {}
+            override fun onComplete() {
+                get()
+            }
             override fun onError(e: Throwable) {
                 errorLiveData.value = e
             }

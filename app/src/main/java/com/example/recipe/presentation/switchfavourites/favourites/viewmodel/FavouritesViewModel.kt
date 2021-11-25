@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.recipe.domain.RecipesInteractor
-import com.example.recipe.models.converter.Converter
-import com.example.recipe.models.domain.RecipeDomainModel
-import com.example.recipe.models.presentation.RecipePresentationModel
-import com.example.recipe.presentation.switchfavourites.SwitchFavouritesActivity
+import com.example.recipe.utils.converters.Converter
+import com.example.recipe.domain.models.RecipeDomainModel
+import com.example.recipe.presentation.models.RecipePresentationModel
+import com.example.recipe.presentation.switchfavourites.favourites.FavouritesFragment
 import com.example.recipe.utils.ISchedulersProvider
 import io.reactivex.Completable
 import io.reactivex.CompletableObserver
@@ -17,7 +17,7 @@ import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 /**
- * ViewModel [SwitchFavouritesActivity]
+ * ViewModel [FavouritesFragment]
  *
  * @param recipesInteractor интерактор
  * @param schedulersProvider провайдер schedulers
@@ -57,12 +57,10 @@ class FavouritesViewModel @Inject constructor(
      */
     fun deleteFromFavourites(recipe: RecipePresentationModel) {
         val completable = object : CompletableObserver {
-            override fun onSubscribe(d: Disposable) {
-            }
-
+            override fun onSubscribe(d: Disposable) {}
             override fun onComplete() {
+                get()
             }
-
             override fun onError(e: Throwable) {
                 errorLiveData.value = e
             }

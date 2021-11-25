@@ -24,4 +24,13 @@
     <string name="download_images">Download images</string>
     <string name="theme">Theme</string>
     <string name="images">Images</string>
+    <string name="enter_recipe_name">Enter recipe name</string>
+    <string name="gallery">Gallery</string>
+    <string name="camera">Camera</string>
+    <string name="enter_ingredients">Enter ingredients</string>
+    <string name="enter_recipe_description">Enter recipe description</string>
+    <string name="directions">Directions:</string>
+    <string name="round_button_to_add_new_recipe">Round button to add new recipe</string>
+    <string name="a_brown_bucket">A brown bucket</string>
+    <string name="done">Done</string>
 </resources>

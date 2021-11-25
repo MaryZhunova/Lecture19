@@ -36,12 +36,20 @@
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout-land/choose_image.xml" value="0.28835978835978837" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout-land/image.xml" value="0.15343915343915343" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout-land/recipe_detail.xml" value="0.3002645502645503" />
+        <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/activity_add_recipe.xml" value="0.3546875" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/activity_main.xml" value="0.3546875" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/activity_my_recipe_det.xml" value="0.3546875" />
+        <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/activity_my_recipe_detail.xml" value="0.3546875" />
+        <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/activity_recipe_detail.xml" value="0.3546875" />
+        <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/activity_recipes_info.xml" value="0.3546875" />
+        <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/activity_settings.xml" value="0.3546875" />
+        <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/activity_switch_favourites.xml" value="0.3546875" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/add_recipe.xml" value="0.25" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/choose_image.xml" value="0.340625" />
+        <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/choose_image_item.xml" value="0.340625" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/favorites.xml" value="0.35052083333333334" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/favourites_list.xml" value="0.3546875" />
+        <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/fragment_choose_image.xml" value="0.340625" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/fragment_favourites.xml" value="0.35052083333333334" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/fragment_my_recipes.xml" value="0.3546875" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/image.xml" value="0.1390625" />
@@ -51,6 +59,8 @@
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/my_recipes.xml" value="0.19739583333333333" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/my_recipes_item.xml" value="0.35052083333333334" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/recipe_detail.xml" value="0.22" />
+        <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/recipe_detail_ingredient_item.xml" value="0.340625" />
+        <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/recipes_info_item.xml" value="0.340625" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/recipes_list_info.xml" value="0.39479166666666665" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/recipes_list_info_item.xml" value="0.22735507246376813" />
         <entry key="..\:/Users/Dmitry/Desktop/finalproject/Lecture19/app/src/main/res/layout/settings.xml" value="0.340625" />

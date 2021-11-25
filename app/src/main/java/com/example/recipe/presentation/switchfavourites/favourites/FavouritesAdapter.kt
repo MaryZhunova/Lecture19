@@ -8,23 +8,24 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipe.R
-import com.example.recipe.models.presentation.RecipePresentationModel
+import com.example.recipe.presentation.models.RecipePresentationModel
 import com.example.recipe.utils.GlideApp
 
 /**
  * Адаптер для отображения элементов списка
  */
 class FavouritesAdapter(
-    val recipes: MutableList<RecipePresentationModel>,
     private val onFavouriteRecipeClickListener: OnFavouriteRecipeClickListener
-) : RecyclerView.Adapter<FavouritesAdapter.MyViewHolder>() {
+) : ListAdapter<RecipePresentationModel, FavouritesAdapter.MyViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.recipes_list_info_item, parent, false),
+                .inflate(R.layout.recipes_info_item, parent, false),
             onFavouriteRecipeClickListener
         )
     }
@@ -33,19 +34,19 @@ class FavouritesAdapter(
         if (PreferenceManager.getDefaultSharedPreferences(holder.getContext())
                 .getBoolean("switch_images", true)
         ) {
-            val tempUri = Uri.parse(recipes[position].image)
+            val tempUri = Uri.parse(currentList[position].image)
             GlideApp.with(holder.getContext())
                 .asBitmap()
                 .load(tempUri)
                 .error(R.drawable.no_image_logo)
                 .into(holder.icon)
         }
-        holder.recipeName.text = recipes[position].label
+        holder.recipeName.text = currentList[position].label
         holder.favouriteFilled.visibility = View.VISIBLE
     }
 
     override fun getItemCount(): Int {
-        return recipes.size
+        return currentList.size
     }
 
     inner class MyViewHolder(
@@ -74,15 +75,28 @@ class FavouritesAdapter(
         override fun onClick(v: View?) {
             if (v != null) {
                 if (v.id == favouriteFilled.id) {
-                    val position = adapterPosition
-                    onRecipeClick.onFavouriteClick(recipes[position])
-                    recipes.removeAt(position)
-                    notifyItemRemoved(position)
+                    onRecipeClick.onFavouriteClick(currentList[absoluteAdapterPosition])
+
                 } else {
-                    onRecipeClick.onRecipeClick(recipes[adapterPosition])
+                    onRecipeClick.onRecipeClick(currentList[absoluteAdapterPosition])
                 }
             }
         }
+    }
+
+    private class DiffCallback : DiffUtil.ItemCallback<RecipePresentationModel>() {
+
+        override fun areItemsTheSame(
+            oldItem: RecipePresentationModel,
+            newItem: RecipePresentationModel
+        ) =
+            oldItem.uri == newItem.uri
+
+        override fun areContentsTheSame(
+            oldItem: RecipePresentationModel,
+            newItem: RecipePresentationModel
+        ) =
+            oldItem == newItem
     }
 }
 
