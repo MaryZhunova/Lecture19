@@ -1,5 +1,9 @@
 package com.example.recipe.presentation.switchfavourites.addrecipe.viewmodel
 
+import android.content.Context
+import android.net.Uri
+import android.os.Environment
+import androidx.core.content.FileProvider
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,6 +16,8 @@ import com.example.recipe.utils.ISchedulersProvider
 import io.reactivex.Completable
 import io.reactivex.CompletableObserver
 import io.reactivex.disposables.Disposable
+import java.io.File
+import java.util.UUID
 import javax.inject.Inject
 
 /**
@@ -28,6 +34,7 @@ class AddRecipeViewModel @Inject constructor(
 ) : ViewModel() {
 
     val errorLiveData: MutableLiveData<Throwable> = MutableLiveData()
+//    val currentImageUri: MutableLiveData<Uri> = MutableLiveData()
 
     /**
      * Добавить рецепт в базу данных
@@ -59,4 +66,5 @@ class AddRecipeViewModel @Inject constructor(
     }
 
     fun getErrorLiveData(): LiveData<Throwable> = errorLiveData
+//    fun getCurrentImageUri(): LiveData<Uri> = currentImageUri
 }

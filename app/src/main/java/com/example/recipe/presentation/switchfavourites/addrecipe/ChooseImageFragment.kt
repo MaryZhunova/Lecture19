@@ -10,11 +10,8 @@ import androidx.fragment.app.Fragment
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.Toast
 import com.example.recipe.databinding.ChooseImageBinding
-import com.example.wordtranslate.presentation.addword.view.ImagesAdapter
-import com.example.wordtranslate.presentation.addword.view.OnItemClickListener
 
 class ChooseImageFragment : Fragment(), OnItemClickListener {
     private lateinit var binding: ChooseImageBinding
@@ -30,7 +27,7 @@ class ChooseImageFragment : Fragment(), OnItemClickListener {
         try {
             mCallback = context as OnItemClickListener
         } catch (e: Exception) {
-            throw Exception("$context should implement MyRecipesFragment.OnItemClickListener")
+            throw Exception("$context should implement ChooseImageFragment.OnItemClickListener")
         }
     }
 
@@ -55,7 +52,6 @@ class ChooseImageFragment : Fragment(), OnItemClickListener {
         }
 
     }
-
 
     private fun showData(list: List<Uri>) {
         val adapter = ImagesAdapter(list, this)
@@ -84,12 +80,10 @@ class ChooseImageFragment : Fragment(), OnItemClickListener {
             sortOrder
         )
         query?.use { cursor ->
-            Log.e("fucking shit", cursor.count.toString())
             while (cursor.moveToNext()) {
                 val id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID))
                 uriList.add(ContentUris.withAppendedId(
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    id)
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
                 )
             }
         }

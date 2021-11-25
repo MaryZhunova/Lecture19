@@ -76,7 +76,6 @@ class MyRecipesAdapter(private val onMyRecipeClickListener: OnMyRecipeClickListe
                 if (v.id == delete.id) {
                     val position = adapterPosition
                     onRecipeClick.onDeleteClick(currentList[adapterPosition])
-                    currentList.removeAt(position)
                     notifyItemRemoved(position)
                 } else {
                     onRecipeClick.onRecipeClick(currentList[adapterPosition])

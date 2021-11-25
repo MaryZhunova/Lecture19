@@ -1,4 +1,4 @@
-package com.example.wordtranslate.presentation.addword.view
+package com.example.recipe.presentation.switchfavourites.addrecipe
 
 import android.view.LayoutInflater
 import android.view.View
