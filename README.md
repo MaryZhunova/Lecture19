@@ -17,12 +17,12 @@ Android Recipe App that will allow you to find any recipe you want or save your 
 ![MainActivity](https://i.ibb.co/grBKkN3/Main-activity.png)
 ![RecipeList](https://i.ibb.co/KKBQ0tm/Query-result.png)
 ![Details](https://i.ibb.co/NNY1Mq6/recipe-detail.png)
-![Favourite recipes] (https://i.ibb.co/J3ppGty/favourite-recipes.png)
-![My recipes] (https://i.ibb.co/9yL0cjY/my-recipes.png)
-![Add a recipe] (https://i.ibb.co/Zg3FDfX/add-recipe.png)
-![Gallery] (https://i.ibb.co/jfrpsfZ/gallery.png)
-![Recipe detail] (https://i.ibb.co/D12mc7q/my-recipe-detail.png)
-![Settings] (https://i.ibb.co/1bJYNH3/settings.png)
+![FavouriteRecipes](https://i.ibb.co/J3ppGty/favourite-recipes.png)
+![MyRecipes](https://i.ibb.co/9yL0cjY/my-recipes.png)
+![AddARecipe](https://i.ibb.co/Zg3FDfX/add-recipe.png)
+![Gallery](https://i.ibb.co/jfrpsfZ/gallery.png)
+![RecipeDetail](https://i.ibb.co/D12mc7q/my-recipe-detail.png)
+![Settings](https://i.ibb.co/1bJYNH3/settings.png)
 
 
 ### Components and Libraries
