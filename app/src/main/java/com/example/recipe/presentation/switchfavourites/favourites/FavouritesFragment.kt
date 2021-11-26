@@ -49,7 +49,7 @@ class FavouritesFragment : Fragment(), OnFavouriteRecipeClickListener {
         //Наблюдать за LiveData
         observeLiveData()
         //Отправить сетевой запрос с ключевым словом query через вью модель
-        favouritesViewModel.get()
+        favouritesViewModel.getFavouriteRecipes()
     }
 
     private fun initRecyclerview() {

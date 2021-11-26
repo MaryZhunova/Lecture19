@@ -1,19 +1,37 @@
 #Recipe App
 
-App for Android App School
-Android Recipe App that will allow you to find any recipe you want. 
+Android Recipe App that will allow you to find any recipe you want or save your own. 
 
-## Extra features
+## Features
 
-* Find list of recipes by a keyword
+* Enter a keyword and find a list of recipes
 * Check detailed information about the recipe and ingredients
+* Add to favourites/ delete from favourites
+* Add and save your own recipes
+* Choose if you want to load images
+* Switch to a dark theme
+* Supports Russian language
+
 
 ## Screens
-![MainActivity](https://i.ibb.co/c1YsPPt/Screenshot-4.png)
-![ProgressBar](https://i.ibb.co/87YbBQT/Screenshot-6.png)
-![RecipeList](https://i.ibb.co/HNC1krK/Screenshot-3.png)
-![Details](https://i.ibb.co/zsVhN8K/Screenshot-2.png)
+![MainActivity](https://i.ibb.co/grBKkN3/Main-activity.png)
+![RecipeList](https://i.ibb.co/KKBQ0tm/Query-result.png)
+![Details](https://i.ibb.co/NNY1Mq6/recipe-detail.png)
+![Favourite recipes] (https://i.ibb.co/J3ppGty/favourite-recipes.png)
+![My recipes] (https://i.ibb.co/9yL0cjY/my-recipes.png)
+![Add a recipe] (https://i.ibb.co/Zg3FDfX/add-recipe.png)
+![Gallery] (https://i.ibb.co/jfrpsfZ/gallery.png)
+![Recipe detail] (https://i.ibb.co/D12mc7q/my-recipe-detail.png)
+![Settings] (https://i.ibb.co/1bJYNH3/settings.png)
+
 
 ### Components and Libraries
-- [x] Application uses MVVM architecture pattern
-- [x] Application uses Okhttp for http requests, JavaRx for multithreading, Glide to show images, LiveData for data holding, Gson for parsing Json data
+- [x] MVVM architecture pattern, clean architecture
+- [x] Retrofit
+- [x] RxJava2
+- [x] Glide
+- [x] LiveData
+- [x] Gson
+- [x] Dagger2
+- [x] ViewPager2
+- [x] Room

@@ -6,7 +6,11 @@ import com.example.recipe.data.dao.entity.MyRecipeEntity
 import com.example.recipe.data.dao.entity.RecipeEntity
 import com.example.recipe.data.dao.entity.relations.RecipeWithIngredients
 import com.example.recipe.data.network.RetrofitService
+import com.example.recipe.data.network.models.Hit
+import com.example.recipe.data.network.models.Link
+import com.example.recipe.data.network.models.Next
 import com.example.recipe.data.network.models.Recipe
+import com.example.recipe.data.network.models.RecipeResponse
 import com.example.recipe.domain.models.MyRecipeDomainModel
 import com.example.recipe.domain.models.RecipeDomainModel
 import com.example.recipe.utils.converters.Converter
@@ -15,6 +19,7 @@ import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import io.reactivex.Observable
 import org.junit.Before
 import org.junit.Test
 
@@ -24,19 +29,10 @@ class RecipesRepositoryImplTest {
     private val retrofitService: RetrofitService = mockk()
     private val recipesDao: RecipesDao = mockk()
     private val converter: Converter<Recipe, RecipeDomainModel> = mockk()
-
-    //        RecipeToDomainConverter()
     private val converterFromEntity: Converter<RecipeEntity, RecipeDomainModel> = mockk()
-
-    //        RecipeEntityToDomainConverter()
     private val converterFromMyEntity: Converter<MyRecipeEntity, MyRecipeDomainModel> = mockk()
-
-    //        MyRecipeEntityToMyDomainConverter()
     private val converterToEntity: Converter<RecipeDomainModel, RecipeEntity> = mockk()
-
-    //        DomainToRecipeEntityConverter()
     private val converterToMyEntity: Converter<MyRecipeDomainModel, MyRecipeEntity> = mockk()
-//        MyDomainToMyRecipeEntityConverter()
 
     @Before
     fun setUp() {
@@ -48,19 +44,20 @@ class RecipesRepositoryImplTest {
 
     @Test
     fun testGet() {
-        // TODO: 26.11.2021
-//        val retrofitResponse: Observable<RecipeResponse> = Observable.just(RecipeResponse(Link(Next("...")), listOf(Hit(Recipe("uri", "label", "image", "source",
-//            "url", listOf("ingredientLines"))))))
-//
-//        val expectedResult: Observable<Pair<String, List<RecipeDomainModel>>> = Observable.just(Pair("...", listOf(
-//            RecipeDomainModel("uri", "label", "image", "source",
-//                "url", listOf("ingredientLines"), false))))
-//
-//        every { retrofitService.get(queryArgument) } returns retrofitResponse
-//
-//        val testResult = recipesRepositoryImpl.get(queryArgument)
-//
-//        Truth.assertThat(testResult).isEqualTo(expectedResult)
+        val recipe = Recipe("uri", "label", "image", "source",
+            "url", listOf("ingredientLines"))
+        val retrofitResponse: Observable<RecipeResponse> = Observable.just(RecipeResponse(
+            Link(Next(nextPage)), listOf(Hit(recipe))))
+
+        every { retrofitService.get(queryArgument) } returns retrofitResponse
+
+        recipesRepositoryImpl.get(queryArgument).subscribe { result ->
+            Truth.assertThat(result.first).isEqualTo(nextPage)
+            Truth.assertThat(result.second).isEqualTo(listOf(recipeDomainModel))
+        }
+
+        val testResult = recipesRepositoryImpl.get(queryArgument)
+        Truth.assertThat(testResult).isInstanceOf(Observable::class.java)
     }
 
     @Test
@@ -79,7 +76,20 @@ class RecipesRepositoryImplTest {
 
     @Test
     fun testGetTwoArguments() {
-        // TODO: 26.11.2021
+        val recipe = Recipe("uri", "label", "image", "source",
+            "url", listOf("ingredientLines"))
+        val retrofitResponse: Observable<RecipeResponse> = Observable.just(RecipeResponse(
+            Link(Next(nextPage)), listOf(Hit(recipe))))
+
+        every { retrofitService.get(queryArgument, nextPage) } returns retrofitResponse
+
+        recipesRepositoryImpl.get(queryArgument, nextPage).subscribe { result ->
+            Truth.assertThat(result.first).isEqualTo(nextPage)
+            Truth.assertThat(result.second).isEqualTo(listOf(recipeDomainModel))
+        }
+
+        val testResult = recipesRepositoryImpl.get(queryArgument, nextPage)
+        Truth.assertThat(testResult).isInstanceOf(Observable::class.java)
     }
 
     @Test
@@ -144,6 +154,37 @@ class RecipesRepositoryImplTest {
     }
 
     @Test
+    fun testAddToFavouritesException() {
+        every { recipesDao.addToFavourites(recipeEntity) } throws java.lang.Exception()
+        every { recipesDao.addIngredientLinesToFavourites(ingredientEntity) } returns Unit
+        every { converterToEntity.convert(recipeDomainModel) } returns recipeEntity
+
+        var testResult = false
+        try {
+            recipesRepositoryImpl.addToFavourites(recipeDomainModel)
+        } catch (e: Exception) {
+            testResult = true
+        }
+        Truth.assertThat(testResult).isTrue()
+    }
+
+    @Test
+    fun testAddToFavouritesIngredientException() {
+        every { recipesDao.addToFavourites(recipeEntity) } returns Unit
+        every { recipesDao.addIngredientLinesToFavourites(ingredientEntity) } throws java.lang.Exception()
+        every { converterToEntity.convert(recipeDomainModel) } returns recipeEntity
+
+        var testResult = false
+        try {
+            recipesRepositoryImpl.addToFavourites(recipeDomainModel)
+        } catch (e: Exception) {
+            testResult = true
+        }
+        Truth.assertThat(testResult).isTrue()
+    }
+
+
+    @Test
     fun testDeleteFromFavourites() {
         every { recipesDao.deleteFromFavourites(recipeEntity) } returns Unit
         every { recipesDao.deleteIngredient(ingredientEntity) } returns Unit
@@ -160,9 +201,38 @@ class RecipesRepositoryImplTest {
     }
 
     @Test
+    fun testDeleteFromFavouritesException() {
+        every { recipesDao.deleteFromFavourites(recipeEntity) } throws java.lang.Exception()
+        every { recipesDao.deleteIngredient(ingredientEntity) } returns Unit
+        every { converterToEntity.convert(recipeDomainModel) } returns recipeEntity
+
+        var testResult = false
+        try {
+            recipesRepositoryImpl.deleteFromFavourites(recipeDomainModel)
+        } catch (e: Exception) {
+            testResult = true
+        }
+        Truth.assertThat(testResult).isTrue()
+    }
+
+    @Test
+    fun testDeleteFromFavouritesIngredientException() {
+        every { recipesDao.deleteFromFavourites(recipeEntity) } returns Unit
+        every { recipesDao.deleteIngredient(ingredientEntity) } throws java.lang.Exception()
+        every { converterToEntity.convert(recipeDomainModel) } returns recipeEntity
+
+        var testResult = false
+        try {
+            recipesRepositoryImpl.deleteFromFavourites(recipeDomainModel)
+        } catch (e: Exception) {
+            testResult = true
+        }
+        Truth.assertThat(testResult).isTrue()
+    }
+
+    @Test
     fun testAddToMyRecipes() {
         every { recipesDao.addToMyRecipes(myRecipeEntityModel) } returns Unit
-
         every { converterToMyEntity.convert(myRecipeDomainModel) } returns myRecipeEntityModel
 
         recipesRepositoryImpl.addToMyRecipes(myRecipeDomainModel)
@@ -174,9 +244,22 @@ class RecipesRepositoryImplTest {
     }
 
     @Test
+    fun testAddToMyRecipesException() {
+        every { recipesDao.addToMyRecipes(myRecipeEntityModel) } throws java.lang.Exception()
+        every { converterToMyEntity.convert(myRecipeDomainModel) } returns myRecipeEntityModel
+
+        var testResult = false
+        try {
+            recipesRepositoryImpl.addToMyRecipes(myRecipeDomainModel)
+        } catch (e: Exception) {
+            testResult = true
+        }
+        Truth.assertThat(testResult).isTrue()
+    }
+
+    @Test
     fun testDeleteFromMyRecipes() {
         every { recipesDao.deleteFromMyRecipes(myRecipeEntityModel) } returns Unit
-
         every { converterToMyEntity.convert(myRecipeDomainModel) } returns myRecipeEntityModel
 
         recipesRepositoryImpl.deleteFromMyRecipes(myRecipeDomainModel)
@@ -188,14 +271,26 @@ class RecipesRepositoryImplTest {
     }
 
     @Test
+    fun testDeleteFromMyRecipesException() {
+        every { recipesDao.deleteFromMyRecipes(myRecipeEntityModel) } throws java.lang.Exception()
+        every { converterToMyEntity.convert(myRecipeDomainModel) } returns myRecipeEntityModel
+
+        var testResult = false
+        try {
+            recipesRepositoryImpl.deleteFromMyRecipes(myRecipeDomainModel)
+        } catch (e: Exception) {
+            testResult = true
+        }
+        Truth.assertThat(testResult).isTrue()
+    }
+
+    @Test
     fun testGetMyRecipes() {
         val recipesDaoResponse = listOf(myRecipeEntityModel)
         val expectedResult = listOf(myRecipeDomainModel)
 
         every { recipesDao.getAllMyRecipes() } returns recipesDaoResponse
-
         every { recipesDao.getAllMyRecipes() } returns recipesDaoResponse
-
         every { converterFromMyEntity.convert(myRecipeEntityModel) } returns myRecipeDomainModel
 
         val testResult = recipesRepositoryImpl.getMyRecipes()

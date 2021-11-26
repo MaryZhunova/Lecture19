@@ -69,7 +69,6 @@ class RecipeDetailViewModelTest {
             })
         }
         confirmVerified(errorLiveDataObserver)
-
     }
     @Test
     fun testGetErrorLiveData() {
@@ -79,7 +78,6 @@ class RecipeDetailViewModelTest {
         recipeDetailViewModel.deleteFromFavourites(recipePresentationModel)
 
         Truth.assertThat(recipeDetailViewModel.getErrorLiveData().value).isInstanceOf(RuntimeException()::class.java)
-
     }
 
     companion object {

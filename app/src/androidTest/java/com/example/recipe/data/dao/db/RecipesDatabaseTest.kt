@@ -31,49 +31,36 @@ class RecipesDatabaseTest : TestCase() {
     }
     @Test
     fun testAddToFavourites() {
-        val recipe = RecipeEntity("uri", "label", "image", "source",
-            "url", true)
-
-        recipesDao.addToFavourites(recipe)
+        recipesDao.addToFavourites(recipeEntity)
 
         val expectedResult = recipesDao.isFavourite("uri")
-        assertThat(expectedResult.contains(recipe)).isTrue()
+        assertThat(expectedResult.contains(recipeEntity)).isTrue()
     }
 
     @Test
     fun testIsFavourite() {
-        val recipe = RecipeEntity("uri", "label", "image", "source",
-            "url", true)
-
         val expectedResult = recipesDao.isFavourite("uri")
 
-        assertThat(expectedResult.contains(recipe)).isFalse()
+        assertThat(expectedResult.contains(recipeEntity)).isFalse()
     }
 
     @Test
     fun testDeleteFromFavourites() {
-        val recipe = RecipeEntity("uri", "label", "image", "source",
-            "url", true)
-
-        recipesDao.addToFavourites(recipe)
-        recipesDao.deleteFromFavourites(recipe)
+        recipesDao.addToFavourites(recipeEntity)
+        recipesDao.deleteFromFavourites(recipeEntity)
 
         val expectedResult = recipesDao.isFavourite("uri")
-        assertThat(expectedResult.contains(recipe)).isFalse()
+        assertThat(expectedResult.contains(recipeEntity)).isFalse()
     }
 
     @Test
     fun testGetAllFavourites() {
-        val recipeEntity = RecipeEntity("uri", "label", "image", "source",
-            "url", true)
-        val ingredientEntity = IngredientEntity("ingredient", "uri")
         val expectedResult: List<RecipeWithIngredients> = listOf(
             RecipeWithIngredients(recipeEntity, listOf(ingredientEntity))
         )
 
         recipesDao.addIngredientLinesToFavourites(ingredientEntity)
         recipesDao.addToFavourites(recipeEntity)
-
 
         val result = recipesDao.getAllFavourites()
 
@@ -82,10 +69,6 @@ class RecipesDatabaseTest : TestCase() {
 
     @Test
     fun testDeleteIngredient() {
-        val recipeEntity = RecipeEntity("uri", "label", "image", "source",
-            "url", true)
-        val ingredientEntity = IngredientEntity("ingredient", "uri")
-
         recipesDao.addToFavourites(recipeEntity)
         recipesDao.addIngredientLinesToFavourites(ingredientEntity)
 
@@ -98,28 +81,24 @@ class RecipesDatabaseTest : TestCase() {
 
     @Test
     fun testAddToMyRecipes() {
-        val recipe = MyRecipeEntity("name", "ingredients", "instructions", "image")
-
-        recipesDao.addToMyRecipes(recipe)
+        recipesDao.addToMyRecipes(myRecipeEntity)
 
         val expectedResult = recipesDao.getAllMyRecipes()
-        assertThat(expectedResult.contains(recipe)).isTrue()
+        assertThat(expectedResult.contains(myRecipeEntity)).isTrue()
     }
 
     @Test
     fun testDeleteFromMyRecipes() {
-        val recipe = MyRecipeEntity("name", "ingredients", "instructions", "image")
-
-        recipesDao.addToMyRecipes(recipe)
-        recipesDao.deleteFromMyRecipes(recipe)
+        recipesDao.addToMyRecipes(myRecipeEntity)
+        recipesDao.deleteFromMyRecipes(myRecipeEntity)
 
         val expectedResult = recipesDao.getAllMyRecipes()
-        assertThat(expectedResult.contains(recipe)).isFalse()
+        assertThat(expectedResult.contains(myRecipeEntity)).isFalse()
 
     }
     @Test
     fun testGetAllMyRecipes() {
-        val recipes = listOf(MyRecipeEntity("name", "ingredients", "instructions", "image"))
+        val recipes = listOf(myRecipeEntity)
 
         for (recipe in recipes) {
             recipesDao.addToMyRecipes(recipe)
@@ -133,5 +112,13 @@ class RecipesDatabaseTest : TestCase() {
     @Throws(IOException::class)
     fun closeDb() {
         db.close()
+    }
+
+    companion object {
+        val recipeEntity = RecipeEntity("uri", "label", "image", "source",
+            "url", true)
+        val ingredientEntity = IngredientEntity("ingredient", "uri")
+        val myRecipeEntity = MyRecipeEntity("name", "ingredients", "instructions", "image")
+
     }
 }

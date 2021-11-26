@@ -1,19 +1,13 @@
 package com.example.recipe.presentation.recipesinfo.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.example.recipe.data.dao.entity.IngredientEntity
-import com.example.recipe.data.dao.entity.MyRecipeEntity
-import com.example.recipe.data.dao.entity.RecipeEntity
 import com.example.recipe.domain.RecipesInteractor
-import com.example.recipe.domain.models.MyRecipeDomainModel
 import com.example.recipe.domain.models.RecipeDomainModel
 import com.example.recipe.presentation.models.RecipePresentationModel
 import com.example.recipe.utils.ISchedulersProvider
 import com.example.recipe.utils.converters.Converter
-import com.example.recipe.utils.converters.DomainToPresentationConverter
-import com.example.recipe.utils.converters.PresentationToDomainConverter
+import com.google.common.truth.Truth
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.mockk
@@ -24,16 +18,15 @@ import io.reactivex.schedulers.Schedulers
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.lang.RuntimeException
 
 
 class RecipesInfoViewModelTest {
     private lateinit var recipesInfoViewModel: RecipesInfoViewModel
     private val recipesInteractor: RecipesInteractor = mockk()
     private val schedulersProvider: ISchedulersProvider = mockk()
-    private val converterToPresentation: Converter<RecipeDomainModel, RecipePresentationModel> = //mockk()
-        DomainToPresentationConverter()
-    private val converterToDomain: Converter<RecipePresentationModel, RecipeDomainModel> = //mockk()
-        PresentationToDomainConverter()
+    private val converterToPresentation: Converter<RecipeDomainModel, RecipePresentationModel> = mockk()
+    private val converterToDomain: Converter<RecipePresentationModel, RecipeDomainModel> = mockk()
     private val progressLiveDataObserver: Observer<Boolean> = mockk()
     private val errorLiveDataObserver: Observer<Throwable> = mockk()
     private val recipesLiveDataObserver: Observer<MutableList<RecipePresentationModel>> = mockk()
@@ -48,15 +41,14 @@ class RecipesInfoViewModelTest {
         every { schedulersProvider.io() } returns (Schedulers.trampoline())
         every { schedulersProvider.ui() } returns (Schedulers.trampoline())
         recipesInfoViewModel = RecipesInfoViewModel(recipesInteractor, schedulersProvider, converterToPresentation, converterToDomain)
-
-        recipesInfoViewModel.getProgressLiveData().observeForever(progressLiveDataObserver)
-        recipesInfoViewModel.getErrorLiveData().observeForever(errorLiveDataObserver)
-        recipesInfoViewModel.getRecipesLiveData().observeForever(recipesLiveDataObserver)
-        recipesInfoViewModel.getNextPageLiveData().observeForever(nextPageLiveDataObserver)
     }
 
     @Test
     fun testGet() {
+        recipesInfoViewModel.getProgressLiveData().observeForever(progressLiveDataObserver)
+        recipesInfoViewModel.getRecipesLiveData().observeForever(recipesLiveDataObserver)
+        recipesInfoViewModel.getNextPageLiveData().observeForever(nextPageLiveDataObserver)
+
         val expectedResult: MutableList<RecipePresentationModel> = mutableListOf(recipePresentationModel)
         val interactorResult: Observable<Pair<String, List<RecipeDomainModel>>> = Observable.just(Pair(
             nextPage, listOf(
@@ -66,7 +58,7 @@ class RecipesInfoViewModelTest {
         every { progressLiveDataObserver.onChanged(any()) } answers {}
         every { nextPageLiveDataObserver.onChanged(any()) } answers {}
         every { recipesLiveDataObserver.onChanged(any()) } answers {}
-
+        every { converterToPresentation.convert(recipeDomainModel) } returns recipePresentationModel
 
         recipesInfoViewModel.get(queryArgument)
 
@@ -81,7 +73,9 @@ class RecipesInfoViewModelTest {
 
     @Test
     fun testGetException() {
-        every { recipesInteractor.get(queryArgumentForException) } throws Exception()
+        recipesInfoViewModel.getErrorLiveData().observeForever(errorLiveDataObserver)
+
+        every { recipesInteractor.get(queryArgumentForException) } returns Observable.error(java.lang.Exception())
         every { errorLiveDataObserver.onChanged(any()) } answers {}
 
         recipesInfoViewModel.get(queryArgumentForException)
@@ -95,28 +89,158 @@ class RecipesInfoViewModelTest {
     }
 
     @Test
-    fun testTestGet() {}
+    fun testGetTwoArguments() {
+        recipesInfoViewModel.getProgressLiveData().observeForever(progressLiveDataObserver)
+        recipesInfoViewModel.getRecipesLiveData().observeForever(recipesLiveDataObserver)
+        recipesInfoViewModel.getNextPageLiveData().observeForever(nextPageLiveDataObserver)
+
+        val interactorResult: Observable<Pair<String, List<RecipeDomainModel>>> = Observable.just(Pair(
+            nextPage, listOf(recipeDomainModel)))
+
+        every { recipesInteractor.get(queryArgument, nextPage) } returns interactorResult
+        every { progressLiveDataObserver.onChanged(any()) } answers {}
+        every { nextPageLiveDataObserver.onChanged(any()) } answers {}
+        every { recipesLiveDataObserver.onChanged(any()) } answers {}
+        every { converterToPresentation.convert(recipeDomainModel) } returns recipePresentationModel
+
+        recipesInfoViewModel.get(queryArgument, nextPage)
+
+        verifyOrder {
+            progressLiveDataObserver.onChanged(true)
+            nextPageLiveDataObserver.onChanged(nextPage)
+            recipesLiveDataObserver.onChanged(null)
+            progressLiveDataObserver.onChanged(false)
+        }
+        confirmVerified(progressLiveDataObserver, nextPageLiveDataObserver, recipesLiveDataObserver)
+    }
 
     @Test
-    fun testAddToFavourites() {}
+    fun testGetTwoArgumentsException() {
+        recipesInfoViewModel.getErrorLiveData().observeForever(errorLiveDataObserver)
+
+        every { recipesInteractor.get(queryArgumentForException, nextPage) } returns Observable.error(java.lang.Exception())
+        every { errorLiveDataObserver.onChanged(any()) } answers {}
+
+        recipesInfoViewModel.get(queryArgumentForException, nextPage)
+
+        verify {
+            errorLiveDataObserver.onChanged(match {
+                    ex -> ex is Exception
+            })
+        }
+        confirmVerified(errorLiveDataObserver)
+    }
 
     @Test
-    fun testDeleteFromFavourites() {}
+    fun testAddToFavourites() {
+        every { converterToDomain.convert(recipePresentationModel) } returns recipeDomainModel
+        every { recipesInteractor.addToFavourites(recipeDomainModel) } returns Unit
+
+        recipesInfoViewModel.addToFavourites(recipePresentationModel)
+
+        verify {
+            recipesInteractor.addToFavourites(recipeDomainModel)
+        }
+        confirmVerified(recipesInteractor)
+    }
 
     @Test
-    fun testOnCleared() {}
+    fun testAddToFavouritesException() {
+        recipesInfoViewModel.getErrorLiveData().observeForever(errorLiveDataObserver)
+
+        every { converterToDomain.convert(recipePresentationModel) } returns recipeDomainModel
+        every { recipesInteractor.addToFavourites(recipeDomainModel) } throws Exception()
+        every { errorLiveDataObserver.onChanged(any()) } answers {}
+
+        recipesInfoViewModel.addToFavourites(recipePresentationModel)
+
+        verify {
+            errorLiveDataObserver.onChanged(match { ex ->
+                ex is Exception
+            })
+        }
+        confirmVerified(errorLiveDataObserver)
+    }
 
     @Test
-    fun testGetProgressLiveData() {}
+    fun testDeleteFromFavourites() {
+        every { converterToDomain.convert(recipePresentationModel) } returns recipeDomainModel
+        every { recipesInteractor.deleteFromFavourites(recipeDomainModel) } returns Unit
+
+        recipesInfoViewModel.deleteFromFavourites(recipePresentationModel)
+
+        verify {
+            recipesInteractor.deleteFromFavourites(recipeDomainModel)
+        }
+        confirmVerified(recipesInteractor)
+    }
 
     @Test
-    fun testGetErrorLiveData() {}
+    fun testDeleteFromFavouritesException() {
+        recipesInfoViewModel.getErrorLiveData().observeForever(errorLiveDataObserver)
+
+        every { converterToDomain.convert(recipePresentationModel) } returns recipeDomainModel
+        every { recipesInteractor.deleteFromFavourites(recipeDomainModel) } throws Exception()
+        every { errorLiveDataObserver.onChanged(any()) } answers {}
+
+        recipesInfoViewModel.deleteFromFavourites(recipePresentationModel)
+
+        verify {
+            errorLiveDataObserver.onChanged(match { ex ->
+                ex is Exception
+            })
+        }
+        confirmVerified(errorLiveDataObserver)
+    }
 
     @Test
-    fun testGetRecipesLiveData() {}
+    fun testGetProgressLiveData() {
+        val interactorResult: Observable<Pair<String, List<RecipeDomainModel>>> = Observable.just(Pair(
+            nextPage, listOf(recipeDomainModel)))
+
+        every { recipesInteractor.get(queryArgument) } returns interactorResult
+
+        recipesInfoViewModel.get(queryArgument)
+
+        Truth.assertThat(recipesInfoViewModel.getProgressLiveData().value).isEqualTo(true)
+    }
 
     @Test
-    fun testGetNextPageLiveData() {}
+    fun testGetErrorLiveData() {
+        every { converterToDomain.convert(recipePresentationModel) } returns recipeDomainModel
+        every { recipesInteractor.addToFavourites(recipeDomainModel) } throws RuntimeException()
+
+        recipesInfoViewModel.addToFavourites(recipePresentationModel)
+
+        Truth.assertThat(recipesInfoViewModel.getErrorLiveData().value).isInstanceOf(
+            RuntimeException()::class.java)
+    }
+
+    @Test
+    fun testGetRecipesLiveData() {
+        val expectedResult: MutableList<RecipePresentationModel> = mutableListOf(recipePresentationModel)
+        val interactorResult: Observable<Pair<String, List<RecipeDomainModel>>> = Observable.just(Pair(
+            nextPage, listOf(recipeDomainModel)))
+
+        every { recipesInteractor.get(queryArgument) } returns interactorResult
+        every { converterToPresentation.convert(recipeDomainModel) } returns recipePresentationModel
+
+        recipesInfoViewModel.get(queryArgument)
+
+        Truth.assertThat(recipesInfoViewModel.getRecipesLiveData().value).isEqualTo(expectedResult)
+    }
+
+    @Test
+    fun testGetNextPageLiveData() {
+        val interactorResult: Observable<Pair<String, List<RecipeDomainModel>>> = Observable.just(Pair(
+            nextPage, listOf(recipeDomainModel)))
+
+        every { recipesInteractor.get(queryArgument) } returns interactorResult
+
+        recipesInfoViewModel.get(queryArgument)
+
+        Truth.assertThat(recipesInfoViewModel.getNextPageLiveData().value).isEqualTo(nextPage)
+    }
 
     private companion object {
         val recipeDomainModel = RecipeDomainModel(

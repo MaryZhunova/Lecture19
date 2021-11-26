@@ -122,7 +122,3 @@ class RecipesRepositoryImpl @Inject constructor(
         return recipe
     }
 }
-
-//for (ingredient in ingredients) {
-//    recipesDao.deleteIngredient(IngredientEntity(ingredient, uri))
-//}

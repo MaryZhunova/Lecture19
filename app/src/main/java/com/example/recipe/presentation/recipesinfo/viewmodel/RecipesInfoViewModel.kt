@@ -117,12 +117,8 @@ class RecipesInfoViewModel @Inject constructor(
      */
     fun deleteFromFavourites(recipe: RecipePresentationModel) {
         val completable = object : CompletableObserver {
-            override fun onSubscribe(d: Disposable) {
-            }
-
-            override fun onComplete() {
-            }
-
+            override fun onSubscribe(d: Disposable) {}
+            override fun onComplete() {}
             override fun onError(e: Throwable) {
                 errorLiveData.value = e
             }

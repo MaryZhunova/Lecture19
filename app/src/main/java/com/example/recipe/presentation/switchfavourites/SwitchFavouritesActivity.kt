@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.recipe.databinding.ActivitySwitchFavouritesBinding
 import com.example.recipe.presentation.models.MyRecipePresentationModel
 import com.example.recipe.presentation.addrecipe.AddRecipeActivity
+import com.example.recipe.presentation.switchfavourites.myrecipes.MyRecipeDetailActivity
 import com.example.recipe.presentation.switchfavourites.myrecipes.MyRecipesFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator

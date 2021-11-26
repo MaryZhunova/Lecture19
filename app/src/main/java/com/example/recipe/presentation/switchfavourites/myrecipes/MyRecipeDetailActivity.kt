@@ -1,4 +1,4 @@
-package com.example.recipe.presentation.switchfavourites
+package com.example.recipe.presentation.switchfavourites.myrecipes
 
 import android.content.Context
 import android.content.Intent

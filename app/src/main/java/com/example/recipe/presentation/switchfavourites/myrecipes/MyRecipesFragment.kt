@@ -79,7 +79,7 @@ class MyRecipesFragment : Fragment(), OnMyRecipeClickListener {
 
     override fun onStart() {
         super.onStart()
-        myRecipesViewModel.get()
+        myRecipesViewModel.getMyRecipes()
     }
 
     private fun initRecyclerview() {
@@ -114,49 +114,7 @@ class MyRecipesFragment : Fragment(), OnMyRecipeClickListener {
     }
 
     private fun showData(recipes: MutableList<MyRecipePresentationModel>) {
-        if (checkPermission()) {
-            adapter.submitList(recipes)
-        } else {
-            requestPermission()
-            adapter.submitList(recipes)
-        }
-
-    }
-
-    private fun requestPermission() {
-        when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> {
-                val uri = Uri.parse("package:com.example.recipe")
-                startActivity(
-                    Intent(
-                        Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
-                        uri
-                    )
-                )
-            }
-            else -> {
-                ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    arrayOf(
-                        Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    ),
-                    REQUEST_CODE
-                )
-            }
-        }
-    }
-
-    private fun checkPermission() = when {
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> Environment.isExternalStorageManager()
-        else -> checkSelfPermission(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
-                && checkSelfPermission(
-            requireContext(),
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
+        adapter.submitList(recipes)
     }
 
     private fun showError(throwable: Throwable) {

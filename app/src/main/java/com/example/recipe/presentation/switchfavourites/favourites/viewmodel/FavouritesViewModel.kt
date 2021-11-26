@@ -39,7 +39,7 @@ class FavouritesViewModel @Inject constructor(
     /**
      * Получить список избранных рецептов
      */
-    fun get() {
+    fun getFavouriteRecipes() {
         val disposable = Single.fromCallable { recipesInteractor.getFavouriteRecipes() }
             .map { recipes -> recipes.map(converterToPresentation::convert) }
             .doOnSubscribe { progressLiveData.postValue(true) }
@@ -59,7 +59,7 @@ class FavouritesViewModel @Inject constructor(
         val completable = object : CompletableObserver {
             override fun onSubscribe(d: Disposable) {}
             override fun onComplete() {
-                get()
+                getFavouriteRecipes()
             }
             override fun onError(e: Throwable) {
                 errorLiveData.value = e

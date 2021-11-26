@@ -35,7 +35,7 @@ class MyRecipesViewModel @Inject constructor(
     /**
      * Получить список рецептов из базы данных
      */
-    fun get() {
+    fun getMyRecipes() {
         val disposable = Single.fromCallable { recipesInteractor.getMyRecipes() }
             .map { recipes -> recipes.map(converterToPresentation::convert) }
             .doOnSubscribe { progressLiveData.postValue(true) }
@@ -55,7 +55,7 @@ class MyRecipesViewModel @Inject constructor(
         val completable = object : CompletableObserver {
             override fun onSubscribe(d: Disposable) {}
             override fun onComplete() {
-                get()
+                getMyRecipes()
             }
             override fun onError(e: Throwable) {
                 errorLiveData.value = e
