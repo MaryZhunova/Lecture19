@@ -20,7 +20,9 @@ import com.example.recipe.presentation.addrecipe.viewmodel.AddRecipeViewModel
 import javax.inject.Inject
 import androidx.core.app.ActivityCompat
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Environment
+import android.provider.Settings
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
@@ -29,6 +31,9 @@ import androidx.fragment.app.Fragment
 import com.example.recipe.R
 import com.example.recipe.databinding.ActivityAddRecipeBinding
 import com.example.recipe.presentation.addrecipe.chooseimage.ChooseImageFragment
+import com.example.recipe.presentation.switchfavourites.myrecipes.MyRecipesFragment
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 import java.io.File
 import java.util.UUID
 
@@ -78,7 +83,13 @@ class AddRecipeActivity : AppCompatActivity(), ChooseImageFragment.OnItemClickLi
         observeLiveData()
 
         binding.chooseImage.setOnClickListener {
-            createFragment()
+            if (checkStorageAccessPermission()) {
+                createFragment()
+            } else {
+                requestStorageAccessPermission()
+                if (checkStorageAccessPermission()) createFragment()
+
+            }
         }
 
         binding.takeImage.setOnClickListener {
@@ -147,6 +158,43 @@ class AddRecipeActivity : AppCompatActivity(), ChooseImageFragment.OnItemClickLi
         Toast.makeText(this, "Couldn't add the recipe. ${throwable.message}", Toast.LENGTH_SHORT)
             .show()
     }
+
+    private fun requestStorageAccessPermission() {
+        when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> {
+                val uri = Uri.parse("package:com.example.recipe")
+                startActivity(
+                    Intent(
+                        Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
+                        uri
+                    )
+                )
+            }
+            else -> {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ),
+                    MyRecipesFragment.REQUEST_CODE
+                )
+            }
+        }
+    }
+
+    private fun checkStorageAccessPermission() = when {
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> Environment.isExternalStorageManager()
+        else -> ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater: MenuInflater = menuInflater

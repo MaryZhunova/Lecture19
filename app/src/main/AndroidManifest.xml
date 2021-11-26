@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Recipe">
         <activity
-            android:name=".presentation.switchfavourites.MyRecipeDetailActivity"
+            android:name=".presentation.switchfavourites.myrecipes.MyRecipeDetailActivity"
             android:exported="false" />
         <activity
             android:name="com.example.recipe.presentation.addrecipe.AddRecipeActivity"
