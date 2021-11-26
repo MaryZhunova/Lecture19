@@ -28,6 +28,7 @@ class RecipesInfoViewModel @Inject constructor(
     private val schedulersProvider: ISchedulersProvider,
     private val converterToPresentation: Converter<RecipeDomainModel, RecipePresentationModel>,
     private val converterToDomain: Converter<RecipePresentationModel, RecipeDomainModel>
+
 ) : ViewModel() {
 
     private val progressLiveData: MutableLiveData<Boolean> = MutableLiveData()

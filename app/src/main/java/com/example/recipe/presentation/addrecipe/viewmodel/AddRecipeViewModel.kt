@@ -11,6 +11,7 @@ import com.example.recipe.presentation.addrecipe.AddRecipeActivity
 import com.example.recipe.utils.ISchedulersProvider
 import io.reactivex.Completable
 import io.reactivex.CompletableObserver
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
@@ -27,7 +28,7 @@ class AddRecipeViewModel @Inject constructor(
     private val converterToDomain: Converter<MyRecipePresentationModel, MyRecipeDomainModel>
 ) : ViewModel() {
 
-    val errorLiveData: MutableLiveData<Throwable> = MutableLiveData()
+    private val errorLiveData: MutableLiveData<Throwable> = MutableLiveData()
 
     /**
      * Добавить рецепт в базу данных
@@ -45,8 +46,7 @@ class AddRecipeViewModel @Inject constructor(
         Completable.fromRunnable {
             recipesInteractor.addToMyRecipes(
                 converterToDomain.convert(
-                    recipe
-                )
+                    recipe)
             )
         }
             .subscribeOn(schedulersProvider.io())

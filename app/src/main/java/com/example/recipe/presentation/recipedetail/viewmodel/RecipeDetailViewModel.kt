@@ -30,6 +30,7 @@ class RecipeDetailViewModel @Inject constructor(
      * @param [recipe] рецепт
      */
     fun deleteFromFavourites(recipe: RecipePresentationModel) {
+
         val completable = object : CompletableObserver {
             override fun onSubscribe(d: Disposable) {
             }

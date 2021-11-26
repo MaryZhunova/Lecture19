@@ -41,7 +41,7 @@
 //    }
 //
 //    @Test
-//    fun getTestException() {
+//    fun testGetException() {
 //
 //        every { api.get(queryArgumentForException) } throws Exception()
 //

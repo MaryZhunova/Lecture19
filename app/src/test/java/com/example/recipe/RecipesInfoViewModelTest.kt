@@ -72,7 +72,7 @@
 //        confirmVerified(progressLiveDataObserver, recipesLiveDataObserver)
 //    }
 //    @Test
-//    fun getTestException() {
+//    fun testGetException() {
 //        every { recipesInteractor.get(queryArgumentForException) } throws Exception()
 //        every { errorLiveDataObserver.onChanged(any()) } answers {}
 //
