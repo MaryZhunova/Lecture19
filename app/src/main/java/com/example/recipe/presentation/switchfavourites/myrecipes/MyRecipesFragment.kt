@@ -1,21 +1,12 @@
 package com.example.recipe.presentation.switchfavourites.myrecipes
 
-import android.Manifest
 import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.provider.Settings
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -133,7 +124,6 @@ class MyRecipesFragment : Fragment(), OnMyRecipeClickListener {
     }
 
     companion object {
-        const val REQUEST_CODE = 333
         fun newInstance() = MyRecipesFragment()
     }
 }

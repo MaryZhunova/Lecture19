@@ -23,7 +23,9 @@ import io.reactivex.Observable
 import org.junit.Before
 import org.junit.Test
 
-
+/**
+ * Тест проверки работы репозитория [RecipesRepositoryImpl]
+ */
 class RecipesRepositoryImplTest {
     private lateinit var recipesRepositoryImpl: RecipesRepositoryImpl
     private val retrofitService: RetrofitService = mockk()

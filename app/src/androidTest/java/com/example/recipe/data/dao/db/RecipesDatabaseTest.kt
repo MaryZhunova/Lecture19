@@ -17,6 +17,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
 
+/**
+ * Тест по проверке работы базы данных
+ */
+
 @RunWith(AndroidJUnit4::class)
 class RecipesDatabaseTest : TestCase() {
     private lateinit var db: RecipesDatabase

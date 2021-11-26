@@ -20,7 +20,9 @@ import org.junit.Rule
 import org.junit.Test
 import java.lang.RuntimeException
 
-
+/**
+ * Тест проверки работы [RecipesInfoViewModel]
+ */
 class RecipesInfoViewModelTest {
     private lateinit var recipesInfoViewModel: RecipesInfoViewModel
     private val recipesInteractor: RecipesInteractor = mockk()

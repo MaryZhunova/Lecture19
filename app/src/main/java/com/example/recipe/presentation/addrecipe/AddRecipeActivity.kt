@@ -1,7 +1,6 @@
 package com.example.recipe.presentation.addrecipe
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -23,17 +22,11 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Environment
 import android.provider.Settings
-import android.view.View
-import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider.getUriForFile
-import androidx.fragment.app.Fragment
 import com.example.recipe.R
 import com.example.recipe.databinding.ActivityAddRecipeBinding
 import com.example.recipe.presentation.addrecipe.chooseimage.ChooseImageFragment
-import com.example.recipe.presentation.switchfavourites.myrecipes.MyRecipesFragment
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
 import java.io.File
 import java.util.UUID
 
@@ -93,10 +86,10 @@ class AddRecipeActivity : AppCompatActivity(), ChooseImageFragment.OnItemClickLi
         }
 
         binding.takeImage.setOnClickListener {
-            if (checkPermission()) {
+            if (checkCameraPermission()) {
                 takePicture()
             } else {
-                requestPermission()
+                requestCameraPermission()
                 takePicture()
             }
         }
@@ -130,14 +123,14 @@ class AddRecipeActivity : AppCompatActivity(), ChooseImageFragment.OnItemClickLi
         return File.createTempFile(uuid + "image", ".jpg", storageDir)
     }
 
-    private fun checkPermission(): Boolean {
+    private fun checkCameraPermission(): Boolean {
         return ContextCompat.checkSelfPermission(
             this,
             Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-    private fun requestPermission() {
+    private fun requestCameraPermission() {
         ActivityCompat.requestPermissions(
             this, arrayOf(Manifest.permission.CAMERA),
             PERMISSION_REQUEST_CODE
@@ -176,8 +169,7 @@ class AddRecipeActivity : AppCompatActivity(), ChooseImageFragment.OnItemClickLi
                     arrayOf(
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    ),
-                    MyRecipesFragment.REQUEST_CODE
+                    ), REQUEST_CODE
                 )
             }
         }
@@ -222,6 +214,7 @@ class AddRecipeActivity : AppCompatActivity(), ChooseImageFragment.OnItemClickLi
     }
 
     companion object {
+        const val REQUEST_CODE = 333
         const val PERMISSION_REQUEST_CODE = 11
         const val URI = "uri"
         const val URI_STR = "str"

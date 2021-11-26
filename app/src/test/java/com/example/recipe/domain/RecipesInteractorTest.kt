@@ -11,7 +11,9 @@ import io.reactivex.Observable
 import org.junit.Before
 import org.junit.Test
 
-
+/**
+ * Тест проверки работы интерактора [RecipesInteractor]
+ */
 class RecipesInteractorTest {
     private lateinit var recipesInteractor: RecipesInteractor
     private val repository: RecipesRepository = mockk()

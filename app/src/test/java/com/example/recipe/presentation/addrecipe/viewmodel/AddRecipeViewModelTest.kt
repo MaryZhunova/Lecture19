@@ -18,7 +18,9 @@ import org.junit.Rule
 import org.junit.Test
 import java.lang.RuntimeException
 
-
+/**
+ * Тест проверки работы [AddRecipeViewModel]
+ */
 class AddRecipeViewModelTest {
 
     private lateinit var addRecipeViewModel: AddRecipeViewModel

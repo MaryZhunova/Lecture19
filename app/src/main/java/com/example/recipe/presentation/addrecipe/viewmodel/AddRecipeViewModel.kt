@@ -11,7 +11,6 @@ import com.example.recipe.presentation.addrecipe.AddRecipeActivity
 import com.example.recipe.utils.ISchedulersProvider
 import io.reactivex.Completable
 import io.reactivex.CompletableObserver
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 

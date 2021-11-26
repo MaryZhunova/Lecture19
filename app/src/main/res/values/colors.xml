@@ -16,6 +16,6 @@
     <color name="primary_color2">#553E37</color>
     <color name="brown">#7c3314</color>
     <color name="brown2">#7c340c</color>
-    <color name="translucent_scrim_bottom">#e0cfb1</color>
-    <color name="translucent_scrim_bottom_center">#e0cfb1</color>
+    <color name="translucent_scrim_bottom">#E0CFB1</color>
+    <color name="translucent_scrim_bottom_center">#81E0CFB1</color>
 </resources>

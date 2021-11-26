@@ -6,6 +6,9 @@ import com.google.common.truth.Truth
 import org.junit.Before
 import org.junit.Test
 
+/**
+ * Тест работы конвертера
+ */
 class RecipeToDomainConverterTest {
     private lateinit var recipeToDomainConverter: Converter<Recipe, RecipeDomainModel>
 
