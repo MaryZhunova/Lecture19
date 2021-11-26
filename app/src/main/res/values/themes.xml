@@ -29,4 +29,7 @@
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:windowBackground">@color/light_brown</item>
     </style>
+    <style name="CustomToolbarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:textColorPrimary">@color/white</item>
+    </style>
 </resources>

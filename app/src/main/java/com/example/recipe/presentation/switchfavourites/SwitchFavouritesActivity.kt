@@ -3,7 +3,6 @@ package com.example.recipe.presentation.switchfavourites
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.recipe.databinding.ActivitySwitchFavouritesBinding
 import com.example.recipe.presentation.models.MyRecipePresentationModel

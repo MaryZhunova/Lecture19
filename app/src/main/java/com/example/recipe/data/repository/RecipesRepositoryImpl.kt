@@ -38,7 +38,6 @@ class RecipesRepositoryImpl @Inject constructor(
 
     override fun get(query: String): Observable<Pair<String, List<RecipeDomainModel>>> {
         return retrofitService.get(query).map(::transformData)
-
     }
 
     override fun get(
@@ -68,11 +67,7 @@ class RecipesRepositoryImpl @Inject constructor(
         // Конверитировать RecipeDomainModel в RecipeEntity
         // Добавить RecipeEntity в базу данных
         recipesDao.addToFavourites(converterToEntity.convert(recipe))
-        // Конверитировать String в IngredientEntity
-        // Добавить IngredientEntity в базу данных
-        for (ingredient in recipe.ingredientLines) {
-            recipesDao.addIngredientLinesToFavourites(IngredientEntity(ingredient, recipe.uri))
-        }
+        addIngredientsToFavourites(recipe.ingredientLines, recipe.uri)
     }
 
     override fun deleteFromFavourites(recipe: RecipeDomainModel) {
@@ -100,12 +95,22 @@ class RecipesRepositoryImpl @Inject constructor(
 
     private fun transformData(recipeResponse: RecipeResponse): Pair<String, List<RecipeDomainModel>> {
         // Параметр для перехода на следующую страницу
-        val nextPage = if (recipeResponse.link.next != null) recipeResponse.link.next.href.substringAfter("_cont=").substringBefore("&type") else ""
+        val nextPage =
+            if (recipeResponse.link.next != null) recipeResponse.link.next.href.substringAfter("_cont=")
+                .substringBefore("&type") else ""
         // Список рецептов
         val recipes = recipeResponse.hits.map { hit -> hit.recipe }
-            .map (converter::convert)
-            .map (::checkFavourites)
+            .map(converter::convert)
+            .map(::checkFavourites)
         return Pair(nextPage, recipes)
+    }
+
+    private fun addIngredientsToFavourites(ingredients: List<String>, uri: String)  {
+        // Конверитировать String в IngredientEntity
+        // Добавить IngredientEntity в базу данных
+        for (ingredient in ingredients) {
+            recipesDao.addIngredientLinesToFavourites(IngredientEntity(ingredient, uri))
+        }
     }
 
     private fun checkFavourites(recipe: RecipeDomainModel): RecipeDomainModel {
@@ -117,3 +122,7 @@ class RecipesRepositoryImpl @Inject constructor(
         return recipe
     }
 }
+
+//for (ingredient in ingredients) {
+//    recipesDao.deleteIngredient(IngredientEntity(ingredient, uri))
+//}
